@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct Finance_Trader_IOSApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Main(app: delegate.app)
         }
     }
 }

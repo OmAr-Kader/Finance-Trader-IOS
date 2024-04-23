@@ -11,6 +11,50 @@
 		07EC2A202BD87030002375F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A1F2BD87030002375F2 /* ContentView.swift */; };
 		07EC2A222BD87033002375F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A212BD87033002375F2 /* Assets.xcassets */; };
 		07EC2A252BD87033002375F2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A242BD87033002375F2 /* Preview Assets.xcassets */; };
+		07EC2A2D2BD87054002375F2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A2B2BD87054002375F2 /* README.md */; };
+		07EC2A2E2BD87054002375F2 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A2C2BD87054002375F2 /* LICENSE */; };
+		07EC2A302BD87073002375F2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A2F2BD87073002375F2 /* .gitignore */; };
+		07EC2A672BD870BF002375F2 /* AppModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A312BD870BE002375F2 /* AppModule.swift */; };
+		07EC2A682BD870BF002375F2 /* AppObserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A322BD870BE002375F2 /* AppObserve.swift */; };
+		07EC2A692BD870BF002375F2 /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A332BD870BE002375F2 /* Project.swift */; };
+		07EC2A6B2BD870BF002375F2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A362BD870BE002375F2 /* AppDelegate.swift */; };
+		07EC2A6C2BD870BF002375F2 /* PreferenceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A372BD870BE002375F2 /* PreferenceData.swift */; };
+		07EC2A6D2BD870BF002375F2 /* PrefRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A382BD870BE002375F2 /* PrefRepo.swift */; };
+		07EC2A6E2BD870BF002375F2 /* PrefRepoImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A392BD870BE002375F2 /* PrefRepoImp.swift */; };
+		07EC2A6F2BD870BF002375F2 /* Preference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A3C2BD870BE002375F2 /* Preference.swift */; };
+		07EC2A702BD870BF002375F2 /* ResultRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A3D2BD870BE002375F2 /* ResultRealm.swift */; };
+		07EC2A712BD870BF002375F2 /* Stock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A3E2BD870BE002375F2 /* Stock.swift */; };
+		07EC2A722BD870BF002375F2 /* BaseRepoImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A402BD870BE002375F2 /* BaseRepoImp.swift */; };
+		07EC2A732BD870BF002375F2 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A412BD870BE002375F2 /* Converter.swift */; };
+		07EC2A742BD870BF002375F2 /* Realm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A422BD870BE002375F2 /* Realm.swift */; };
+		07EC2A752BD870BF002375F2 /* RealmSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A432BD870BE002375F2 /* RealmSync.swift */; };
+		07EC2A762BD870BF002375F2 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A462BD870BE002375F2 /* Color.swift */; };
+		07EC2A772BD870BF002375F2 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A472BD870BE002375F2 /* Const.swift */; };
+		07EC2A782BD870BF002375F2 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A482BD870BE002375F2 /* Scope.swift */; };
+		07EC2A792BD870BF002375F2 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A492BD870BE002375F2 /* Theme.swift */; };
+		07EC2A7A2BD870BF002375F2 /* Roots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A4B2BD870BE002375F2 /* Roots.swift */; };
+		07EC2A7B2BD870BF002375F2 /* BarBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A4D2BD870BE002375F2 /* BarBuilder.swift */; };
+		07EC2A7C2BD870BF002375F2 /* BottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A4E2BD870BE002375F2 /* BottomBar.swift */; };
+		07EC2A7D2BD870BF002375F2 /* BottomBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A4F2BD870BE002375F2 /* BottomBarItem.swift */; };
+		07EC2A7E2BD870BF002375F2 /* BottomBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A502BD870BE002375F2 /* BottomBarItemView.swift */; };
+		07EC2A7F2BD870BF002375F2 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A522BD870BE002375F2 /* BackButton.swift */; };
+		07EC2A802BD870BF002375F2 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A532BD870BE002375F2 /* Image.swift */; };
+		07EC2A812BD870BF002375F2 /* NavigationDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A542BD870BE002375F2 /* NavigationDrawer.swift */; };
+		07EC2A822BD870BF002375F2 /* OutlinedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A552BD870BE002375F2 /* OutlinedTextField.swift */; };
+		07EC2A832BD870BF002375F2 /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A562BD870BE002375F2 /* StatusBar.swift */; };
+		07EC2A842BD870BF002375F2 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A572BD870BE002375F2 /* ToastView.swift */; };
+		07EC2A852BD870BF002375F2 /* Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A582BD870BE002375F2 /* Views.swift */; };
+		07EC2A862BD870BF002375F2 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A5A2BD870BE002375F2 /* Media.swift */; };
+		07EC2A872BD870BF002375F2 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A5B2BD870BE002375F2 /* Utils.swift */; };
+		07EC2A882BD870BF002375F2 /* Web.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A5C2BD870BE002375F2 /* Web.swift */; };
+		07EC2A892BD870BF002375F2 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A5F2BD870BF002375F2 /* Main.swift */; };
+		07EC2A8A2BD870BF002375F2 /* Elements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A602BD870BF002375F2 /* Elements.swift */; };
+		07EC2A8B2BD870BF002375F2 /* HomeTrader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A622BD870BF002375F2 /* HomeTrader.swift */; };
+		07EC2A8C2BD870BF002375F2 /* HomeTraderObserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A632BD870BF002375F2 /* HomeTraderObserve.swift */; };
+		07EC2A902BD870F9002375F2 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 07EC2A8F2BD870F9002375F2 /* Swinject */; };
+		07EC2A922BD870F9002375F2 /* Swinject-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 07EC2A912BD870F9002375F2 /* Swinject-Dynamic */; };
+		07EC2A952BD8711E002375F2 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 07EC2A942BD8711E002375F2 /* Realm */; };
+		07EC2A972BD8711E002375F2 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 07EC2A962BD8711E002375F2 /* RealmSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +63,46 @@
 		07EC2A1F2BD87030002375F2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		07EC2A212BD87033002375F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07EC2A242BD87033002375F2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		07EC2A2B2BD87054002375F2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		07EC2A2C2BD87054002375F2 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		07EC2A2F2BD87073002375F2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		07EC2A312BD870BE002375F2 /* AppModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppModule.swift; sourceTree = "<group>"; };
+		07EC2A322BD870BE002375F2 /* AppObserve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppObserve.swift; sourceTree = "<group>"; };
+		07EC2A332BD870BE002375F2 /* Project.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		07EC2A362BD870BE002375F2 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		07EC2A372BD870BE002375F2 /* PreferenceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferenceData.swift; sourceTree = "<group>"; };
+		07EC2A382BD870BE002375F2 /* PrefRepo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefRepo.swift; sourceTree = "<group>"; };
+		07EC2A392BD870BE002375F2 /* PrefRepoImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefRepoImp.swift; sourceTree = "<group>"; };
+		07EC2A3C2BD870BE002375F2 /* Preference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preference.swift; sourceTree = "<group>"; };
+		07EC2A3D2BD870BE002375F2 /* ResultRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultRealm.swift; sourceTree = "<group>"; };
+		07EC2A3E2BD870BE002375F2 /* Stock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stock.swift; sourceTree = "<group>"; };
+		07EC2A402BD870BE002375F2 /* BaseRepoImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseRepoImp.swift; sourceTree = "<group>"; };
+		07EC2A412BD870BE002375F2 /* Converter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
+		07EC2A422BD870BE002375F2 /* Realm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Realm.swift; sourceTree = "<group>"; };
+		07EC2A432BD870BE002375F2 /* RealmSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmSync.swift; sourceTree = "<group>"; };
+		07EC2A462BD870BE002375F2 /* Color.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		07EC2A472BD870BE002375F2 /* Const.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
+		07EC2A482BD870BE002375F2 /* Scope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
+		07EC2A492BD870BE002375F2 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		07EC2A4B2BD870BE002375F2 /* Roots.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Roots.swift; sourceTree = "<group>"; };
+		07EC2A4D2BD870BE002375F2 /* BarBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarBuilder.swift; sourceTree = "<group>"; };
+		07EC2A4E2BD870BE002375F2 /* BottomBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomBar.swift; sourceTree = "<group>"; };
+		07EC2A4F2BD870BE002375F2 /* BottomBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomBarItem.swift; sourceTree = "<group>"; };
+		07EC2A502BD870BE002375F2 /* BottomBarItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomBarItemView.swift; sourceTree = "<group>"; };
+		07EC2A522BD870BE002375F2 /* BackButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
+		07EC2A532BD870BE002375F2 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		07EC2A542BD870BE002375F2 /* NavigationDrawer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDrawer.swift; sourceTree = "<group>"; };
+		07EC2A552BD870BE002375F2 /* OutlinedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OutlinedTextField.swift; sourceTree = "<group>"; };
+		07EC2A562BD870BE002375F2 /* StatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
+		07EC2A572BD870BE002375F2 /* ToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		07EC2A582BD870BE002375F2 /* Views.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Views.swift; sourceTree = "<group>"; };
+		07EC2A5A2BD870BE002375F2 /* Media.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
+		07EC2A5B2BD870BE002375F2 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		07EC2A5C2BD870BE002375F2 /* Web.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Web.swift; sourceTree = "<group>"; };
+		07EC2A5F2BD870BF002375F2 /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		07EC2A602BD870BF002375F2 /* Elements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Elements.swift; sourceTree = "<group>"; };
+		07EC2A622BD870BF002375F2 /* HomeTrader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTrader.swift; sourceTree = "<group>"; };
+		07EC2A632BD870BF002375F2 /* HomeTraderObserve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTraderObserve.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +110,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07EC2A972BD8711E002375F2 /* RealmSwift in Frameworks */,
+				07EC2A952BD8711E002375F2 /* Realm in Frameworks */,
+				07EC2A902BD870F9002375F2 /* Swinject in Frameworks */,
+				07EC2A922BD870F9002375F2 /* Swinject-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,6 +123,9 @@
 		07EC2A112BD87030002375F2 = {
 			isa = PBXGroup;
 			children = (
+				07EC2A2F2BD87073002375F2 /* .gitignore */,
+				07EC2A2C2BD87054002375F2 /* LICENSE */,
+				07EC2A2B2BD87054002375F2 /* README.md */,
 				07EC2A1C2BD87030002375F2 /* Finance-Trader-IOS */,
 				07EC2A1B2BD87030002375F2 /* Products */,
 			);
@@ -51,6 +142,12 @@
 		07EC2A1C2BD87030002375F2 /* Finance-Trader-IOS */ = {
 			isa = PBXGroup;
 			children = (
+				07EC2A452BD870BE002375F2 /* data */,
+				07EC2A342BD870BE002375F2 /* di */,
+				07EC2A5E2BD870BE002375F2 /* global */,
+				07EC2A652BD870BF002375F2 /* ui */,
+				07EC2A362BD870BE002375F2 /* AppDelegate.swift */,
+				07EC2A5F2BD870BF002375F2 /* Main.swift */,
 				07EC2A1D2BD87030002375F2 /* Finance_Trader_IOSApp.swift */,
 				07EC2A1F2BD87030002375F2 /* ContentView.swift */,
 				07EC2A212BD87033002375F2 /* Assets.xcassets */,
@@ -65,6 +162,157 @@
 				07EC2A242BD87033002375F2 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		07EC2A342BD870BE002375F2 /* di */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A312BD870BE002375F2 /* AppModule.swift */,
+				07EC2A322BD870BE002375F2 /* AppObserve.swift */,
+				07EC2A332BD870BE002375F2 /* Project.swift */,
+			);
+			path = di;
+			sourceTree = "<group>";
+		};
+		07EC2A3A2BD870BE002375F2 /* pref */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A372BD870BE002375F2 /* PreferenceData.swift */,
+				07EC2A382BD870BE002375F2 /* PrefRepo.swift */,
+				07EC2A392BD870BE002375F2 /* PrefRepoImp.swift */,
+			);
+			path = pref;
+			sourceTree = "<group>";
+		};
+		07EC2A3B2BD870BE002375F2 /* dataSources */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A3A2BD870BE002375F2 /* pref */,
+			);
+			path = dataSources;
+			sourceTree = "<group>";
+		};
+		07EC2A3F2BD870BE002375F2 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A3C2BD870BE002375F2 /* Preference.swift */,
+				07EC2A3D2BD870BE002375F2 /* ResultRealm.swift */,
+				07EC2A3E2BD870BE002375F2 /* Stock.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		07EC2A442BD870BE002375F2 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A402BD870BE002375F2 /* BaseRepoImp.swift */,
+				07EC2A412BD870BE002375F2 /* Converter.swift */,
+				07EC2A422BD870BE002375F2 /* Realm.swift */,
+				07EC2A432BD870BE002375F2 /* RealmSync.swift */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
+		07EC2A452BD870BE002375F2 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A3B2BD870BE002375F2 /* dataSources */,
+				07EC2A3F2BD870BE002375F2 /* model */,
+				07EC2A442BD870BE002375F2 /* util */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		07EC2A4A2BD870BE002375F2 /* base */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A462BD870BE002375F2 /* Color.swift */,
+				07EC2A472BD870BE002375F2 /* Const.swift */,
+				07EC2A482BD870BE002375F2 /* Scope.swift */,
+				07EC2A492BD870BE002375F2 /* Theme.swift */,
+			);
+			path = base;
+			sourceTree = "<group>";
+		};
+		07EC2A4C2BD870BE002375F2 /* navigation */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A4B2BD870BE002375F2 /* Roots.swift */,
+			);
+			path = navigation;
+			sourceTree = "<group>";
+		};
+		07EC2A512BD870BE002375F2 /* bottomBar */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A4D2BD870BE002375F2 /* BarBuilder.swift */,
+				07EC2A4E2BD870BE002375F2 /* BottomBar.swift */,
+				07EC2A4F2BD870BE002375F2 /* BottomBarItem.swift */,
+				07EC2A502BD870BE002375F2 /* BottomBarItemView.swift */,
+			);
+			path = bottomBar;
+			sourceTree = "<group>";
+		};
+		07EC2A592BD870BE002375F2 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A512BD870BE002375F2 /* bottomBar */,
+				07EC2A522BD870BE002375F2 /* BackButton.swift */,
+				07EC2A532BD870BE002375F2 /* Image.swift */,
+				07EC2A542BD870BE002375F2 /* NavigationDrawer.swift */,
+				07EC2A552BD870BE002375F2 /* OutlinedTextField.swift */,
+				07EC2A562BD870BE002375F2 /* StatusBar.swift */,
+				07EC2A572BD870BE002375F2 /* ToastView.swift */,
+				07EC2A582BD870BE002375F2 /* Views.swift */,
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
+		07EC2A5D2BD870BE002375F2 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A5A2BD870BE002375F2 /* Media.swift */,
+				07EC2A5B2BD870BE002375F2 /* Utils.swift */,
+				07EC2A5C2BD870BE002375F2 /* Web.swift */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
+		07EC2A5E2BD870BE002375F2 /* global */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A4A2BD870BE002375F2 /* base */,
+				07EC2A4C2BD870BE002375F2 /* navigation */,
+				07EC2A592BD870BE002375F2 /* ui */,
+				07EC2A5D2BD870BE002375F2 /* util */,
+			);
+			path = global;
+			sourceTree = "<group>";
+		};
+		07EC2A612BD870BF002375F2 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A602BD870BF002375F2 /* Elements.swift */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		07EC2A642BD870BF002375F2 /* homeTrader */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A622BD870BF002375F2 /* HomeTrader.swift */,
+				07EC2A632BD870BF002375F2 /* HomeTraderObserve.swift */,
+			);
+			path = homeTrader;
+			sourceTree = "<group>";
+		};
+		07EC2A652BD870BF002375F2 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				07EC2A612BD870BF002375F2 /* common */,
+				07EC2A642BD870BF002375F2 /* homeTrader */,
+			);
+			path = ui;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +331,12 @@
 			dependencies = (
 			);
 			name = "Finance-Trader-IOS";
+			packageProductDependencies = (
+				07EC2A8F2BD870F9002375F2 /* Swinject */,
+				07EC2A912BD870F9002375F2 /* Swinject-Dynamic */,
+				07EC2A942BD8711E002375F2 /* Realm */,
+				07EC2A962BD8711E002375F2 /* RealmSwift */,
+			);
 			productName = "Finance-Trader-IOS";
 			productReference = 07EC2A1A2BD87030002375F2 /* Finance-Trader-IOS.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +365,10 @@
 				Base,
 			);
 			mainGroup = 07EC2A112BD87030002375F2;
+			packageReferences = (
+				07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */,
+				07EC2A932BD8711E002375F2 /* XCRemoteSwiftPackageReference "realm-swift" */,
+			);
 			productRefGroup = 07EC2A1B2BD87030002375F2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -125,7 +383,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07EC2A302BD87073002375F2 /* .gitignore in Resources */,
+				07EC2A2D2BD87054002375F2 /* README.md in Resources */,
 				07EC2A252BD87033002375F2 /* Preview Assets.xcassets in Resources */,
+				07EC2A2E2BD87054002375F2 /* LICENSE in Resources */,
 				07EC2A222BD87033002375F2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,8 +398,45 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07EC2A6C2BD870BF002375F2 /* PreferenceData.swift in Sources */,
+				07EC2A772BD870BF002375F2 /* Const.swift in Sources */,
+				07EC2A832BD870BF002375F2 /* StatusBar.swift in Sources */,
+				07EC2A822BD870BF002375F2 /* OutlinedTextField.swift in Sources */,
 				07EC2A202BD87030002375F2 /* ContentView.swift in Sources */,
+				07EC2A782BD870BF002375F2 /* Scope.swift in Sources */,
+				07EC2A7A2BD870BF002375F2 /* Roots.swift in Sources */,
+				07EC2A6D2BD870BF002375F2 /* PrefRepo.swift in Sources */,
+				07EC2A792BD870BF002375F2 /* Theme.swift in Sources */,
+				07EC2A892BD870BF002375F2 /* Main.swift in Sources */,
+				07EC2A872BD870BF002375F2 /* Utils.swift in Sources */,
+				07EC2A8A2BD870BF002375F2 /* Elements.swift in Sources */,
+				07EC2A7D2BD870BF002375F2 /* BottomBarItem.swift in Sources */,
+				07EC2A7B2BD870BF002375F2 /* BarBuilder.swift in Sources */,
+				07EC2A7E2BD870BF002375F2 /* BottomBarItemView.swift in Sources */,
+				07EC2A732BD870BF002375F2 /* Converter.swift in Sources */,
+				07EC2A862BD870BF002375F2 /* Media.swift in Sources */,
+				07EC2A752BD870BF002375F2 /* RealmSync.swift in Sources */,
+				07EC2A712BD870BF002375F2 /* Stock.swift in Sources */,
+				07EC2A882BD870BF002375F2 /* Web.swift in Sources */,
+				07EC2A842BD870BF002375F2 /* ToastView.swift in Sources */,
+				07EC2A722BD870BF002375F2 /* BaseRepoImp.swift in Sources */,
+				07EC2A742BD870BF002375F2 /* Realm.swift in Sources */,
+				07EC2A702BD870BF002375F2 /* ResultRealm.swift in Sources */,
 				07EC2A1E2BD87030002375F2 /* Finance_Trader_IOSApp.swift in Sources */,
+				07EC2A6F2BD870BF002375F2 /* Preference.swift in Sources */,
+				07EC2A8C2BD870BF002375F2 /* HomeTraderObserve.swift in Sources */,
+				07EC2A682BD870BF002375F2 /* AppObserve.swift in Sources */,
+				07EC2A852BD870BF002375F2 /* Views.swift in Sources */,
+				07EC2A812BD870BF002375F2 /* NavigationDrawer.swift in Sources */,
+				07EC2A6B2BD870BF002375F2 /* AppDelegate.swift in Sources */,
+				07EC2A802BD870BF002375F2 /* Image.swift in Sources */,
+				07EC2A8B2BD870BF002375F2 /* HomeTrader.swift in Sources */,
+				07EC2A6E2BD870BF002375F2 /* PrefRepoImp.swift in Sources */,
+				07EC2A7C2BD870BF002375F2 /* BottomBar.swift in Sources */,
+				07EC2A7F2BD870BF002375F2 /* BackButton.swift in Sources */,
+				07EC2A692BD870BF002375F2 /* Project.swift in Sources */,
+				07EC2A672BD870BF002375F2 /* AppModule.swift in Sources */,
+				07EC2A762BD870BF002375F2 /* Color.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -342,6 +640,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.7;
+			};
+		};
+		07EC2A932BD8711E002375F2 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		07EC2A8F2BD870F9002375F2 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+		07EC2A912BD870F9002375F2 /* Swinject-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = "Swinject-Dynamic";
+		};
+		07EC2A942BD8711E002375F2 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07EC2A932BD8711E002375F2 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		07EC2A962BD8711E002375F2 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07EC2A932BD8711E002375F2 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 07EC2A122BD87030002375F2 /* Project object */;
 }
