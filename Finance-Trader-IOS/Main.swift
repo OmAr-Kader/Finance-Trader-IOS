@@ -50,3 +50,5 @@ struct SplashScreen : View {
         }.background(theme.background)
     }
 }
+
+
