@@ -20,6 +20,8 @@ struct Theme {
     let textGrayColor: Color
     let error: Color
     let textHintColor: Color
+    let textHintAlpha: Color
+    let backDarkAlpha: Color
 
     init(isDarkMode: Bool) {
         self.isDarkMode = isDarkMode
@@ -42,6 +44,8 @@ struct Theme {
             self.textGrayColor = Color(UIColor.lightGray)
             self.error = Color(red: 255 / 255, green: 21 / 255, blue: 21 / 255)
             self.textHintColor = Color(red: 175 / 255, green: 175 / 255, blue: 175 / 255)
+            self.textHintAlpha = UIColor(_colorLiteralRed: 175 / 255, green: 175 / 255, blue: 175 / 255, alpha: 0.5).toC
+            self.backDarkAlpha = UIColor(_colorLiteralRed: 31 / 255, green: 31 / 255, blue: 31 / 255, alpha: 0.5).toC
         } else {
             self.isDarkStatusBarText = false
             self.primary = Purple40
@@ -61,6 +65,8 @@ struct Theme {
             self.textGrayColor = Color(UIColor.darkGray)
             self.error = Color(red: 155 / 255, green: 0, blue: 0)
             self.textHintColor = Color(red: 80 / 255, green: 80 / 255, blue: 80 / 255)
+            self.textHintAlpha = UIColor(_colorLiteralRed: 80 / 255, green: 80 / 255, blue: 80 / 255, alpha: 0.5).toC
+            self.backDarkAlpha = UIColor(_colorLiteralRed: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 0.5).toC
             
         }
     }

@@ -808,3 +808,47 @@ struct BoxGroupStyle: GroupBoxStyle {
             )
     }
 }
+
+struct LoadingBar : View {
+    
+    @Inject
+    private var theme: Theme
+    
+    let isLoading: Bool
+    
+    var body: some View {
+        if !isLoading {
+            Spacer(minLength: 0)
+        } else {
+            FullZStack {
+                ProgressView().progressViewStyle(CircularProgressViewStyle(tint: theme.primary)).onCenter()
+            }.background(theme.backDarkAlpha)
+        }
+    }
+}
+/**
+ 
+ 
+ @Composable
+ fun LoadingScreen(
+     isLoading: Boolean,
+     theme: Theme,
+ ) {
+     if (isLoading) {
+         Card(
+             modifier = Modifier.fillMaxSize().clickable { },
+             colors = CardDefaults.cardColors(containerColor = theme.backDarkAlpha),
+         ) {
+             Box(
+                 modifier = Modifier.fillMaxSize(),
+                 contentAlignment = Alignment.Center
+             ) {
+                 CircularProgressIndicator(
+                     modifier = Modifier,
+                     color = theme.primary,
+                 )
+             }
+         }
+     } else return
+ }
+*/

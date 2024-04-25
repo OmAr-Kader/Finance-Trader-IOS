@@ -48,7 +48,6 @@ class PrefRepoImp : PrefRepo {
                 realm.add(pref, update: .all)
             }
             await invoke(pref)
-            print("=====>" + "Done" + pref.ketString + pref.value)
         } catch let error {
             print("=====>" + error.localizedDescription)
             await invoke(nil)

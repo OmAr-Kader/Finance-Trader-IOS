@@ -74,7 +74,18 @@ extension String {
             return self
         }
     }
-
+    
+    //isoDate: String
+    func toTime() -> Int64 {
+        let dateFormatter = DateFormatter()
+        //dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+        dateFormatter.dateFormat = "dd MMM yy"
+        let date = dateFormatter.date(from: self)!
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day, .hour], from: date)
+        let time = calendar.date(from: components)!.timeIntervalSince1970 * 1000
+        return Int64(time)
+    }
 }
 
 extension Int64 {

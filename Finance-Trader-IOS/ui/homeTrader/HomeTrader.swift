@@ -30,7 +30,7 @@ struct HomeTrader : View {
         FullZStack {
             switch  state.selectedIndex {
             case 0: HomeTraderSearch()
-            case 1: HomeTraderOpportunity(state: state) { obs.loadData(state.selectedIndex) }
+            case 1: HomeTraderOpportunity(state: state, onModeChange: obs.loadStocks) { obs.loadData(state.selectedIndex, mode: state.mode) }
             default: HomeTraderPortfolio()
             }
             BottomBar(
@@ -38,10 +38,10 @@ struct HomeTrader : View {
                 items: items, backColor: theme.backDark
             ) { it in
                 obs.onPageSelected(it)
-                obs.loadData(it)
+                obs.loadData(it, mode: state.mode)
             }.onBottom().frame(height: 60)
         }.onAppear {
-            obs.loadData(state.selectedIndex)
+            obs.loadData(state.selectedIndex, mode: state.mode)
         }
     }
 }
@@ -62,6 +62,7 @@ struct HomeTraderOpportunity : View {
     private var theme: Theme
     
     let state: HomeTraderObserve.State
+    let onModeChange: (ChartMode) -> Unit
     let onRefresh: () -> Unit
     
     var body: some View {
@@ -73,25 +74,67 @@ struct HomeTraderOpportunity : View {
                     Text("Refresh")
                         .padding(20)
                 }.onEnd()
-                
                 Group {
                     ScrollView(Axis.Set.vertical, showsIndicators: false) {
                         LazyVStack {
                             GroupBox { //(title)
-                                StockWaveView(stocks: state.stocksWave, stockBoarder: state.stockBoarderWave, grad: state.grad)
+                                ScrollView(Axis.Set.horizontal, showsIndicators: false) {
+                                    LazyHStack {
+                                        Button {
+                                            onModeChange(.StockWave)
+                                        } label: {
+                                            Text("Wave")
+                                                .padding(10)
+                                        }
+                                        Button {
+                                            onModeChange(.StockMulti)
+                                        } label: {
+                                            Text("Multi")
+                                                .padding(10)
+                                        }
+                                        Button {
+                                            onModeChange(.StockSMA)
+                                        } label: {
+                                            Text("SMA")
+                                                .padding(10)
+                                        }
+                                        Button {
+                                            onModeChange(.StockEMA)
+                                        } label: {
+                                            Text("EMA")
+                                                .padding(10)
+                                        }
+                                        Button {
+                                            onModeChange(.StockRSI)
+                                        } label: {
+                                            Text("RSI")
+                                                .padding(10)
+                                        }
+                                        Button {
+                                            onModeChange(.StockTrad)
+                                        } label: {
+                                            Text("Trad")
+                                                .padding(10)
+                                        }
+                                        Button {
+                                            onModeChange(.StockPrediction)
+                                        } label: {
+                                            Text("Prediction")
+                                                .padding(10)
+                                        }
+                                    }
+                                }
+                                switch state.mode {
+                                case .StockWave : StockWaveView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
+                                case .StockMulti: StockMultiView(stocks: state.stocks, stockBoarder: state.stockBoarder)
+                                case .StockSMA: StockSMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
+                                case .StockEMA: StockEMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
+                                case .StockRSI: StockRSIView(stock: state.stock, stockBoarder: state.stockBoarder)
+                                case .StockTrad: StockTradView(stock: state.stock, stockBoarder: state.stockBoarder)
+                                case .StockPrediction: StockPredictionView(stock: state.stock, stockPrediction: state.stockPrediction, stockBoarder: state.stockBoarder, grad: state.gradient, gradPred: state.gradientPred)
+                                }
                             }.groupBoxStyle(BoxGroupStyle(color: theme.backDark))
                                 .padding()
-                            Spacer().frame(height: 15)
-                            GroupBox { //(title)
-                                StockMultiView(stocks: state.stocksMutli, stockBoarder: state.stockBoarderMulti)
-                            }.groupBoxStyle(BoxGroupStyle(color: Color(hue: 0.10, saturation: 0.10, brightness: 0.98)))
-                                .padding()
-                            Spacer().frame(height: 15)
-                            GroupBox { //(title)
-                                StockTradView(stocks: state.stocksWave, stockBoarder: state.stockBoarderWave)
-                            }.groupBoxStyle(BoxGroupStyle(color: theme.backDark))
-                                .padding()
-                            Spacer().frame(height: 15)
                         }
                     }
                 }.onBottom()
