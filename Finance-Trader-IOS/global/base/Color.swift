@@ -22,6 +22,17 @@ extension UIColor {
     var toC: Color {
         return Color(self)
     }
+    
+    var rgba: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        return (red, green, blue, alpha)
+    }
+
 }
 
 extension Color {
@@ -36,6 +47,15 @@ extension Color {
 
     func margeWithPrimary(_ f: Double = 0.15) -> Color {
         return (toUic * (1.0 - f) + Purple40.toUic * f).toC
+    }
+    
+    static func random(randomOpacity: Bool = false) -> Color {
+        Color(
+            red: .random(in: 0...1),
+            green: .random(in: 0...1),
+            blue: .random(in: 0...1),
+            opacity: randomOpacity ? .random(in: 0...1) : 1
+        )
     }
 }
 
@@ -76,7 +96,7 @@ var Purple40: Color {
 }
 
 var DarkGray: Color {
-    return Color(red: 32 / 255, green: 32 / 255, blue: 32 / 255)
+    return Color(red: 22 / 255, green: 22 / 255, blue: 22 / 255)
 }
 
 var LightViolet: Color {

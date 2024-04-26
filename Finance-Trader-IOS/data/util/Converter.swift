@@ -49,6 +49,41 @@ extension Array where Element : Object {
     }
 }
 
+extension [StockBoarder] {
+    
+    @BackgroundActor
+    func minAndMaxValues(_ mode: ChartMode, values: (_ stockBoarder: StockBoarder) -> (), failed: () -> ()) {
+        var minXStock: [Int64] = []
+        var maxXStock: [Int64] = []
+        var minYStock: [Float64] = []
+        var maxYStock: [Float64] = []
+        self.forEach { stockBoarder in
+            minXStock.append(stockBoarder.minX)
+            maxXStock.append(stockBoarder.maxX)
+            minYStock.append(stockBoarder.minY)
+            maxYStock.append(stockBoarder.maxY)
+        }
+        guard let minX = minXStock.sorted().first else {
+            failed()
+            return
+        }
+        guard let maxX = maxXStock.sorted().last else {
+            failed()
+            return
+        }
+        guard let minY = minYStock.sorted().first else {
+            failed()
+            return
+        }
+        guard let maxY = maxYStock.sorted().last else {
+            failed()
+            return
+        }
+        values(StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY))
+    }
+    
+}
+
 extension [StockData] {
     
     @BackgroundActor
@@ -85,40 +120,16 @@ extension [StockData] {
         }
         values(StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY))
     }
-
-}
-extension [StockBoarder] {
     
-    @BackgroundActor
-    func minAndMaxValues(_ mode: ChartMode, values: (_ stockBoarder: StockBoarder) -> (), failed: () -> ()) {
-        var minXStock: [Int64] = []
-        var maxXStock: [Int64] = []
-        var minYStock: [Float64] = []
-        var maxYStock: [Float64] = []
-        self.forEach { stockBoarder in
-            minXStock.append(stockBoarder.minX)
-            maxXStock.append(stockBoarder.maxX)
-            minYStock.append(stockBoarder.minY)
-            maxYStock.append(stockBoarder.maxY)
+    func injectColor() -> [StockData] {
+        let colors: [ColorUI] = [.blue, .green, .red, .orange, .pink, .purple, .mint, .cyan, .teal]
+        var stocks = self
+        for i in self.indices {
+            stocks[i].color = colors[safe: i] ?? ColorUI.random()
         }
-        guard let minX = minXStock.sorted().first else {
-            failed()
-            return
-        }
-        guard let maxX = maxXStock.sorted().last else {
-            failed()
-            return
-        }
-        guard let minY = minYStock.sorted().first else {
-            failed()
-            return
-        }
-        guard let maxY = maxYStock.sorted().last else {
-            failed()
-            return
-        }
-        values(StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY))
+        return stocks
     }
+
 }
 
 extension [StockPointData] {

@@ -22,6 +22,7 @@ struct Theme {
     let textHintColor: Color
     let textHintAlpha: Color
     let backDarkAlpha: Color
+    let primaryAlpha: Color
 
     init(isDarkMode: Bool) {
         self.isDarkMode = isDarkMode
@@ -35,7 +36,7 @@ struct Theme {
             self.onSecondary = BackSecDark
             self.onBackground = Color(red: 28 / 255, green: 27 / 255, blue: 31 / 255)
             self.onSurface = Color.white
-            self.backDark = Color(red: 31 / 255, green: 31 / 255, blue: 31 / 255)
+            self.backDark = Color(red: 41 / 255, green: 41 / 255, blue: 41 / 255)
             self.backDarkSec = Color(red: 61 / 255, green: 61 / 255, blue: 61 / 255)
             self.backDarkThr = Color(red: 100 / 255, green: 100 / 255, blue: 100 / 255)
             self.backGreyTrans = UIColor(_colorLiteralRed: 85 / 255, green: 85 / 255, blue: 85 / 255, alpha: 0.33).toC
@@ -46,6 +47,7 @@ struct Theme {
             self.textHintColor = Color(red: 175 / 255, green: 175 / 255, blue: 175 / 255)
             self.textHintAlpha = UIColor(_colorLiteralRed: 175 / 255, green: 175 / 255, blue: 175 / 255, alpha: 0.5).toC
             self.backDarkAlpha = UIColor(_colorLiteralRed: 31 / 255, green: 31 / 255, blue: 31 / 255, alpha: 0.5).toC
+            self.primaryAlpha = UIColor(_colorLiteralRed: 208 / 255, green: 188 / 255, blue: 255 / 255, alpha: 0.5).toC
         } else {
             self.isDarkStatusBarText = false
             self.primary = Purple40
@@ -67,7 +69,7 @@ struct Theme {
             self.textHintColor = Color(red: 80 / 255, green: 80 / 255, blue: 80 / 255)
             self.textHintAlpha = UIColor(_colorLiteralRed: 80 / 255, green: 80 / 255, blue: 80 / 255, alpha: 0.5).toC
             self.backDarkAlpha = UIColor(_colorLiteralRed: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 0.5).toC
-            
+            self.primaryAlpha = UIColor(_colorLiteralRed: 102 / 255, green: 80 / 255, blue: 164 / 255, alpha: 0.5).toC
         }
     }
     

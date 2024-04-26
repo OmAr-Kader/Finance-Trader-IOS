@@ -13,6 +13,7 @@ class HomeTraderObserve : ObservableObject {
         state = state.copy(selectedIndex: it)
     }
     
+    @MainActor
     func loadData(_ it: Int, mode: ChartMode) {
         switch  it {
         case 0: ()
@@ -22,7 +23,13 @@ class HomeTraderObserve : ObservableObject {
         }
     }
     
+    @MainActor
     func loadStocks(mode: ChartMode) {
+        state = state.copy(
+            stocks: [],
+            stock: StockData(),
+            mode: mode
+        )
         scope.launchRealm {
             switch mode { 
             case .StockWave: await self.loadWave(mode: mode)
@@ -58,7 +65,7 @@ class HomeTraderObserve : ObservableObject {
     private func loadMulti(mode: ChartMode) async {
         let stock1 = StockData.temp(name: "SPY").injectStatus(mode: mode)
         let stock2 = StockData.temp(name: "IBM").injectStatus(mode: mode)
-        let stockMulti = [stock1, stock2]
+        let stockMulti = [stock1, stock2].injectColor()
         stockMulti.minAndMaxValues(mode) { stockBoarderMulti in
             self.scope.launchMain {
                 self.state = self.state.copy(
@@ -145,9 +152,10 @@ class HomeTraderObserve : ObservableObject {
     private func loadPrediction(mode: ChartMode) async {
         let stockPred = StockData.temp(name: "SPY", start: 0, end: 30).injectStatus(mode: mode)
         let _stockPrediction = StockData.temp(name: "SPY", start: 30, end: 40).injectStatus(mode: mode)
+        let stockMulti = [stockPred, _stockPrediction]
         stockPred.values.minAndMaxValues(mode) { stockBoarderPred in
             _stockPrediction.values.minAndMaxValues(mode) { stockBoarderPredictions in
-                [stockPred, _stockPrediction].minAndMaxValues(mode) { both in
+                stockMulti.minAndMaxValues(mode) { both in
                     let gradient = stockPred.values.gradientCreator(stockBoarderPred, mode: mode)
                     let gradientPred = _stockPrediction.values.gradientCreator(stockBoarderPredictions, mode: mode)
                     let stockPrediction = _stockPrediction.injectConnectPoint(stockPred.values.last!) // Not Before For Correctly Gradient Creation
@@ -184,7 +192,7 @@ class HomeTraderObserve : ObservableObject {
 
         var isLoading: Bool = false
         var selectedIndex: Int = 1
-        var mode: ChartMode = ChartMode.StockWave
+        var mode: ChartMode = ChartMode.StockPrediction
         var staticsMode: Int = 0
         
         mutating func copy(

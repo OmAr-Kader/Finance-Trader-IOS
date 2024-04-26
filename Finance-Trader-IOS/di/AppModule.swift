@@ -15,7 +15,7 @@ func buildContainer() -> Container {
         realmApi: realmApi,
         preference: preference
     )
-    let theme = Theme(isDarkMode: UITraitCollection.current.userInterfaceStyle.isDarkMode)
+    let theme = Theme(isDarkMode: !UITraitCollection.current.userInterfaceStyle.isDarkMode)
     container.register(RealmApi.self) { _  in
         return realmApi
     }.inObjectScope(.container)

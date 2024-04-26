@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0787412F2BDABFFF008689BB /* ConverterUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0787412E2BDABFFF008689BB /* ConverterUI.swift */; };
 		07EC2A1E2BD87030002375F2 /* Finance_Trader_IOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A1D2BD87030002375F2 /* Finance_Trader_IOSApp.swift */; };
-		07EC2A202BD87030002375F2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A1F2BD87030002375F2 /* ContentView.swift */; };
 		07EC2A222BD87033002375F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A212BD87033002375F2 /* Assets.xcassets */; };
 		07EC2A252BD87033002375F2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A242BD87033002375F2 /* Preview Assets.xcassets */; };
 		07EC2A2D2BD87054002375F2 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A2B2BD87054002375F2 /* README.md */; };
@@ -63,7 +62,6 @@
 		0787412E2BDABFFF008689BB /* ConverterUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterUI.swift; sourceTree = "<group>"; };
 		07EC2A1A2BD87030002375F2 /* Finance-Trader-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Finance-Trader-IOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC2A1D2BD87030002375F2 /* Finance_Trader_IOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finance_Trader_IOSApp.swift; sourceTree = "<group>"; };
-		07EC2A1F2BD87030002375F2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		07EC2A212BD87033002375F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07EC2A242BD87033002375F2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		07EC2A2B2BD87054002375F2 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 				07EC2A362BD870BE002375F2 /* AppDelegate.swift */,
 				07EC2A5F2BD870BF002375F2 /* Main.swift */,
 				07EC2A1D2BD87030002375F2 /* Finance_Trader_IOSApp.swift */,
-				07EC2A1F2BD87030002375F2 /* ContentView.swift */,
 				07EC2A212BD87033002375F2 /* Assets.xcassets */,
 				07EC2A232BD87033002375F2 /* Preview Content */,
 			);
@@ -408,7 +405,6 @@
 				07EC2A772BD870BF002375F2 /* Const.swift in Sources */,
 				07EC2A832BD870BF002375F2 /* StatusBar.swift in Sources */,
 				07EC2A822BD870BF002375F2 /* OutlinedTextField.swift in Sources */,
-				07EC2A202BD87030002375F2 /* ContentView.swift in Sources */,
 				07EC2A782BD870BF002375F2 /* Scope.swift in Sources */,
 				07EC2A7A2BD870BF002375F2 /* Roots.swift in Sources */,
 				07EC2A6D2BD870BF002375F2 /* PrefRepo.swift in Sources */,

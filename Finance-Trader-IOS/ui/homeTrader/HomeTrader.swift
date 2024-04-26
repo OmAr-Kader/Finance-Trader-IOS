@@ -42,7 +42,7 @@ struct HomeTrader : View {
             }.onBottom().frame(height: 60)
         }.onAppear {
             obs.loadData(state.selectedIndex, mode: state.mode)
-        }
+        }.background(theme.background)
     }
 }
 
@@ -67,79 +67,35 @@ struct HomeTraderOpportunity : View {
     
     var body: some View {
         FullZStack {
-            VStack {
-                Button {
-                    onRefresh()
-                } label: {
-                    Text("Refresh")
-                        .padding(20)
-                }.onEnd()
-                Group {
-                    ScrollView(Axis.Set.vertical, showsIndicators: false) {
-                        LazyVStack {
-                            GroupBox { //(title)
-                                ScrollView(Axis.Set.horizontal, showsIndicators: false) {
-                                    LazyHStack {
-                                        Button {
-                                            onModeChange(.StockWave)
-                                        } label: {
-                                            Text("Wave")
-                                                .padding(10)
-                                        }
-                                        Button {
-                                            onModeChange(.StockMulti)
-                                        } label: {
-                                            Text("Multi")
-                                                .padding(10)
-                                        }
-                                        Button {
-                                            onModeChange(.StockSMA)
-                                        } label: {
-                                            Text("SMA")
-                                                .padding(10)
-                                        }
-                                        Button {
-                                            onModeChange(.StockEMA)
-                                        } label: {
-                                            Text("EMA")
-                                                .padding(10)
-                                        }
-                                        Button {
-                                            onModeChange(.StockRSI)
-                                        } label: {
-                                            Text("RSI")
-                                                .padding(10)
-                                        }
-                                        Button {
-                                            onModeChange(.StockTrad)
-                                        } label: {
-                                            Text("Trad")
-                                                .padding(10)
-                                        }
-                                        Button {
-                                            onModeChange(.StockPrediction)
-                                        } label: {
-                                            Text("Prediction")
-                                                .padding(10)
-                                        }
+            //ScrollView(Axis.Set.vertical, showsIndicators: false) {
+                //LazyVStack {
+                    GroupBox { //(title)
+                        ScrollView(Axis.Set.horizontal, showsIndicators: false) {
+                            LazyHStack {
+                                ForEach(ChartMode.allCases, id: \.key) { (key: ChartMode, value: String) in
+                                    Button {
+                                        onModeChange(key)
+                                    } label: {
+                                        Text(value)
+                                            .padding(10)
                                     }
                                 }
-                                switch state.mode {
-                                case .StockWave : StockWaveView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
-                                case .StockMulti: StockMultiView(stocks: state.stocks, stockBoarder: state.stockBoarder)
-                                case .StockSMA: StockSMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
-                                case .StockEMA: StockEMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
-                                case .StockRSI: StockRSIView(stock: state.stock, stockBoarder: state.stockBoarder)
-                                case .StockTrad: StockTradView(stock: state.stock, stockBoarder: state.stockBoarder)
-                                case .StockPrediction: StockPredictionView(stock: state.stock, stockPrediction: state.stockPrediction, stockBoarder: state.stockBoarder, grad: state.gradient, gradPred: state.gradientPred)
-                                }
-                            }.groupBoxStyle(BoxGroupStyle(color: theme.backDark))
-                                .padding()
+                            }
                         }
-                    }
-                }.onBottom()
-            }
-        }
+                        switch state.mode {
+                        case .StockWave : StockWaveView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
+                        case .StockMulti: StockMultiView(stocks: state.stocks, stockBoarder: state.stockBoarder)
+                        case .StockSMA: StockSMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
+                        case .StockEMA: StockEMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
+                        case .StockRSI: StockRSIView(stock: state.stock, stockBoarder: state.stockBoarder)
+                        case .StockTrad: StockTradView(stock: state.stock, stockBoarder: state.stockBoarder)
+                        case .StockPrediction: StockPredictionView(stock: state.stock, stockPrediction: state.stockPrediction, stockBoarder: state.stockBoarder, grad: state.gradient, gradPred: state.gradientPred)
+                        }
+                    }.groupBoxStyle(BoxGroupStyle(color: theme.backDark))
+                        .padding()
+                }.background(theme.background)
+            //}
+        //}.background(theme.background)
     }
 }
 
