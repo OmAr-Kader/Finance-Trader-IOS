@@ -34,11 +34,11 @@ struct SplashScreen : View {
         FullZStack {
             Image(
                 uiImage: UIImage(
-                    named: "search"
+                    named: "AppIcon"
                 )?.withTintColor(
                     UIColor(theme.textColor)
                 ) ?? UIImage()
-            ).resizable()
+            ).resizable().cornerRadius(25)
                 .scaleEffect(scale)
                 .frame(width: width, height: width, alignment: .center)
                 .onAppear {

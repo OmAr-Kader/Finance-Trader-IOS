@@ -35,16 +35,16 @@ extension View {
     
     @inlinable public func onCenter() -> some View {
         return HStack {
-            Spacer()
+            Spacer(minLength: 0)
             self
-            Spacer()
+            Spacer(minLength: 0)
         }
     }
     
     @inlinable public func onTop() -> some View {
         return VStack {
             self
-            Spacer()
+            Spacer(minLength: 0)
         }
     }
     
@@ -820,9 +820,7 @@ struct LoadingBar : View {
         if !isLoading {
             Spacer(minLength: 0)
         } else {
-            FullZStack {
-                ProgressView().progressViewStyle(CircularProgressViewStyle(tint: theme.primary)).onCenter()
-            }.background(theme.backDarkAlpha)
+            ProgressView().progressViewStyle(CircularProgressViewStyle(tint: theme.primary)).frame(width: 20, height: 20).onCenter().controlSize(.large)
         }
     }
 }

@@ -49,8 +49,8 @@ struct HomeTrader : View {
 //https://www.swiftyplace.com/blog/swiftcharts-create-charts-and-graphs-in-swiftui
 struct HomeTraderSearch : View {
     var body: some View {
-        VStack {
-            
+        FullZStack {
+            Spacer()
         }
     }
 }
@@ -66,43 +66,53 @@ struct HomeTraderOpportunity : View {
     let onRefresh: () -> Unit
     
     var body: some View {
-        FullZStack {
-            //ScrollView(Axis.Set.vertical, showsIndicators: false) {
-                //LazyVStack {
-                    GroupBox { //(title)
-                        ScrollView(Axis.Set.horizontal, showsIndicators: false) {
-                            LazyHStack {
-                                ForEach(ChartMode.allCases, id: \.key) { (key: ChartMode, value: String) in
-                                    Button {
-                                        onModeChange(key)
-                                    } label: {
-                                        Text(value)
-                                            .padding(10)
-                                    }
-                                }
+        VStack {
+            VStack {
+                ScrollView(Axis.Set.horizontal, showsIndicators: false) {
+                    LazyHStack {
+                        ForEach(ChartMode.allCases, id: \.key) { (key: ChartMode, value: String) in
+                            Button {
+                                onModeChange(key)
+                            } label: {
+                                Text(value)
+                                    .padding()
+                                    .frame(minWidth: 80)
+                                    .foregroundColor(state.mode == key ? .black : theme.textColor)
+                                    .background(
+                                        RoundedRectangle(
+                                            cornerRadius: 15,
+                                            style: .continuous
+                                        )
+                                        .fill(state.mode == key ? theme.primary.gradient : Color.clear.gradient)
+                                    )
                             }
                         }
-                        switch state.mode {
-                        case .StockWave : StockWaveView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
-                        case .StockMulti: StockMultiView(stocks: state.stocks, stockBoarder: state.stockBoarder)
-                        case .StockSMA: StockSMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
-                        case .StockEMA: StockEMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient)
-                        case .StockRSI: StockRSIView(stock: state.stock, stockBoarder: state.stockBoarder)
-                        case .StockTrad: StockTradView(stock: state.stock, stockBoarder: state.stockBoarder)
-                        case .StockPrediction: StockPredictionView(stock: state.stock, stockPrediction: state.stockPrediction, stockBoarder: state.stockBoarder, grad: state.gradient, gradPred: state.gradientPred)
-                        }
-                    }.groupBoxStyle(BoxGroupStyle(color: theme.backDark))
-                        .padding()
-                }.background(theme.background)
-            //}
-        //}.background(theme.background)
+                        .animation(.default, value: state.mode)
+                    }
+                }.frame(height: 60).padding()
+                ZStack {
+                    switch state.mode {
+                    case .StockWave : StockWaveView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient, isLoading: state.isLoading)
+                    case .StockMulti: StockMultiView(stocks: state.stocks, stockBoarder: state.stockBoarder, isLoading: state.isLoading)
+                    case .StockSMA: StockSMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient, isLoading: state.isLoading)
+                    case .StockEMA: StockEMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient, isLoading: state.isLoading)
+                    case .StockRSI: StockRSIView(stock: state.stock, stockBoarder: state.stockBoarder, isLoading: state.isLoading)
+                    case .StockTrad: StockTradView(stock: state.stock, stockBoarder: state.stockBoarder, isLoading: state.isLoading)
+                    case .StockPrediction: StockPredictionView(stock: state.stock, stockPrediction: state.stockPrediction, stockBoarder: state.stockBoarder, grad: state.gradient, gradPred: state.gradientPred, isLoading: state.isLoading)
+                    }
+                    LoadingBar(isLoading: state.isLoading)
+                }
+            }.background(theme.backDark)
+                .cornerRadius(15).background(theme.background).padding()
+            Spacer()
+        }
     }
 }
 
 struct HomeTraderPortfolio : View {
     var body: some View {
-        VStack {
-            
+        FullZStack {
+            Spacer()
         }
     }
 }

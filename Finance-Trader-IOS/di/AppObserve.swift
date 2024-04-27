@@ -4,7 +4,8 @@ import RealmSwift
 import Combine
 
 class AppObserve : ObservableObject {
-    
+
+
     @Inject
     private var project: Project
         
@@ -137,9 +138,22 @@ class AppObserve : ObservableObject {
             args[screen] = screenConfig
             return self
         }
-        
-        
     }
+    
+    /*func hiIamJustBuilt() {
+        import AVFoundation
+        var player: AVAudioPlayer?
+        guard let path = Bundle.main.path(forResource: "beep", ofType:"mp3") else {
+            return
+        }
+        let url = URL(fileURLWithPath: path)
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+            player?.play()
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }*/
     
     deinit {
         prefsTask?.cancel()

@@ -118,12 +118,30 @@ extension Int64 {
             from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
         )
     }
+    
+    var toStrDMY: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM yy" //"dd MMM yy" //"d MMM yyyy"//"YY/MM/dd"
+        return dateFormatter.string(
+            from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
+        )
+    }
 
 }
 
 extension Float64 {
     
-    var toStr: String {
+    var toString: String {
         String(format: "%g", self)
     }
+    
+    func toStr(toPlaces: Int = 2) -> String {
+        String(format: "%.\(toPlaces)f", self)
+    }
+    
+    func rounded(toPlaces places:Int) -> Float64 {
+        let divisor = pow(10.0, Float64(places))
+        return (self * divisor).rounded() / divisor
+    }
+
 }

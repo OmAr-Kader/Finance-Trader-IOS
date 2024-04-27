@@ -26,12 +26,13 @@ class HomeTraderObserve : ObservableObject {
     @MainActor
     func loadStocks(mode: ChartMode) {
         state = state.copy(
-            stocks: [],
-            stock: StockData(),
-            mode: mode
+            stocks: mode != state.mode ? [] : state.stocks,
+            stock: mode != state.mode ? StockData() : state.stock,
+            mode: mode,
+            isLoading: true
         )
         scope.launchRealm {
-            switch mode { 
+            switch mode {
             case .StockWave: await self.loadWave(mode: mode)
             case .StockMulti: await self.loadMulti(mode: mode)
             case .StockSMA: await self.loadSMA(mode: mode)
@@ -53,7 +54,8 @@ class HomeTraderObserve : ObservableObject {
                     stock: stockWave,
                     stockBoarder: stockBoarderWave,
                     mode: mode,
-                    gradient: gradient
+                    gradient: gradient,
+                    isLoading: false
                 )
             }
         } failed: {
@@ -71,7 +73,8 @@ class HomeTraderObserve : ObservableObject {
                 self.state = self.state.copy(
                     stocks: stockMulti,
                     stockBoarder: stockBoarderMulti,
-                    mode: mode
+                    mode: mode,
+                    isLoading: false
                 )
             }
         } failed: {
@@ -89,7 +92,8 @@ class HomeTraderObserve : ObservableObject {
                     stock: stockSMA,
                     stockBoarder: stockBoarderSMA,
                     mode: mode,
-                    gradient: gradient
+                    gradient: gradient,
+                    isLoading: false
                 )
             }
         } failed: {
@@ -107,7 +111,8 @@ class HomeTraderObserve : ObservableObject {
                     stock: stockEMA,
                     stockBoarder: stockBoarderEMA,
                     mode: mode,
-                    gradient: gradient
+                    gradient: gradient,
+                    isLoading: false
                 )
             }
         } failed: {
@@ -123,7 +128,8 @@ class HomeTraderObserve : ObservableObject {
                 self.state = self.state.copy(
                     stock: stockRSI,
                     stockBoarder: StockBoarder(minX: stockBoarderRSI.minX, maxX: stockBoarderRSI.maxX, minY: 0, maxY: 100),
-                    mode: mode
+                    mode: mode,
+                    isLoading: false
                 )
             }
         } failed: {
@@ -139,7 +145,8 @@ class HomeTraderObserve : ObservableObject {
                 self.state = self.state.copy(
                     stock: stockTrad,
                     stockBoarder: stockBoarderTrad,
-                    mode: mode
+                    mode: mode,
+                    isLoading: false
                 )
             }
         } failed: {
@@ -166,7 +173,8 @@ class HomeTraderObserve : ObservableObject {
                             stockBoarder: both,
                             mode: mode,
                             gradient: gradient,
-                            gradientPred: gradientPred
+                            gradientPred: gradientPred,
+                            isLoading: false
                         )
                     }
                 } failed: {
@@ -192,7 +200,7 @@ class HomeTraderObserve : ObservableObject {
 
         var isLoading: Bool = false
         var selectedIndex: Int = 1
-        var mode: ChartMode = ChartMode.StockPrediction
+        var mode: ChartMode = ChartMode.StockWave
         var staticsMode: Int = 0
         
         mutating func copy(
