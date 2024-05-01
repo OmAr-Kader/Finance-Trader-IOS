@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		070308A52BE2A62D0040A902 /* StockExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070308A42BE2A62C0040A902 /* StockExchange.swift */; };
+		070308A92BE2D4290040A902 /* SupplyDemand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070308A82BE2D4290040A902 /* SupplyDemand.swift */; };
+		070308AB2BE2D4370040A902 /* Trader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070308AA2BE2D4370040A902 /* Trader.swift */; };
 		0787412F2BDABFFF008689BB /* ConverterUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0787412E2BDABFFF008689BB /* ConverterUI.swift */; };
 		07EC2A1E2BD87030002375F2 /* Finance_Trader_IOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A1D2BD87030002375F2 /* Finance_Trader_IOSApp.swift */; };
 		07EC2A222BD87033002375F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A212BD87033002375F2 /* Assets.xcassets */; };
@@ -59,6 +62,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		070308A42BE2A62C0040A902 /* StockExchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockExchange.swift; sourceTree = "<group>"; };
+		070308A82BE2D4290040A902 /* SupplyDemand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyDemand.swift; sourceTree = "<group>"; };
+		070308AA2BE2D4370040A902 /* Trader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trader.swift; sourceTree = "<group>"; };
 		0787412E2BDABFFF008689BB /* ConverterUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterUI.swift; sourceTree = "<group>"; };
 		07EC2A1A2BD87030002375F2 /* Finance-Trader-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Finance-Trader-IOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC2A1D2BD87030002375F2 /* Finance_Trader_IOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finance_Trader_IOSApp.swift; sourceTree = "<group>"; };
@@ -199,6 +205,9 @@
 				07EC2A3C2BD870BE002375F2 /* Preference.swift */,
 				07EC2A3D2BD870BE002375F2 /* ResultRealm.swift */,
 				07EC2A3E2BD870BE002375F2 /* Stock.swift */,
+				070308A42BE2A62C0040A902 /* StockExchange.swift */,
+				070308A82BE2D4290040A902 /* SupplyDemand.swift */,
+				070308AA2BE2D4370040A902 /* Trader.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -412,6 +421,7 @@
 				07EC2A892BD870BF002375F2 /* Main.swift in Sources */,
 				07EC2A872BD870BF002375F2 /* Utils.swift in Sources */,
 				07EC2A8A2BD870BF002375F2 /* Elements.swift in Sources */,
+				070308A92BE2D4290040A902 /* SupplyDemand.swift in Sources */,
 				07EC2A7D2BD870BF002375F2 /* BottomBarItem.swift in Sources */,
 				07EC2A7B2BD870BF002375F2 /* BarBuilder.swift in Sources */,
 				0787412F2BDABFFF008689BB /* ConverterUI.swift in Sources */,
@@ -435,9 +445,11 @@
 				07EC2A6B2BD870BF002375F2 /* AppDelegate.swift in Sources */,
 				07EC2A802BD870BF002375F2 /* Image.swift in Sources */,
 				07EC2A8B2BD870BF002375F2 /* HomeTrader.swift in Sources */,
+				070308A52BE2A62D0040A902 /* StockExchange.swift in Sources */,
 				07EC2A6E2BD870BF002375F2 /* PrefRepoImp.swift in Sources */,
 				07EC2A7C2BD870BF002375F2 /* BottomBar.swift in Sources */,
 				07EC2A7F2BD870BF002375F2 /* BackButton.swift in Sources */,
+				070308AB2BE2D4370040A902 /* Trader.swift in Sources */,
 				07EC2A692BD870BF002375F2 /* Project.swift in Sources */,
 				07EC2A672BD870BF002375F2 /* AppModule.swift in Sources */,
 				07EC2A762BD870BF002375F2 /* Color.swift in Sources */,

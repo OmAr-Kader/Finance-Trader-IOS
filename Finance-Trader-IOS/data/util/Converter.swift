@@ -196,3 +196,28 @@ extension List<StockPoint> {
 
 
 
+extension [StockHolderData] {
+    
+    
+    @BackgroundActor
+    func toStockHolder() -> List<StockHolder> {
+        return self.map { it in
+            StockHolder(holderId: it.holderId, holderShares: it.holderShares)
+        }.toRealmList()
+    }
+    
+}
+
+
+
+extension List<StockHolder> {
+    
+    @BackgroundActor
+    func toStockHolderData() -> [StockHolderData] {
+        return self.toList().map { it in
+            StockHolderData(holderId: it.holderId, holderShares: it.holderShares)
+        }
+    }
+}
+
+

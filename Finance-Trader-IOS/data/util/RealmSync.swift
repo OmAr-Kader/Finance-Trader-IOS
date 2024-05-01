@@ -61,7 +61,7 @@ extension User {
     
     var initialSubscriptionBlock: Realm.Configuration {
         var config = self.flexibleSyncConfiguration(initialSubscriptions: { subs in
-            subs.append(QuerySubscription<Stock>())
+            subs.append(QuerySubscription<StockSession>())
        })
         config.objectTypes = listOfSchemaRealmClass + listOfSchemaEmbeddedRealmClass
         config.schemaVersion = SCHEMA_VERSION

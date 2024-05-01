@@ -16,7 +16,7 @@ var listOfOnlyLocalSchemaRealmClass: [ObjectBase.Type] {
 
 var listOfSchemaRealmClass: [ObjectBase.Type] {
     return [
-    Stock.self,
+        StockSession.self,
     ]
 }
 
