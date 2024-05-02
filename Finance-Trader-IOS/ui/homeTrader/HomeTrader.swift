@@ -10,14 +10,15 @@ import Charts
 
 
 struct HomeTrader : View {
-    
+
+    @StateObject var app: AppObserve
+
     @Inject
     private var theme: Theme
     
-    @StateObject var app: AppObserve
-    @StateObject var obs: HomeTraderObserve = HomeTraderObserve()
+    @StateObject private var obs: HomeTraderObserve = HomeTraderObserve()
 
-    var items: [BottomBarItem] {
+    private var items: [BottomBarItem] {
         return [
             BottomBarItem(icon: "search", title: "Search", color: theme.primary),
             BottomBarItem(icon: "graph", title: "Opportunities", color: theme.primary),
@@ -30,7 +31,7 @@ struct HomeTrader : View {
         FullZStack {
             switch  state.selectedIndex {
             case 0: HomeTraderSearch()
-            case 1: HomeTraderOpportunity(state: state, onModeChange: obs.loadStocks) { obs.loadData(state.selectedIndex, mode: state.mode) }
+            case 1: HomeTraderOpportunity(state: state, onModeChange: obs.loadStocks, onNavigate: app.navigateTo) { obs.loadData(state.selectedIndex, mode: state.mode) }
             default: HomeTraderPortfolio()
             }
             BottomBar(
@@ -46,7 +47,6 @@ struct HomeTrader : View {
     }
 }
 
-//https://www.swiftyplace.com/blog/swiftcharts-create-charts-and-graphs-in-swiftui
 struct HomeTraderSearch : View {
     var body: some View {
         FullZStack {
@@ -63,6 +63,7 @@ struct HomeTraderOpportunity : View {
     
     let state: HomeTraderObserve.State
     let onModeChange: (ChartMode) -> Unit
+    let onNavigate: (Screen) -> ()
     let onRefresh: () -> Unit
     
     var body: some View {
@@ -91,20 +92,35 @@ struct HomeTraderOpportunity : View {
                     }
                 }.frame(height: 60).padding()
                 ZStack {
-                    switch state.mode {
-                    case .StockWave : StockWaveView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient, isLoading: state.isLoading)
-                    case .StockMulti: StockMultiView(stocks: state.stocks, stockBoarder: state.stockBoarder, isLoading: state.isLoading)
-                    case .StockSMA: StockSMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient, isLoading: state.isLoading)
-                    case .StockEMA: StockEMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient, isLoading: state.isLoading)
-                    case .StockRSI: StockRSIView(stock: state.stock, stockBoarder: state.stockBoarder, isLoading: state.isLoading)
-                    case .StockTrad: StockTradView(stock: state.stock, stockBoarder: state.stockBoarder, isLoading: state.isLoading)
-                    case .StockPrediction: StockPredictionView(stock: state.stock, stockPrediction: state.stockPrediction, stockBoarder: state.stockBoarder, grad: state.gradient, gradPred: state.gradientPred, isLoading: state.isLoading)
+                    VStack {
+                        HStack(alignment: .center) {
+                            Text(getTitle(stockSymbol: state.stock.symbol, mode: state.mode)).foregroundStyle(theme.textColor).frame(minWidth: 80)
+                        }.frame(height: 40).onTapGesture {
+                            onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: TraderData(id: "1", name: "Name"), stockId: "1"))
+                        }
+                        switch state.mode {
+                        case .StockWave : StockWaveView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient, isLoading: state.isLoading)
+                        case .StockMulti: StockMultiView(stocks: state.stocks, stockBoarder: state.stockBoarder,  isLoading: state.isLoading)
+                        case .StockSMA: StockSMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient,  isLoading: state.isLoading)
+                        case .StockEMA: StockEMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient,  isLoading: state.isLoading)
+                        case .StockRSI: StockRSIView(stock: state.stock, stockBoarder: state.stockBoarder,  isLoading: state.isLoading)
+                        case .StockTrad: StockTradView(stock: state.stock, stockBoarder: state.stockBoarder,  isLoading: state.isLoading)
+                        case .StockPrediction: StockPredictionView(stock: state.stock, stockPrediction: state.stockPrediction, stockBoarder: state.stockBoarder, grad: state.gradient, gradPred: state.gradientPred,  isLoading: state.isLoading)
+                        }
                     }
                     LoadingBar(isLoading: state.isLoading)
                 }
             }.background(theme.backDark)
                 .cornerRadius(15).background(theme.background).padding()
             Spacer()
+        }
+    }
+    
+    func getTitle(stockSymbol: String, mode: ChartMode) -> String {
+        return switch mode {
+        case .StockMulti : "Comparison"
+        case .StockPrediction : "AI Predictions"
+        default : stockSymbol
         }
     }
 }
@@ -116,3 +132,11 @@ struct HomeTraderPortfolio : View {
         }
     }
 }
+
+/*
+#Preview {
+    VStack {
+        HomeTrader(app: AppObserve())
+    }
+}*/
+

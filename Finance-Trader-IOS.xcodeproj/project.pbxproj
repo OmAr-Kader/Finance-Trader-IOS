@@ -8,9 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		070308A52BE2A62D0040A902 /* StockExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070308A42BE2A62C0040A902 /* StockExchange.swift */; };
-		070308A92BE2D4290040A902 /* SupplyDemand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070308A82BE2D4290040A902 /* SupplyDemand.swift */; };
 		070308AB2BE2D4370040A902 /* Trader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070308AA2BE2D4370040A902 /* Trader.swift */; };
+		072188A22BE4217B00FC33B9 /* ExchangeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072188A12BE4217B00FC33B9 /* ExchangeScreen.swift */; };
+		072188A42BE421C500FC33B9 /* ExchangeObserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072188A32BE421C500FC33B9 /* ExchangeObserve.swift */; };
 		0787412F2BDABFFF008689BB /* ConverterUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0787412E2BDABFFF008689BB /* ConverterUI.swift */; };
+		07DD0E1F2BE3CF450006E25E /* RandomColor in Frameworks */ = {isa = PBXBuildFile; productRef = 07DD0E1E2BE3CF450006E25E /* RandomColor */; };
+		07DD0E232BE40ACC0006E25E /* SupplyAndDemand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07DD0E222BE40ACC0006E25E /* SupplyAndDemand.swift */; };
+		07E9E5E32BE38EB7009EACAA /* StockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E9E5E22BE38EB7009EACAA /* StockScreen.swift */; };
+		07E9E5E52BE38EF6009EACAA /* StockObserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E9E5E42BE38EF6009EACAA /* StockObserve.swift */; };
 		07EC2A1E2BD87030002375F2 /* Finance_Trader_IOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A1D2BD87030002375F2 /* Finance_Trader_IOSApp.swift */; };
 		07EC2A222BD87033002375F2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A212BD87033002375F2 /* Assets.xcassets */; };
 		07EC2A252BD87033002375F2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07EC2A242BD87033002375F2 /* Preview Assets.xcassets */; };
@@ -63,9 +68,13 @@
 
 /* Begin PBXFileReference section */
 		070308A42BE2A62C0040A902 /* StockExchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockExchange.swift; sourceTree = "<group>"; };
-		070308A82BE2D4290040A902 /* SupplyDemand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyDemand.swift; sourceTree = "<group>"; };
 		070308AA2BE2D4370040A902 /* Trader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trader.swift; sourceTree = "<group>"; };
+		072188A12BE4217B00FC33B9 /* ExchangeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeScreen.swift; sourceTree = "<group>"; };
+		072188A32BE421C500FC33B9 /* ExchangeObserve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeObserve.swift; sourceTree = "<group>"; };
 		0787412E2BDABFFF008689BB /* ConverterUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterUI.swift; sourceTree = "<group>"; };
+		07DD0E222BE40ACC0006E25E /* SupplyAndDemand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyAndDemand.swift; sourceTree = "<group>"; };
+		07E9E5E22BE38EB7009EACAA /* StockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockScreen.swift; sourceTree = "<group>"; };
+		07E9E5E42BE38EF6009EACAA /* StockObserve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockObserve.swift; sourceTree = "<group>"; };
 		07EC2A1A2BD87030002375F2 /* Finance-Trader-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Finance-Trader-IOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		07EC2A1D2BD87030002375F2 /* Finance_Trader_IOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finance_Trader_IOSApp.swift; sourceTree = "<group>"; };
 		07EC2A212BD87033002375F2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -120,6 +129,7 @@
 			files = (
 				07EC2A972BD8711E002375F2 /* RealmSwift in Frameworks */,
 				07EC2A952BD8711E002375F2 /* Realm in Frameworks */,
+				07DD0E1F2BE3CF450006E25E /* RandomColor in Frameworks */,
 				07EC2A902BD870F9002375F2 /* Swinject in Frameworks */,
 				07EC2A922BD870F9002375F2 /* Swinject-Dynamic in Frameworks */,
 			);
@@ -128,6 +138,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		072188A02BE4213500FC33B9 /* exchange */ = {
+			isa = PBXGroup;
+			children = (
+				072188A12BE4217B00FC33B9 /* ExchangeScreen.swift */,
+				072188A32BE421C500FC33B9 /* ExchangeObserve.swift */,
+			);
+			path = exchange;
+			sourceTree = "<group>";
+		};
+		07E9E5E12BE38E64009EACAA /* stock */ = {
+			isa = PBXGroup;
+			children = (
+				07E9E5E22BE38EB7009EACAA /* StockScreen.swift */,
+				07E9E5E42BE38EF6009EACAA /* StockObserve.swift */,
+			);
+			path = stock;
+			sourceTree = "<group>";
+		};
 		07EC2A112BD87030002375F2 = {
 			isa = PBXGroup;
 			children = (
@@ -206,8 +234,8 @@
 				07EC2A3D2BD870BE002375F2 /* ResultRealm.swift */,
 				07EC2A3E2BD870BE002375F2 /* Stock.swift */,
 				070308A42BE2A62C0040A902 /* StockExchange.swift */,
-				070308A82BE2D4290040A902 /* SupplyDemand.swift */,
 				070308AA2BE2D4370040A902 /* Trader.swift */,
+				07DD0E222BE40ACC0006E25E /* SupplyAndDemand.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -321,6 +349,8 @@
 		07EC2A652BD870BF002375F2 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				072188A02BE4213500FC33B9 /* exchange */,
+				07E9E5E12BE38E64009EACAA /* stock */,
 				07EC2A612BD870BF002375F2 /* common */,
 				07EC2A642BD870BF002375F2 /* homeTrader */,
 			);
@@ -348,6 +378,7 @@
 				07EC2A912BD870F9002375F2 /* Swinject-Dynamic */,
 				07EC2A942BD8711E002375F2 /* Realm */,
 				07EC2A962BD8711E002375F2 /* RealmSwift */,
+				07DD0E1E2BE3CF450006E25E /* RandomColor */,
 			);
 			productName = "Finance-Trader-IOS";
 			productReference = 07EC2A1A2BD87030002375F2 /* Finance-Trader-IOS.app */;
@@ -380,6 +411,7 @@
 			packageReferences = (
 				07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */,
 				07EC2A932BD8711E002375F2 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				07DD0E1D2BE3CF450006E25E /* XCRemoteSwiftPackageReference "RandomColorSwift" */,
 			);
 			productRefGroup = 07EC2A1B2BD87030002375F2 /* Products */;
 			projectDirPath = "";
@@ -414,14 +446,15 @@
 				07EC2A772BD870BF002375F2 /* Const.swift in Sources */,
 				07EC2A832BD870BF002375F2 /* StatusBar.swift in Sources */,
 				07EC2A822BD870BF002375F2 /* OutlinedTextField.swift in Sources */,
+				072188A22BE4217B00FC33B9 /* ExchangeScreen.swift in Sources */,
 				07EC2A782BD870BF002375F2 /* Scope.swift in Sources */,
 				07EC2A7A2BD870BF002375F2 /* Roots.swift in Sources */,
 				07EC2A6D2BD870BF002375F2 /* PrefRepo.swift in Sources */,
 				07EC2A792BD870BF002375F2 /* Theme.swift in Sources */,
 				07EC2A892BD870BF002375F2 /* Main.swift in Sources */,
 				07EC2A872BD870BF002375F2 /* Utils.swift in Sources */,
+				07DD0E232BE40ACC0006E25E /* SupplyAndDemand.swift in Sources */,
 				07EC2A8A2BD870BF002375F2 /* Elements.swift in Sources */,
-				070308A92BE2D4290040A902 /* SupplyDemand.swift in Sources */,
 				07EC2A7D2BD870BF002375F2 /* BottomBarItem.swift in Sources */,
 				07EC2A7B2BD870BF002375F2 /* BarBuilder.swift in Sources */,
 				0787412F2BDABFFF008689BB /* ConverterUI.swift in Sources */,
@@ -439,6 +472,7 @@
 				07EC2A6F2BD870BF002375F2 /* Preference.swift in Sources */,
 				07FBFE4D2BD9C45B00625E17 /* SecureConst.swift in Sources */,
 				07EC2A8C2BD870BF002375F2 /* HomeTraderObserve.swift in Sources */,
+				07E9E5E52BE38EF6009EACAA /* StockObserve.swift in Sources */,
 				07EC2A682BD870BF002375F2 /* AppObserve.swift in Sources */,
 				07EC2A852BD870BF002375F2 /* Views.swift in Sources */,
 				07EC2A812BD870BF002375F2 /* NavigationDrawer.swift in Sources */,
@@ -446,6 +480,8 @@
 				07EC2A802BD870BF002375F2 /* Image.swift in Sources */,
 				07EC2A8B2BD870BF002375F2 /* HomeTrader.swift in Sources */,
 				070308A52BE2A62D0040A902 /* StockExchange.swift in Sources */,
+				072188A42BE421C500FC33B9 /* ExchangeObserve.swift in Sources */,
+				07E9E5E32BE38EB7009EACAA /* StockScreen.swift in Sources */,
 				07EC2A6E2BD870BF002375F2 /* PrefRepoImp.swift in Sources */,
 				07EC2A7C2BD870BF002375F2 /* BottomBar.swift in Sources */,
 				07EC2A7F2BD870BF002375F2 /* BackButton.swift in Sources */,
@@ -660,6 +696,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		07DD0E1D2BE3CF450006E25E /* XCRemoteSwiftPackageReference "RandomColorSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/RandomColorSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Swinject/Swinject";
@@ -679,6 +723,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		07DD0E1E2BE3CF450006E25E /* RandomColor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07DD0E1D2BE3CF450006E25E /* XCRemoteSwiftPackageReference "RandomColorSwift" */;
+			productName = RandomColor;
+		};
 		07EC2A8F2BD870F9002375F2 /* Swinject */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */;

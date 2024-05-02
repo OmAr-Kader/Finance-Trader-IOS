@@ -11,14 +11,17 @@ extension View {
             SplashScreen(app: app)
         case .HOME_TRADER_ROUTE :
             HomeTrader(app: app)
+        case .STOCK_SCREEN_ROUTE(let traderData, let stockId):
+            StockScreen(app: app, trader: traderData, stockId: stockId)
         }
     }
 }
 
-enum Screen {
+enum Screen : Hashable {
     
     case SPLASH_SCREEN_ROUTE
     case HOME_TRADER_ROUTE
+    case STOCK_SCREEN_ROUTE(traderData: TraderData, stockId: String)
 }
 
 
@@ -27,4 +30,3 @@ protocol ScreenConfig {}
 class SplashConfig: ScreenConfig {
     
 }
-

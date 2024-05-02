@@ -11,6 +11,7 @@ class Trader : Object {
         self.name = ""
     }
     
+    @BackgroundActor
     convenience init(traderData: TraderData) {
         self.init()
         self._id = try! ObjectId.init(string: traderData.id)
@@ -20,16 +21,22 @@ class Trader : Object {
 }
 
 
-struct TraderData {
+struct TraderData : Hashable {
     
     let id: String
     let name: String
+    
+    init() {
+        self.id = ""
+        self.name = ""
+    }
     
     init(id: String, name: String) {
         self.id = id
         self.name = name
     }
     
+    @BackgroundActor
     init(trader: Trader) {
         self.id = trader._id.stringValue
         self.name = trader.name

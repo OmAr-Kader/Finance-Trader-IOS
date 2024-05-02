@@ -5,6 +5,7 @@ import Swinject
 //https://github.com/realm/realm-swift
 //https://github.com/firebase/firebase-ios-sdk
 //https://github.com/Swinject/Swinject
+//https://github.com/onevcat/RandomColorSwift.git
 
 func buildContainer() -> Container {
     let container = Container()

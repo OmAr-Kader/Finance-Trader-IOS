@@ -20,6 +20,13 @@ struct Main: View {
     }
 }
 
+#Preview {
+    VStack {
+        Main(app: AppObserve())
+    }
+}
+
+
 struct SplashScreen : View {
     
     @Inject
