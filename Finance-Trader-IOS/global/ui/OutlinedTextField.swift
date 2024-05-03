@@ -8,6 +8,7 @@ struct OutlinedTextField : View {
     let isError: Bool
     let errorMsg: String
     let theme: Theme
+    let cornerRadius: CGFloat
     let lineLimit: Int?
     let keyboardType: UIKeyboardType?
 
@@ -36,7 +37,7 @@ struct OutlinedTextField : View {
                 .keyboardType(keyboardType ?? .default)
                 .preferredColorScheme(theme.isDarkMode ? .dark : .light)
                 .background(
-                    RoundedRectangle(cornerRadius: 5)
+                    RoundedRectangle(cornerRadius: cornerRadius)
                         .stroke(
                             isError ? theme.error : (isFocused ? theme.primary : theme.secondary),
                             lineWidth: 1.5

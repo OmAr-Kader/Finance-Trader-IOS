@@ -824,6 +824,25 @@ struct LoadingBar : View {
         }
     }
 }
+struct LoadingScreen : View {
+    
+    @Inject
+    private var theme: Theme
+    
+    let isLoading: Bool
+    
+    var body: some View {
+        if !isLoading {
+            Spacer(minLength: 0)
+        } else {
+            FullZStack {
+                ProgressView().progressViewStyle(CircularProgressViewStyle(tint: theme.primary)).frame(width: 20, height: 20).onCenter().controlSize(.large)
+            }.background(theme.backDarkAlpha).onTapGesture {
+                
+            }
+        }
+    }
+}
 /**
  
  

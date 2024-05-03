@@ -14,7 +14,9 @@ class Trader : Object {
     @BackgroundActor
     convenience init(traderData: TraderData) {
         self.init()
-        self._id = try! ObjectId.init(string: traderData.id)
+        if !traderData.id.isEmpty {
+            self._id = try! ObjectId.init(string: traderData.id)
+        }
         self.name = traderData.name
     }
 

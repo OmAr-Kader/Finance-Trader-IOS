@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension View {
-
+    
     @ViewBuilder func targetScreen(
         _ target: Screen,
         _ app: AppObserve

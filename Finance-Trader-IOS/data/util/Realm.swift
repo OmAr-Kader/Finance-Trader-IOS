@@ -17,12 +17,16 @@ var listOfOnlyLocalSchemaRealmClass: [ObjectBase.Type] {
 var listOfSchemaRealmClass: [ObjectBase.Type] {
     return [
         StockSession.self,
+        StockInfo.self,
+        Trader.self,
+        SupplyDemand.self,
     ]
 }
 
 var listOfSchemaEmbeddedRealmClass: [ObjectBase.Type] {
     return [
         StockPoint.self,
+        StockHolder.self,
     ]
 }
 

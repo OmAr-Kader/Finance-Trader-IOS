@@ -119,6 +119,55 @@ class StockObserve : ObservableObject {
         } failed: {}
     }
     
+    func sellShare(supplyDemandData: SupplyDemandData, trader: TraderData, stockInfo: StockInfoData) {
+        
+    }
+    
+    func buyShare(supplyDemandData: SupplyDemandData, trader: TraderData, stockInfo: StockInfoData) {
+        
+    }
+    
+    func pushNegotiate(supplyDemandData: SupplyDemandData, trader: TraderData) {
+        
+    }
+    
+    @MainActor
+    func setAddSheet(_ it: Bool) {
+        self.state = self.state.copy(isAddSheet: it)
+    }
+    
+    @MainActor
+    func setNegotiateSheet(_ it: Bool) {
+        self.state = self.state.copy(isNegotiateSheet: it)
+    }
+    
+    @MainActor
+    func setNegotiateShares(_ it: String) {
+        self.state = self.state.copy(shares: it)
+    }
+    
+    @MainActor
+    func setNegotiatePrice(_ it: String) {
+        self.state = self.state.copy(price: it)
+    }
+    
+    @MainActor
+    func showSupplyDemandSheet(supplyDemandData: SupplyDemandData) {
+        self.state = self.state.copy(
+            supplyDemandData: supplyDemandData,
+            isNegotiateSheet: true
+        )
+    }
+    
+    @MainActor
+    func showNegotiateSheet(supplyDemandData: SupplyDemandData) {
+        self.state = self.state.copy(
+            supplyDemandData: supplyDemandData,
+            isNegotiateSheet: true
+        )
+    }
+    
+    
     struct State {
         
         var trader: TraderData = TraderData()
@@ -136,6 +185,11 @@ class StockObserve : ObservableObject {
 
         var isLoading: Bool = false
         
+        var isAddSheet: Bool = false
+
+        var isNegotiateSheet: Bool = false
+        var supplyDemandData: SupplyDemandData? = nil
+
         mutating func copy(
             trader: TraderData? = nil,
             stockInfo: StockInfoData? = nil,
@@ -147,7 +201,12 @@ class StockObserve : ObservableObject {
             mode: ChartMode? = nil,
             stockPrediction: StockData? = nil,
             gradientPred: Gradient? = nil,
-            isLoading: Bool? = nil
+            isLoading: Bool? = nil,
+            isAddSheet: Bool? = nil,
+            supplyDemandData: SupplyDemandData? = nil,
+            isNegotiateSheet: Bool? = nil,
+            shares: String? = nil,
+            price: String? = nil
         ) -> Self {
             self.trader = trader ?? self.trader
             self.stockInfo = stockInfo ?? self.stockInfo
@@ -160,6 +219,9 @@ class StockObserve : ObservableObject {
             self.stockPrediction = stockPrediction ?? self.stockPrediction
             self.gradientPred = gradientPred ?? self.gradientPred
             self.isLoading = isLoading ?? self.isLoading
+            self.isAddSheet = isAddSheet ?? self.isAddSheet
+            self.supplyDemandData = supplyDemandData ?? self.supplyDemandData
+            self.isNegotiateSheet = isNegotiateSheet ?? self.isNegotiateSheet
             return self
         }
     }

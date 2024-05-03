@@ -82,7 +82,6 @@ class UrlImageModel: ObservableObject {
             print("Cache hit")
             return
         }
-
         print("Cache missing, loading from url")
         loadImageFromUrl()
     }
@@ -92,7 +91,6 @@ class UrlImageModel: ObservableObject {
             print("Cache hit")
             return
         }
-
         print("Cache missing, loading from url")
         loadVideoFromURL()
     }
@@ -101,7 +99,6 @@ class UrlImageModel: ObservableObject {
         guard let url = url else {
             return false
         }
-
         guard let cacheImage = imageCache[url] else {
             return false
         }
@@ -113,7 +110,6 @@ class UrlImageModel: ObservableObject {
         guard let url = url else {
             return
         }
-
         cancellable = URLSession.shared.dataTaskPublisher(for: url)
             .map { UIImage(data: $0.data) }
             .replaceError(with: nil)
