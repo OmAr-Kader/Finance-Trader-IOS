@@ -14,156 +14,174 @@ class HomeTraderObserve : ObservableObject {
     }
     
     @MainActor
-    func loadData(_ it: Int, mode: ChartMode) {
-        switch  it {
-        case 0: ()
-        case 1: loadStocks(mode: mode)
-        case 2: ()
-        default: ()
+    func loadData(_ it: Int) {
+        if it == 0 {
+        } else if it == 1 {
+            if state.stocks.isEmpty {
+                loadStocks()
+            }
+        } else if it == 2 {
         }
     }
     
     @MainActor
-    func loadStocks(mode: ChartMode) {
+    func loadStocks() {
         state = state.copy(
-            stocks: mode != state.mode ? [] : state.stocks,
-            stock: mode != state.mode ? StockData() : state.stock,
-            mode: mode,
             isLoading: true
         )
-        scope.launchRealm {
-            switch mode {
-            case .StockWave: await self.loadWave(mode: mode)
-            case .StockMulti: await self.loadMulti(mode: mode)
-            case .StockSMA: await self.loadSMA(mode: mode)
-            case .StockEMA: await self.loadEMA(mode: mode)
-            case .StockRSI: await self.loadRSI(mode: mode)
-            case .StockTrad: await self.loadTrad(mode: mode)
-            case .StockPrediction: await self.loadPrediction(mode: mode)
+        self.scope.launchRealm {
+            var _stocks: [StockData] = []
+            for i in 0...10 {
+                let stockInfo = StockInfoData.temp()
+                let _stock = StockData.temp(id: String(i), symbol: stockInfo.symbol).injectLastPrice(price: stockInfo.stockPrice, isGain: stockInfo.isGain)
+                let stock = await self.loadWave(_stock, mode: ChartMode.StockWave)
+                _stocks.append(stock)
+            }
+            let stocks = _stocks
+            self.scope.launchMain {
+                self.state = self.state.copy(stocks: stocks, isLoading: false, dummy: self.state.dummy + 1)
+            }
+        }
+    }
+  
+    @MainActor
+    func loadStockMode(index: Int, mode: ChartMode) {
+        guard var _stock: StockData = state.stocks[safe: index] else {
+            return
+        }
+        _stock.isLoading = true
+        let stock = _stock
+        self.state = self.state.copy(stocks: self.updateStocks(index, stock))
+        self.scope.launchRealm {
+            let newStock = switch mode {
+            case .StockWave: await self.loadWave(stock, mode: mode)
+            case .StockSMA: await self.loadSMA(stock, mode: mode)
+            case .StockEMA: await self.loadEMA(stock, mode: mode)
+            case .StockRSI: await self.loadRSI(stock, mode: mode)
+            case .StockTrad: await self.loadTrad(stock, mode: mode)
+            case .StockPrediction: await self.loadPrediction(stock, mode: mode)
+            }
+            self.scope.launchMain {
+                self.state = self.state.copy(stocks: self.updateStocks(index, newStock), dummy: self.state.dummy + 1)
             }
         }
     }
     
-    @BackgroundActor
-    private func loadWave(mode: ChartMode) async {
-        let stockWave = StockData.temp(symbol: "SPY").injectStatus(mode: mode)
-        stockWave.values.minAndMaxValues(mode) { stockBoarderWave in
-            let gradient = stockWave.values.gradientCreator(stockBoarderWave, mode: mode)
-            self.scope.launchMain {
-                self.state = self.state.copy(stock: stockWave, stockBoarder: stockBoarderWave, mode: mode, gradient: gradient, isLoading: false)
-            }
-        } failed: {}
+    @MainActor
+    func updateStocks(_ index: Int,_ stockData: StockData) -> [StockData] {
+        var stocks = state.stocks
+        var _stockData = stockData
+        _stockData.isLoading = false
+        stocks[index] = _stockData
+        return stocks
     }
     
     @BackgroundActor
-    private func loadMulti(mode: ChartMode) async {
-        let stock1 = StockData.temp(symbol: "SPY").injectStatus(mode: mode)
-        let stock2 = StockData.temp(symbol: "IBM").injectStatus(mode: mode)
-        let stockMulti = [stock1, stock2].injectColor()
-        stockMulti.minAndMaxValues(mode) { stockBoarderMulti in
-            self.scope.launchMain {
-                self.state = self.state.copy(stocks: stockMulti, stockBoarder: stockBoarderMulti, mode: mode, isLoading: false)
-            }
-        } failed: {}
+    private func loadWave(_ stock: StockData, mode: ChartMode) async -> StockData {
+        let _stockWave = stock.injectStatus(mode: mode)
+        guard let stockBoarderWave = _stockWave.values.minAndMaxValues(mode) else {
+            return stock
+        }
+        let gradient = _stockWave.values.gradientCreator(stockBoarderWave, mode: mode)
+        return _stockWave.injectGradient(gradient: gradient).injectMode(mode: mode).injectStockBoarder(stockBoarder: stockBoarderWave)
     }
     
     @BackgroundActor
-    private func loadSMA(mode: ChartMode) async {
-        let stockSMA = StockData.temp(symbol: "SPY").injectSMA().injectStatus(mode: mode)
-        stockSMA.values.minAndMaxValues(mode) { stockBoarderSMA in
-            let gradient = stockSMA.values.gradientCreator(stockBoarderSMA, mode: mode)
-            self.scope.launchMain {
-                self.state = self.state.copy(stock: stockSMA, stockBoarder: stockBoarderSMA, mode: mode, gradient: gradient, isLoading: false)
-            }
-        } failed: {}
+    private func loadSMA(_ stock: StockData, mode: ChartMode) async -> StockData {
+        let _stockSMA = stock.injectSMA().injectStatus(mode: mode)
+        guard let stockBoarderSMA = _stockSMA.values.minAndMaxValues(mode) else {
+            return stock
+        }
+        let gradient = _stockSMA.values.gradientCreator(stockBoarderSMA, mode: mode)
+        return _stockSMA.injectGradient(gradient: gradient).injectMode(mode: mode).injectStockBoarder(stockBoarder: stockBoarderSMA)
     }
     
     @BackgroundActor
-    private func loadEMA(mode: ChartMode) async {
-        let stockEMA = StockData.temp(symbol: "SPY").injectEMA().injectStatus(mode: mode)
-        stockEMA.values.minAndMaxValues(mode) { stockBoarderEMA in
-            let gradient = stockEMA.values.gradientCreator(stockBoarderEMA, mode: mode)
-            self.scope.launchMain {
-                self.state = self.state.copy(stock: stockEMA, stockBoarder: stockBoarderEMA, mode: mode, gradient: gradient, isLoading: false)
-            }
-        } failed: {}
+    private func loadEMA(_ stock: StockData, mode: ChartMode) async -> StockData {
+        let _stockEMA = stock.injectEMA().injectStatus(mode: mode)
+        guard let stockBoarderEMA = _stockEMA.values.minAndMaxValues(mode) else {
+            return stock
+        }
+        let gradient = _stockEMA.values.gradientCreator(stockBoarderEMA, mode: mode)
+        return _stockEMA.injectGradient(gradient: gradient).injectMode(mode: mode).injectStockBoarder(stockBoarder: stockBoarderEMA)
     }
     
     @BackgroundActor
-    private func loadRSI(mode: ChartMode) async {
-        let stockRSI = StockData.temp(symbol: "SPY").injectRSI().injectStatus(mode: mode)
-        stockRSI.values.minAndMaxValues(mode) { stockBoarderRSI in
-            self.scope.launchMain {
-                self.state = self.state.copy(stock: stockRSI, stockBoarder: StockBoarder(minX: stockBoarderRSI.minX, maxX: stockBoarderRSI.maxX, minY: 0, maxY: 100), mode: mode, isLoading: false)
-            }
-        } failed: {}
+    private func loadRSI(_ stock: StockData, mode: ChartMode) async -> StockData {
+        let _stockRSI = stock.injectRSI().injectStatus(mode: mode)
+        guard let stockBoarderRSI = _stockRSI.values.minAndMaxValues(mode) else {
+            return stock
+        }
+        return _stockRSI.injectMode(mode: mode).injectStockBoarder(stockBoarder: StockBoarder(minX: stockBoarderRSI.minX, maxX: stockBoarderRSI.maxX, minY: 0, maxY: 100))
     }
     
     @BackgroundActor
-    private func loadTrad(mode: ChartMode) async {
-        let stockTrad = StockData.temp(symbol: "SPY").injectStatus(mode: mode)
-        stockTrad.values.minAndMaxValues(mode) { stockBoarderTrad in
-            self.scope.launchMain {
-                self.state = self.state.copy(stock: stockTrad, stockBoarder: stockBoarderTrad, mode: mode, isLoading: false)
-            }
-        } failed: {}
+    private func loadTrad(_ stock: StockData, mode: ChartMode) async -> StockData {
+        let _stockTrad = stock.injectStatus(mode: mode)
+        guard let stockBoarderTrad = _stockTrad.values.minAndMaxValues(mode) else {
+            return stock
+        }
+        return _stockTrad.injectMode(mode: mode).injectStockBoarder(stockBoarder: stockBoarderTrad)
     }
     
     
     @BackgroundActor
-    private func loadPrediction(mode: ChartMode) async {
-        let stockPred = StockData.temp(symbol: "SPY", start: 0, end: 30).injectStatus(mode: mode)
-        let _stockPrediction = StockData.temp(symbol: "SPY", start: 30, end: 40).injectStatus(mode: mode)
-        let stockMulti = [stockPred, _stockPrediction]
-        stockPred.values.minAndMaxValues(mode) { stockBoarderPred in
-            _stockPrediction.values.minAndMaxValues(mode) { stockBoarderPredictions in
-                stockMulti.minAndMaxValues(mode) { both in
-                    let gradient = stockPred.values.gradientCreator(stockBoarderPred, mode: mode)
-                    let gradientPred = _stockPrediction.values.gradientCreator(stockBoarderPredictions, mode: mode)
-                    let stockPrediction = _stockPrediction.injectConnectPoint(stockPred.values.last!) // Not Before For Correctly Gradient Creation
-                    self.scope.launchMain {
-                        self.state = self.state.copy(stock: stockPred, stockPrediction: stockPrediction, stockBoarder: both, mode: mode, gradient: gradient, gradientPred: gradientPred, isLoading: false)
-                    }
-                } failed: {}
-            } failed: {}
-        } failed: {}
+    private func loadPrediction(_ stock: StockData, mode: ChartMode) async -> StockData {
+        let stockPred = stock.injectStatus(mode: mode).injectPredictions().injectPredictionStatus(mode: mode)
+        let stockMulti = [stockPred.values, stockPred.valuesPrediction]
+        guard let stockBoarderPred = stockPred.values.minAndMaxValues(mode)  else {
+            return stock
+        }
+        guard let stockBoarderPredictions = stockPred.valuesPrediction.minAndMaxValues(mode) else {
+            return stock
+        }
+        guard let both = stockMulti.minAndMaxValues(mode) else {
+            return stock
+        }
+        let gradient = stockPred.values.gradientCreator(stockBoarderPred, mode: mode)
+        let gradientPred = stockPred.valuesPrediction.gradientCreator(stockBoarderPredictions, mode: mode)
+        return stockPred.injectGradient(gradient: gradient)
+            .injectGradientPredictions(gradientPred: gradientPred)
+            .injectConnectPredictionPoint(stockPred.values.last!)
+            .injectMode(mode: mode)
+            .injectStockBoarder(stockBoarder: both)
     }
     
     struct State {
         var stocks: [StockData] = []
-        var stock: StockData = StockData()
-        var stockPrediction: StockData = StockData()
-
-        var stockBoarder: StockBoarder = StockBoarder()
-        
-        var gradient: Gradient = Gradient(stops: [])
-        var gradientPred: Gradient = Gradient(stops: [])
-
         var isLoading: Bool = false
         var selectedIndex: Int = 1
-        var mode: ChartMode = ChartMode.StockWave
-        
+
+        var dummy: Int = 1
+
         mutating func copy(
             stocks: [StockData]? = nil,
-            stock: StockData? = nil,
-            stockPrediction: StockData? = nil,
-            stockBoarder: StockBoarder? = nil,
             selectedIndex: Int? = nil,
-            mode: ChartMode? = nil,
-            gradient: Gradient? = nil,
-            gradientPred: Gradient? = nil,
-            isLoading: Bool? = nil
+            isLoading: Bool? = nil,
+            dummy: Int? = nil
         ) -> Self {
             self.stocks = stocks ?? self.stocks
-            self.stock = stock ?? self.stock
-            self.stockPrediction = stockPrediction ?? self.stockPrediction
-            self.stockBoarder = stockBoarder ?? self.stockBoarder
             self.selectedIndex = selectedIndex ?? self.selectedIndex
-            self.mode = mode ?? self.mode
-            self.gradient = gradient ?? self.gradient
-            self.gradientPred = gradientPred ?? self.gradientPred
             self.isLoading = isLoading ?? self.isLoading
+            self.dummy = dummy ?? self.dummy
             return self
         }
     }
+    
+    /*
+    var stocks: [StockData] = []
+    var stockBoarderMulti: StockBoarder
+     
+    StockMultiView(stocks: state.stocks, stockBoarderMulti: state.stockBoarderMulti, isLoading: state.isLoading)
+     
+    @BackgroundActor
+    private func loadMulti(mode: ChartMode) async {
+        let stock1 = StockData.temp(id: "1", symbol: "SPY").injectStatus(mode: mode)
+        let stock2 = StockData.temp(id: "2", symbol: "IBM").injectStatus(mode: mode)
+        let stockMulti = [stock1, stock2].injectColor()
+        guard let stockBoarderMulti = stockMulti.minAndMaxValues(mode) else {
+            return
+        }
+    }*/
+
 }

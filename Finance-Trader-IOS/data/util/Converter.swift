@@ -84,41 +84,70 @@ extension [StockBoarder] {
     
 }
 
-extension [StockData] {
+extension [[StockPointData]] {
     
     @BackgroundActor
-    func minAndMaxValues(_ mode: ChartMode, values: (_ stockBoarder: StockBoarder) -> (), failed: () -> ()) {
+    func minAndMaxValues(_ mode: ChartMode) -> StockBoarder? {
         var minXStock: [Int64] = []
         var maxXStock: [Int64] = []
         var minYStock: [Float64] = []
         var maxYStock: [Float64] = []
-        self.forEach { stock in
-            stock.values.minAndMaxValues(mode) { stockBoarder in
-                minXStock.append(stockBoarder.minX)
-                maxXStock.append(stockBoarder.maxX)
-                minYStock.append(stockBoarder.minY)
-                maxYStock.append(stockBoarder.maxY)
-            } failed: {
-                
+        for values in self {
+            guard let stockBoarder = values.minAndMaxValues(mode) else {
+                continue
             }
+            minXStock.append(stockBoarder.minX)
+            maxXStock.append(stockBoarder.maxX)
+            minYStock.append(stockBoarder.minY)
+            maxYStock.append(stockBoarder.maxY)
         }
         guard let minX = minXStock.sorted().first else {
-            failed()
-            return
+            return nil
         }
         guard let maxX = maxXStock.sorted().last else {
-            failed()
-            return
+            return nil
         }
         guard let minY = minYStock.sorted().first else {
-            failed()
-            return
+            return nil
         }
         guard let maxY = maxYStock.sorted().last else {
-            failed()
-            return
+            return nil
         }
-        values(StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY))
+        return StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY)
+    }
+    
+}
+
+extension [StockData] {
+    
+    @BackgroundActor
+    func minAndMaxValues(_ mode: ChartMode) -> StockBoarder? {
+        var minXStock: [Int64] = []
+        var maxXStock: [Int64] = []
+        var minYStock: [Float64] = []
+        var maxYStock: [Float64] = []
+        for stock in self {
+            guard let stockBoarder = stock.values.minAndMaxValues(mode) else {
+                continue
+            }
+            minXStock.append(stockBoarder.minX)
+            maxXStock.append(stockBoarder.maxX)
+            minYStock.append(stockBoarder.minY)
+            maxYStock.append(stockBoarder.maxY)
+        }
+        guard let minX = minXStock.sorted().first else {
+            return nil
+        }
+        guard let maxX = maxXStock.sorted().last else {
+            return nil
+        }
+        guard let minY = minYStock.sorted().first else {
+            return nil
+        }
+        guard let maxY = maxYStock.sorted().last else {
+            return nil
+        }
+        return StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY)
     }
     
     func injectColor() -> [StockData] {
@@ -135,7 +164,7 @@ extension [StockData] {
 extension [StockPointData] {
     
     @BackgroundActor
-    func minAndMaxValues(_ mode: ChartMode, values: (_ stockBoarder: StockBoarder) -> (), failed: () -> ()) {
+    func minAndMaxValues(_ mode: ChartMode) -> StockBoarder? {
         let xSorted = self.sorted { $0.time < $1.time }
         let ySorted = switch mode {
         case .StockSMA: self.sorted { $0.sma < $1.sma }
@@ -144,12 +173,10 @@ extension [StockPointData] {
         default: self.sorted { $0.value < $1.value }
         }
         guard let minX = xSorted.first?.time else {
-            failed()
-            return
+            return nil
         }
         guard let maxX = xSorted.last?.time else {
-            failed()
-            return
+            return nil
         }
         guard let minY = switch mode {
         case .StockSMA: ySorted.first?.sma
@@ -157,8 +184,7 @@ extension [StockPointData] {
         case .StockRSI: ySorted.first?.rsi
         default: ySorted.first?.value
         } else {
-            failed()
-            return
+            return nil
         }
         guard let maxY = switch mode {
         case .StockSMA: ySorted.last?.sma
@@ -166,10 +192,9 @@ extension [StockPointData] {
         case .StockRSI: ySorted.last?.rsi
         default : ySorted.last?.value
         } else {
-            failed()
-            return
+            return nil
         }
-        values(StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY))
+        return StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY)
     }
     
     @BackgroundActor

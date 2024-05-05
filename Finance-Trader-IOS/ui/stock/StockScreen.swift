@@ -23,26 +23,31 @@ struct StockScreen : View {
                 ScrollView {
                     LazyVStack {
                         VStack {
-                            StockChartHeadView(stockInfo: state.stockInfo)
+                            StockChartHeadView(
+                                symbol: state.stock.symbol,
+                                isGain: state.stock.isGain,
+                                stockPrice: state.stock.lastPrice
+                            ) {
+                                
+                            }
                             ScrollView(Axis.Set.horizontal, showsIndicators: false) {
                                 LazyHStack {
-                                    ForEach(ChartMode.allCasesNotMulti, id: \.key) { (key: ChartMode, value: String) in
-                                        ChartModeItemView(selectedMode: state.mode, item: (key, value)) {
+                                    ForEach(ChartMode.allCases, id: \.key) { (key: ChartMode, value: String) in
+                                        ChartModeItemView(selectedMode: state.stock.mode, item: (key, value)) {
                                             obs.loadStocks(mode: key)
                                         }
                                     }
-                                    .animation(.default, value: state.mode)
+                                    .animation(.default, value: state.stock.mode)
                                 }
                             }.frame(height: 60)
                             ZStack {
-                                switch state.mode {
-                                case .StockWave : StockWaveView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient, isLoading: state.isLoading)
-                                case .StockSMA: StockSMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient,  isLoading: state.isLoading)
-                                case .StockEMA: StockEMAView(stock: state.stock, stockBoarder: state.stockBoarder, grad: state.gradient,  isLoading: state.isLoading)
-                                case .StockRSI: StockRSIView(stock: state.stock, stockBoarder: state.stockBoarder,  isLoading: state.isLoading)
-                                case .StockTrad: StockTradView(stock: state.stock, stockBoarder: state.stockBoarder,  isLoading: state.isLoading)
-                                case .StockPrediction: StockPredictionView(stock: state.stock, stockPrediction: state.stockPrediction, stockBoarder: state.stockBoarder, grad: state.gradient, gradPred: state.gradientPred,  isLoading: state.isLoading)
-                                default: VStack {}
+                                switch state.stock.mode {
+                                case .StockWave : StockWaveView(stock: state.stock, isLoading: state.isLoading)
+                                case .StockSMA: StockSMAView(stock: state.stock, isLoading: state.isLoading)
+                                case .StockEMA: StockEMAView(stock: state.stock, isLoading: state.isLoading)
+                                case .StockRSI: StockRSIView(stock: state.stock, isLoading: state.isLoading)
+                                case .StockTrad: StockTradView(stock: state.stock, isLoading: state.isLoading)
+                                case .StockPrediction: StockPredictionView(stock: state.stock, isLoading: state.isLoading)
                                 }
                                 LoadingBar(isLoading: state.isLoading)
                             }.scrollDisabled(true)
@@ -105,18 +110,23 @@ struct StockScreen : View {
 
 struct StockChartHeadView : View {
     
-    let stockInfo: StockInfoData
+    let symbol: String
+    let isGain: Bool
+    let stockPrice: Float64
+    let onClick: () -> ()
     
     @Inject
     private var theme: Theme
     
     var body: some View {
         HStack(alignment: .center) {
-            Text(stockInfo.symbol).foregroundStyle(theme.textColor).frame(minWidth: 80)
+            Text(symbol).foregroundStyle(theme.textColor).frame(minWidth: 80).onTapGesture {
+                onClick()
+            }
             HStack {
                 Text("Prce:").foregroundStyle(theme.textColor).font(.subheadline)
-                ImageAsset(icon: stockInfo.isGain ? "up" : "down", tint: stockInfo.isGain ? .green : .red).frame(width: 10, height: 10)
-                Text(String(stockInfo.stockPrice) + " $").foregroundStyle(stockInfo.isGain ? .green : .red).font(.subheadline)
+                ImageAsset(icon: isGain ? "up" : "down", tint: isGain ? .green : .red).frame(width: 10, height: 10)
+                Text(String(stockPrice) + " $").foregroundStyle(isGain ? .green : .red).font(.subheadline)
             }.padding()
         }.frame(height: 40)
     }

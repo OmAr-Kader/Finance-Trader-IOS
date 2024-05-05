@@ -10,9 +10,7 @@ struct NegotiateSheet : View {
 
     @Inject
     private var theme: Theme
-    
-    @StateObject private var obs: ExchangeObserve = ExchangeObserve()
-    
+        
     var body: some View {
         if supplyDemandData == nil {
             VStack {}
@@ -97,8 +95,6 @@ struct AddSheet : View {
 
     @Inject
     private var theme: Theme
-    
-    @StateObject private var obs: ExchangeObserve = ExchangeObserve()
     
     var body: some View {
         if isHaveShares {
