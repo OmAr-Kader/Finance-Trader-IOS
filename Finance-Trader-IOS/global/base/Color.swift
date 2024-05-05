@@ -143,3 +143,6 @@ var BackSecDark: Color {
     return Color(red: 201 / 255, green: 201 / 255, blue: 201 / 255)
 }
 
+var colorBarIOS: Color {
+    return Color(red: 9 / 255, green: 131 / 255, blue: 1)
+}

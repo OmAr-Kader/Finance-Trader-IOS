@@ -21,12 +21,12 @@ struct Main: View {
         }.background(theme.background).ignoresSafeArea()
     }
 }
-
+/*
 #Preview {
     VStack {
         Main(app: AppObserve())
     }
-}
+}*/
 
 
 struct SplashScreen : View {
@@ -54,7 +54,13 @@ struct SplashScreen : View {
                     withAnimation() {
                         width = 150
                     }
-                    app.navigateHome(.HOME_TRADER_ROUTE)
+                    app.findUserBase { it in
+                        guard let it else {
+                            app.navigateHome(.SIGN_ROUTE)
+                            return
+                        }
+                        app.navigateHome(.HOME_TRADER_ROUTE(traderData: it))
+                    }
                 }
         }.background(theme.background)
     }

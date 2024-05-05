@@ -120,15 +120,15 @@ struct StockChartHeadView : View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Text(symbol).foregroundStyle(theme.textColor).frame(minWidth: 80).onTapGesture {
-                onClick()
-            }
+            Text(symbol).foregroundStyle(theme.textColor).frame(minWidth: 80)
             HStack {
                 Text("Prce:").foregroundStyle(theme.textColor).font(.subheadline)
                 ImageAsset(icon: isGain ? "up" : "down", tint: isGain ? .green : .red).frame(width: 10, height: 10)
                 Text(String(stockPrice) + " $").foregroundStyle(isGain ? .green : .red).font(.subheadline)
             }.padding()
-        }.frame(height: 40)
+        }.frame(height: 40).onTapGesture {
+            onClick()
+        }
     }
 }
 

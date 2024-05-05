@@ -5,7 +5,6 @@ import Combine
 
 class AppObserve : ObservableObject {
 
-
     @Inject
     private var project: Project
         
@@ -72,7 +71,64 @@ class AppObserve : ObservableObject {
         }
     }
     
-    
+    @MainActor
+    func findUserBase(
+        invoke: @escaping @MainActor (TraderData?) -> Unit
+    ) {
+        guard let currentUser = self.project.realmApi.realmApp?.currentUser else {
+            invoke(nil)
+            return
+        }
+        if (preferences.isEmpty) {
+            inti { it in
+                let userBase = self.fetchUserBase(it)
+                self.scope.launchMain {
+                    self.preferences = it
+                    print(currentUser.profile.email == userBase?.email)
+                    invoke(userBase)
+                }
+            }
+        } else {
+            scope.launchRealm {
+                let userBase = self.fetchUserBase(self.preferences)
+                self.scope.launchMain {
+                    print(currentUser.profile.email == userBase?.email)
+                    invoke(userBase)
+                }
+            }
+        }
+    }
+
+    @BackgroundActor
+    private func fetchUserBase(_ list: [Preference]) -> TraderData? {
+        let id = list.first { it in it.ketString == PREF_USER_ID }?.value
+        let name = list.first { it in it.ketString == PREF_USER_NAME }?.value
+        let email = list.first { it in it.ketString == PREF_USER_EMAIL }?.value
+        let userType = list.first { it in it.ketString == PREF_USER_TYPE }?.value as? Int
+        if (id == nil || name == nil || email == nil || userType == nil) {
+            return nil
+        }
+        return TraderData(id: id!, name: name!, email: email!, accountType: userType!)
+    }
+
+    func updateUserBase(trader: TraderData, invoke: @escaping () -> Unit) {
+        scope.launchRealm {
+            var list : [Preference] = []
+            list.append(Preference(ketString: PREF_USER_ID, value: trader.id))
+            list.append(Preference(ketString: PREF_USER_NAME, value: trader.name))
+            list.append(Preference(ketString: PREF_USER_EMAIL, value: trader.email))
+            list.append(Preference(ketString: PREF_USER_TYPE, value: String(trader.accountType)))
+            await self.project.preference.insertPref(list) { newPref in
+                self.inti { it in
+                    self.scope.launchMain {
+                        self.preferences = it
+                        invoke()
+                    }
+                }
+            }
+        }
+    }
+
     func findPrefString(
         key: String,
         value: @escaping (String?) -> Unit
@@ -110,13 +166,14 @@ class AppObserve : ObservableObject {
             }
     }
     
-    func updatePref(key: String, newValue: String) {
+    func updatePref(key: String, newValue: String, _ invoke: @escaping () -> ()) {
         scope.launchRealm {
             await self.updatePref(key, newValue) {
-                
+                invoke()
             }
         }
     }
+    
 
     struct State {
         var homeScreen: Screen = .SPLASH_SCREEN_ROUTE

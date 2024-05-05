@@ -10,21 +10,16 @@ import Swinject
 func buildContainer() -> Container {
     let container = Container()
     let realmApi = RealmApi()//app: App(id: REALM_APP_ID)
-    let preferenceRepo: PrefRepo = PrefRepoImp(realmApi: realmApi)
-    let preference: PreferenceData = PreferenceData(repository: preferenceRepo)
     let pro = Project(
         realmApi: realmApi,
-        preference: preference
+        preference: PreferenceData(repository: PrefRepoImp(realmApi: realmApi)),
+        trader: TraderUserData(repository: TraderRepoImp(realmApi: realmApi)),
+        stockSession: StockSessionData(repository: StockSessionRepoImp(realmApi: realmApi)),
+        stockInfo: StockInformationData(repository: StockInfRepImp(realmApi: realmApi))
     )
-    let theme = Theme(isDarkMode: !UITraitCollection.current.userInterfaceStyle.isDarkMode)
+    let theme = Theme(isDarkMode: true)//UITraitCollection.current.userInterfaceStyle.isDarkMode
     container.register(RealmApi.self) { _  in
         return realmApi
-    }.inObjectScope(.container)
-    container.register(PrefRepo.self) { _  in
-        return preferenceRepo
-    }.inObjectScope(.container)
-    container.register(PreferenceData.self) { _  in
-        return preference
     }.inObjectScope(.container)
     container.register(Project.self) { _  in
         return pro

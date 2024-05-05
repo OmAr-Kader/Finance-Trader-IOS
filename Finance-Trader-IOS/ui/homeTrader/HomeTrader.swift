@@ -12,6 +12,8 @@ import Charts
 struct HomeTrader : View {
 
     @StateObject var app: AppObserve
+    let traderData: TraderData
+    let isCompany: Bool = true
 
     @Inject
     private var theme: Theme
@@ -31,7 +33,7 @@ struct HomeTrader : View {
         FullZStack {
             switch  state.selectedIndex {
             case 0: HomeTraderSearch()
-            case 1: HomeTraderOpportunity(state: state, onModeChange: obs.loadStockMode, onNavigate: app.navigateTo)
+            case 1: HomeTraderOpportunity(state: state, traderData: traderData, onModeChange: obs.loadStockMode, onNavigate: app.navigateTo)
             default: HomeTraderPortfolio()
             }
             BottomBar(
@@ -44,6 +46,29 @@ struct HomeTrader : View {
         }.onAppear {
             obs.loadData(state.selectedIndex)
         }.background(theme.background)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Text("Trader").font(.headline).foregroundStyle(colorBarIOS)
+                }
+                if state.selectedIndex == 1 && isCompany {
+                    ToolbarItem(placement: .primaryAction) {
+                        ImageAsset(icon: "create", tint: colorBarIOS).frame(width: 28, height: 28).onTapGesture {
+                            self.app.navigateTo(Screen.LISTING_STOCK_ROUTE(traderData: self.traderData, stockInfoData: nil))
+                        }.animation(.default, value: state.selectedIndex)
+                    }
+                } else if state.selectedIndex == 0 {
+                    ToolbarItem(placement: .primaryAction) {
+                        ImageAsset(icon: "search", tint: colorBarIOS).frame(width: 28, height: 28).onTapGesture {
+                            
+                        }.animation(.default, value: state.selectedIndex)
+                    }
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    ImageAsset(icon: "compare", tint: colorBarIOS).frame(width: 28, height: 28).onTapGesture {
+                        
+                    }
+                }
+            }.toolbarRole(.editor).animation(.default, value: state.selectedIndex)
     }
 }
 
@@ -62,6 +87,7 @@ struct HomeTraderOpportunity : View {
     private var theme: Theme
     
     let state: HomeTraderObserve.State
+    let traderData: TraderData
     let onModeChange: (Int, ChartMode) -> Unit
     let onNavigate: (Screen) -> ()
     
@@ -77,7 +103,7 @@ struct HomeTraderOpportunity : View {
                                     isGain: stock.isGain,
                                     stockPrice: stock.lastPrice
                                 ) {
-                                    onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: TraderData(id: "1", name: "Name"), stockId: "1"))
+                                    onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: traderData, stockId: stock.id))
                                 }
                                 ScrollViewReader { value in
                                     ScrollView(Axis.Set.horizontal, showsIndicators: false) {

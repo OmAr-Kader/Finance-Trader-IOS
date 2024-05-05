@@ -1,89 +1,5 @@
 import SwiftUI
 
-struct NegotiateSheet : View {
-    
-    let supplyDemandData: SupplyDemandData?
-    let pushNegotiate: (SupplyDemandData, Int64, Float64) -> ()
-    
-    @State private var shares: String = ""
-    @State private var price: String = ""
-
-    @Inject
-    private var theme: Theme
-        
-    var body: some View {
-        if supplyDemandData == nil {
-            VStack {}
-        } else {
-            let supplyDemandData = self.supplyDemandData!
-            Text("Negotiate A " + (supplyDemandData.isSupply ? "Supply" : "Demand")).foregroundStyle(theme.textColor).onCenter()
-            HStack {
-                HStack {
-                    Text("Shares:").foregroundStyle(theme.textColor).font(.title3)
-                    Text(String(supplyDemandData.shares)).foregroundStyle(theme.textHintColor).font(.title3)
-                }
-                Spacer()
-                HStack {
-                    Text("Prce:").foregroundStyle(theme.textColor).font(.title3)
-                    Text(String(supplyDemandData.price) + " $").foregroundStyle(theme.textColor).font(.title3)
-                }
-                Spacer()
-            }.padding()
-            HStack {
-                OutlinedTextField(
-                    text: self.shares,
-                    onChange: { it in
-                        self.shares = it
-                    },
-                    hint: "Enter your desired Shares",
-                    isError: Int64(shares) == nil,
-                    errorMsg: "Shouldn't be empty",
-                    theme: theme,
-                    cornerRadius: 25,
-                    lineLimit: 1,
-                    keyboardType: UIKeyboardType.numberPad
-                ).padding()
-            }
-            HStack {
-                OutlinedTextField(
-                    text: self.price,
-                    onChange: { it in
-                        self.price = it
-                    },
-                    hint: "Enter your desired Price",
-                    isError: Float64(price) == nil,
-                    errorMsg: "Shouldn't be empty",
-                    theme: theme,
-                    cornerRadius: 25,
-                    lineLimit: 1,
-                    keyboardType: UIKeyboardType.numberPad
-                ).padding()
-            }
-            Button {
-                guard let share = Int64(shares) else {
-                    return
-                }
-                guard let pri = Float64(price) else {
-                    return
-                }
-                pushNegotiate(supplyDemandData, share, pri)
-            } label: {
-                Text("Done")
-                    .padding(10)
-                    .frame(minWidth: 80)
-                    .foregroundColor(.black)
-                    .background(
-                        RoundedRectangle(
-                            cornerRadius: 15,
-                            style: .continuous
-                        )
-                        .fill(Color.green.gradient)
-                    )
-            }.padding().onCenter()
-        }
-    }
-}
-
 struct AddSheet : View {
     
     let isHaveShares: Bool
@@ -206,6 +122,89 @@ struct AddSheet : View {
     }
 }
 
+struct NegotiateSheet : View {
+    
+    let supplyDemandData: SupplyDemandData?
+    let pushNegotiate: (SupplyDemandData, Int64, Float64) -> ()
+    
+    @State private var shares: String = ""
+    @State private var price: String = ""
+
+    @Inject
+    private var theme: Theme
+        
+    var body: some View {
+        if supplyDemandData == nil {
+            VStack {}
+        } else {
+            let supplyDemandData = self.supplyDemandData!
+            Text("Negotiate A " + (supplyDemandData.isSupply ? "Supply" : "Demand")).foregroundStyle(theme.textColor).onCenter()
+            HStack {
+                HStack {
+                    Text("Shares:").foregroundStyle(theme.textColor).font(.title3)
+                    Text(String(supplyDemandData.shares)).foregroundStyle(theme.textHintColor).font(.title3)
+                }
+                Spacer()
+                HStack {
+                    Text("Prce:").foregroundStyle(theme.textColor).font(.title3)
+                    Text(String(supplyDemandData.price) + " $").foregroundStyle(theme.textColor).font(.title3)
+                }
+                Spacer()
+            }.padding()
+            HStack {
+                OutlinedTextField(
+                    text: self.shares,
+                    onChange: { it in
+                        self.shares = it
+                    },
+                    hint: "Enter your desired Shares",
+                    isError: Int64(shares) == nil,
+                    errorMsg: "Shouldn't be empty",
+                    theme: theme,
+                    cornerRadius: 25,
+                    lineLimit: 1,
+                    keyboardType: UIKeyboardType.numberPad
+                ).padding()
+            }
+            HStack {
+                OutlinedTextField(
+                    text: self.price,
+                    onChange: { it in
+                        self.price = it
+                    },
+                    hint: "Enter your desired Price",
+                    isError: Float64(price) == nil,
+                    errorMsg: "Shouldn't be empty",
+                    theme: theme,
+                    cornerRadius: 25,
+                    lineLimit: 1,
+                    keyboardType: UIKeyboardType.numberPad
+                ).padding()
+            }
+            Button {
+                guard let share = Int64(shares) else {
+                    return
+                }
+                guard let pri = Float64(price) else {
+                    return
+                }
+                pushNegotiate(supplyDemandData, share, pri)
+            } label: {
+                Text("Done")
+                    .padding(10)
+                    .frame(minWidth: 80)
+                    .foregroundColor(.black)
+                    .background(
+                        RoundedRectangle(
+                            cornerRadius: 15,
+                            style: .continuous
+                        )
+                        .fill(Color.green.gradient)
+                    )
+            }.padding().onCenter()
+        }
+    }
+}
 
 enum SupplyDemandScreenMode : Hashable {
     case IsOwnerEdit
