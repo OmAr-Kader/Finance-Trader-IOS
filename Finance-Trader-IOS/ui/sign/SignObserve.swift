@@ -111,7 +111,7 @@ class SignObserve  : ObservableObject {
         failed: @escaping @MainActor (String) -> Unit,
         invoke: @escaping (User?) -> Unit
     ) {
-        self.project.realmApi.realmApp?.emailPasswordAuth.registerUser(
+        self.project.realmApi.realmApp.emailPasswordAuth.registerUser(
                 email: email, password: password
         ) { (error) in
             if error != nil {
@@ -132,7 +132,7 @@ class SignObserve  : ObservableObject {
     }
     
     private func loginRealm(email: String, password: String, invoke: @escaping (User?) -> Unit) {
-        self.project.realmApi.realmApp?.login(
+        self.project.realmApi.realmApp.login(
             credentials: Credentials.emailPassword(
                 email: email,
                 password: password
@@ -148,7 +148,7 @@ class SignObserve  : ObservableObject {
     }
     
     private func signUpRealm(email: String, password: String, invoke: @escaping (Int) -> Unit) {
-        self.project.realmApi.realmApp?.emailPasswordAuth.registerUser(
+        self.project.realmApi.realmApp.emailPasswordAuth.registerUser(
             email: email, password: password
         ) { (error) in
             invoke(error == nil ? REALM_SUCCESS : REALM_FAILED)

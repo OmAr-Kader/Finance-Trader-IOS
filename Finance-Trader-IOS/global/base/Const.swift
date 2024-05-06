@@ -1,6 +1,6 @@
 import Foundation
 
-let SCHEMA_VERSION: UInt64 = 3
+let SCHEMA_VERSION: UInt64 = 0
 let MIN_CHART_SCALE: Float64 = 0.9
 let MAX_CHART_SCALE: Float64 = 1.1
 

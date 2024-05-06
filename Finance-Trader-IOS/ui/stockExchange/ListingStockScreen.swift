@@ -36,7 +36,7 @@ struct ListingStockScreen : View {
                     onChange: { it in
                         self.name = it
                     },
-                    hint: "Enter your Compant Name",
+                    hint: "Enter your Company Name",
                     isError: name.isEmpty || state.names.contains(name),
                     errorMsg: "Already Taken",
                     theme: theme,

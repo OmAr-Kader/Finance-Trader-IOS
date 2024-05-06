@@ -7,4 +7,5 @@ struct Project {
     let trader: TraderUserData
     let stockSession: StockSessionData
     let stockInfo: StockInformationData
+    let supplyDemand: SupplyAndDemandData
 }

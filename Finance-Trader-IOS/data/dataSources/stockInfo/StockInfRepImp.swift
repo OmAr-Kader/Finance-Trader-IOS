@@ -18,6 +18,13 @@ class StockInfRepImp : BaseRepoImp, StockInfoRep {
         return await querySingleFlow(invoke, "getStockInfoLive\(id)", "%K == %@", "_id", try! ObjectId.init(string: id))
     }
     
+    func getStockInfo(
+        id: String,
+        invoke: (ResultRealm<StockInfo?>) -> Unit
+    ) async {
+        await querySingle(invoke, "getStockInfo\(id)", "%K == %@", "_id", try! ObjectId.init(string: id))
+    }
+    
     func getAllStockInfo(invoke: (ResultRealm<[StockInfo]>) -> Unit) async {
         await queryAll(invoke)
     }

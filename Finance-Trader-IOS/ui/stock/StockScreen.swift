@@ -1,5 +1,6 @@
 import SwiftUI
 
+// Create Add Supply Or Demand Modes
 
 struct StockScreen : View {
     
@@ -14,7 +15,8 @@ struct StockScreen : View {
     private var theme: Theme
     
     @StateObject private var obs: StockObserve = StockObserve()
-    
+    @State private var toast: Toast? = nil
+
     var body: some View {
         let state = obs.state
         ZStack {
@@ -82,7 +84,11 @@ struct StockScreen : View {
                 $addHeight
             ) {
                 AddSheet(isHaveShares: state.isHaveShares) { shares, prices, isSupply in
-                    
+                    obs.createSupply(isSupply: isSupply, traderId: trader.id, stockId: stockId, shares: shares, price: prices) {
+                        obs.setAddSheet(false)
+                    } failed: {
+                        toast = Toast(style: .error, message: "Failed")
+                    }
                 }
             }
             .bottomSheet(
@@ -103,8 +109,8 @@ struct StockScreen : View {
             }
             LoadingScreen(isLoading: state.isLoading)
         }.onAppear {
-            obs.loadData(trader: trader, isDarkMode: theme.isDarkMode)
-        }.background(theme.background)
+            obs.loadData(stockId: stockId, trader: trader, isDarkMode: theme.isDarkMode)
+        }.background(theme.background).toastView(toast: $toast)
     }
 }
 

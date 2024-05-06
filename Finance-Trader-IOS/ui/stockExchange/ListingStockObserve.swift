@@ -17,33 +17,36 @@ class ListingStockObserve : ObservableObject {
     }
     
     @MainActor
-    func createStock(name: String, symbol: String, share: Int64, pri: Float64, traderId: String, invoke: @escaping () -> (), failed: @escaping () -> ()) {
+    func createStock(name: String, symbol: String, share: Int64, pri: Float64, traderId: String, invoke: @escaping @MainActor () -> (), failed: @escaping @MainActor () -> ()) {
         loadingStatus(true)
-        let stockInfo = state.stockInfo
         self.scope.launchRealm {
             let stockInfoData = StockInfoData(
                 id: "",
                 logoUrl: "",
-                symbol: stockInfo.symbol,
-                name: stockInfo.symbol,
+                symbol: symbol,
+                name: name,
                 isGain: true,
-                numberOfShares: stockInfo.numberOfShares,
-                stockPrice: stockInfo.stockPrice,
-                stockholders: [StockHolderData(holderId: traderId, holderShares: stockInfo.numberOfShares)]
+                numberOfShares: share,
+                stockPrice: pri,
+                stockholders: [StockHolderData(holderId: traderId, holderShares: share)]
             )
             await self.project.stockInfo.insertStockInfo(StockInfo(stockInfoData: stockInfoData)) { it in
-                guard let it else {
-                    failed()
+                guard it != nil else {
+                    self.scope.launchMain {
+                        failed()
+                    }
                     self.loadingStatus(false)
                     return
                 }
-                invoke()
+                self.scope.launchMain {
+                    invoke()
+                }
             }
         }
     }
     
     @MainActor
-    func editStock(name: String, symbol: String, share: Int64, pri: Float64, traderId: String, stockInfoData: StockInfoData, invoke: @escaping () -> (), failed: @escaping () -> ()) {
+    func editStock(name: String, symbol: String, share: Int64, pri: Float64, traderId: String, stockInfoData: StockInfoData, invoke: @escaping @MainActor () -> (), failed: @escaping @MainActor () -> ()) {
         loadingStatus(true)
         self.scope.launchRealm {
             var _stockInfoData = stockInfoData
@@ -52,12 +55,16 @@ class ListingStockObserve : ObservableObject {
             _stockInfoData.numberOfShares = share
             _stockInfoData.stockPrice = pri
             let stockInfo = _stockInfoData
-            guard let it = await self.project.stockInfo.updateSession(stockInfoData: stockInfoData).value else {
-                failed()
+            guard (await self.project.stockInfo.updateSession(stockInfoData: stockInfo).value) != nil else {
+                self.scope.launchMain {
+                    failed()
+                }
                 self.loadingStatus(false)
                 return
             }
-            invoke()
+            self.scope.launchMain {
+                invoke()
+            }
         }
     }
 

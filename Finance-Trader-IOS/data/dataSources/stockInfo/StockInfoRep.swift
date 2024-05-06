@@ -15,6 +15,12 @@ protocol StockInfoRep {
     func getStockInfoLive(id: String, invoke: @escaping (StockInfo?) -> Unit) async -> AnyCancellable?
     
     @BackgroundActor
+    func getStockInfo(
+        id: String,
+        invoke: (ResultRealm<StockInfo?>) -> Unit
+    ) async
+    
+    @BackgroundActor
     func getAllStockInfo(
         invoke: (ResultRealm<[StockInfo]>) -> Unit
     ) async

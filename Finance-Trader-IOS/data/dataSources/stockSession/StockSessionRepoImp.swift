@@ -33,5 +33,18 @@ class StockSessionRepoImp : BaseRepoImp, StockSessionRepo {
             "stringData", filterArguments
         )
     }
+
+    func getStocksSessions(stockId: [String], stringData: [String], stockSessions: (ResultRealm<[StockSession]>) -> Unit) async {
+        let stringDataArguments = NSMutableArray()
+        stringDataArguments.addObjects(from: stringData)
+        let stockIdArguments = NSMutableArray()
+        stockIdArguments.addObjects(from: stockId)
+        await queryLess(stockSessions,
+            "%K IN %@ AND ANY %K IN %@",
+            "stockId", stockIdArguments,
+            "stringData", stringDataArguments
+        )
+    }
     
 }
+

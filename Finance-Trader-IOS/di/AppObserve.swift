@@ -24,11 +24,13 @@ class AppObserve : ObservableObject {
         sinkPrefs?.cancel()
         prefsTask = scope.launchRealm {
             self.sinkPrefs = await self.project.preference.prefsBack { list in
+                print("=====>" + "Done" + String(list.count))
                 self.preferences = list
             }
         }
     }
     
+    @MainActor
     var navigateHome: (Screen) -> Unit {
         return { screen in
             withAnimation {
@@ -38,10 +40,12 @@ class AppObserve : ObservableObject {
         }
     }
     
+    @MainActor
     func navigateTo(_ screen: Screen) {
         self.navigationPath.append(screen)
     }
     
+    @MainActor
     func backPress() {
         if !self.navigationPath.isEmpty {
             self.navigationPath.removeLast()
@@ -75,16 +79,16 @@ class AppObserve : ObservableObject {
     func findUserBase(
         invoke: @escaping @MainActor (TraderData?) -> Unit
     ) {
-        guard let currentUser = self.project.realmApi.realmApp?.currentUser else {
+        guard self.project.realmApi.realmApp.currentUser != nil else {
             invoke(nil)
             return
         }
-        if (preferences.isEmpty) {
+        invoke(TraderData(id: "6638fe6c19a7050bba0ad215", name: "Omar", email: "omar@gmail.com", accountType: 1))
+        /*if (preferences.isEmpty) {
             inti { it in
                 let userBase = self.fetchUserBase(it)
                 self.scope.launchMain {
                     self.preferences = it
-                    print(currentUser.profile.email == userBase?.email)
                     invoke(userBase)
                 }
             }
@@ -92,15 +96,15 @@ class AppObserve : ObservableObject {
             scope.launchRealm {
                 let userBase = self.fetchUserBase(self.preferences)
                 self.scope.launchMain {
-                    print(currentUser.profile.email == userBase?.email)
                     invoke(userBase)
                 }
             }
-        }
+        }*/
     }
 
     @BackgroundActor
     private func fetchUserBase(_ list: [Preference]) -> TraderData? {
+        print(list.count)
         let id = list.first { it in it.ketString == PREF_USER_ID }?.value
         let name = list.first { it in it.ketString == PREF_USER_NAME }?.value
         let email = list.first { it in it.ketString == PREF_USER_EMAIL }?.value
@@ -111,7 +115,7 @@ class AppObserve : ObservableObject {
         return TraderData(id: id!, name: name!, email: email!, accountType: userType!)
     }
 
-    func updateUserBase(trader: TraderData, invoke: @escaping () -> Unit) {
+    func updateUserBase(trader: TraderData, invoke: @escaping @MainActor () -> Unit) {
         scope.launchRealm {
             var list : [Preference] = []
             list.append(Preference(ketString: PREF_USER_ID, value: trader.id))
@@ -119,6 +123,7 @@ class AppObserve : ObservableObject {
             list.append(Preference(ketString: PREF_USER_EMAIL, value: trader.email))
             list.append(Preference(ketString: PREF_USER_TYPE, value: String(trader.accountType)))
             await self.project.preference.insertPref(list) { newPref in
+                print(newPref?.description ?? "nil")
                 self.inti { it in
                     self.scope.launchMain {
                         self.preferences = it

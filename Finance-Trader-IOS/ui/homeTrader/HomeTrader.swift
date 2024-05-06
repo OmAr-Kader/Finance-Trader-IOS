@@ -68,7 +68,7 @@ struct HomeTrader : View {
                         
                     }
                 }
-            }.toolbarRole(.editor).animation(.default, value: state.selectedIndex)
+            }.toolbarRole(.navigationStack).animation(.default, value: state.selectedIndex)
     }
 }
 

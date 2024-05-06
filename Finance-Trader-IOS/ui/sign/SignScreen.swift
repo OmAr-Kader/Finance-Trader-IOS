@@ -23,7 +23,9 @@ struct SignScreen : View {
                 HStack(spacing: 0) {
                     Spacer()
                     Button(action: {
-                        obs.setIsLogin(true)
+                        withAnimation {
+                            obs.setIsLogin(true)
+                        }
                     }) {
                         Text("Log In")
                             .padding(10)
@@ -67,19 +69,21 @@ struct SignScreen : View {
                     }
                     Spacer()
                 }.padding()
-                OutlinedTextField(
-                    text: self.name,
-                    onChange: { it in
-                        self.name = it
-                    },
-                    hint: "Enter your Name",
-                    isError: name.isEmpty,
-                    errorMsg: "Shouldn't be empty",
-                    theme: theme,
-                    cornerRadius: 15,
-                    lineLimit: 1,
-                    keyboardType: UIKeyboardType.default
-                ).padding()
+                if !state.isLogin {
+                    OutlinedTextField(
+                        text: self.name,
+                        onChange: { it in
+                            self.name = it
+                        },
+                        hint: "Enter your Name",
+                        isError: name.isEmpty,
+                        errorMsg: "Shouldn't be empty",
+                        theme: theme,
+                        cornerRadius: 15,
+                        lineLimit: 1,
+                        keyboardType: UIKeyboardType.default
+                    ).padding()
+                }
                 OutlinedTextField(
                     text: self.email,
                     onChange: { it in
@@ -107,9 +111,6 @@ struct SignScreen : View {
                     keyboardType: UIKeyboardType.numberPad
                 ).padding()
                 Button {
-                    if self.name.isEmpty {
-                        return
-                    }
                     if self.password.isEmpty {
                         return
                     }
@@ -119,6 +120,9 @@ struct SignScreen : View {
                         }
                     }
                     if !state.isLogin {
+                        if self.name.isEmpty {
+                            return
+                        }
                         obs.signUp(name: name, email: email, password: password) { trader in
                             app.updateUserBase(trader: trader) {
                                 app.navigateTo(Screen.HOME_TRADER_ROUTE(traderData: trader))

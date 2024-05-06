@@ -10,6 +10,9 @@
 		070308A52BE2A62D0040A902 /* StockExchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070308A42BE2A62C0040A902 /* StockExchange.swift */; };
 		070308AB2BE2D4370040A902 /* Trader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070308AA2BE2D4370040A902 /* Trader.swift */; };
 		072188A22BE4217B00FC33B9 /* StockExchangeSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072188A12BE4217B00FC33B9 /* StockExchangeSheets.swift */; };
+		0762E4A32BE97125004E58EE /* SupplyAndDemandData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0762E4A22BE97125004E58EE /* SupplyAndDemandData.swift */; };
+		0762E4A52BE97132004E58EE /* SupplyDemandRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0762E4A42BE97132004E58EE /* SupplyDemandRepo.swift */; };
+		0762E4A72BE9713F004E58EE /* SupplyDemandRepoImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0762E4A62BE9713F004E58EE /* SupplyDemandRepoImp.swift */; };
 		0787412F2BDABFFF008689BB /* ConverterUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0787412E2BDABFFF008689BB /* ConverterUI.swift */; };
 		07B286462BE57725009991B8 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B286452BE57725009991B8 /* BottomSheet.swift */; };
 		07B286482BE598A9009991B8 /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B286472BE598A9009991B8 /* Items.swift */; };
@@ -84,6 +87,9 @@
 		070308A42BE2A62C0040A902 /* StockExchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockExchange.swift; sourceTree = "<group>"; };
 		070308AA2BE2D4370040A902 /* Trader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trader.swift; sourceTree = "<group>"; };
 		072188A12BE4217B00FC33B9 /* StockExchangeSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockExchangeSheets.swift; sourceTree = "<group>"; };
+		0762E4A22BE97125004E58EE /* SupplyAndDemandData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyAndDemandData.swift; sourceTree = "<group>"; };
+		0762E4A42BE97132004E58EE /* SupplyDemandRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyDemandRepo.swift; sourceTree = "<group>"; };
+		0762E4A62BE9713F004E58EE /* SupplyDemandRepoImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplyDemandRepoImp.swift; sourceTree = "<group>"; };
 		0787412E2BDABFFF008689BB /* ConverterUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterUI.swift; sourceTree = "<group>"; };
 		07B286452BE57725009991B8 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		07B286472BE598A9009991B8 /* Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
@@ -176,6 +182,16 @@
 			path = stockExchange;
 			sourceTree = "<group>";
 		};
+		0762E4A12BE97105004E58EE /* supplyDemand */ = {
+			isa = PBXGroup;
+			children = (
+				0762E4A22BE97125004E58EE /* SupplyAndDemandData.swift */,
+				0762E4A42BE97132004E58EE /* SupplyDemandRepo.swift */,
+				0762E4A62BE9713F004E58EE /* SupplyDemandRepoImp.swift */,
+			);
+			path = supplyDemand;
+			sourceTree = "<group>";
+		};
 		07E9E5E12BE38E64009EACAA /* stock */ = {
 			isa = PBXGroup;
 			children = (
@@ -251,6 +267,7 @@
 		07EC2A3B2BD870BE002375F2 /* dataSources */ = {
 			isa = PBXGroup;
 			children = (
+				0762E4A12BE97105004E58EE /* supplyDemand */,
 				07F3EBF62BE848C5005017F2 /* stockInfo */,
 				07F3EBEF2BE83804005017F2 /* stockSession */,
 				07F3EBE32BE80924005017F2 /* trader */,
@@ -519,8 +536,10 @@
 				07F3EBEC2BE815FC005017F2 /* SignScreen.swift in Sources */,
 				07EC2A6C2BD870BF002375F2 /* PreferenceData.swift in Sources */,
 				07EC2A772BD870BF002375F2 /* Const.swift in Sources */,
+				0762E4A32BE97125004E58EE /* SupplyAndDemandData.swift in Sources */,
 				07EC2A832BD870BF002375F2 /* StatusBar.swift in Sources */,
 				07F3EBE72BE80949005017F2 /* TraderRepo.swift in Sources */,
+				0762E4A72BE9713F004E58EE /* SupplyDemandRepoImp.swift in Sources */,
 				07EC2A822BD870BF002375F2 /* OutlinedTextField.swift in Sources */,
 				072188A22BE4217B00FC33B9 /* StockExchangeSheets.swift in Sources */,
 				07EC2A782BD870BF002375F2 /* Scope.swift in Sources */,
@@ -551,6 +570,7 @@
 				07EC2A882BD870BF002375F2 /* Web.swift in Sources */,
 				07EC2A842BD870BF002375F2 /* ToastView.swift in Sources */,
 				07EC2A722BD870BF002375F2 /* BaseRepoImp.swift in Sources */,
+				0762E4A52BE97132004E58EE /* SupplyDemandRepo.swift in Sources */,
 				07EC2A742BD870BF002375F2 /* Realm.swift in Sources */,
 				07F3EBF82BE84907005017F2 /* StockInformationData.swift in Sources */,
 				07EC2A702BD870BF002375F2 /* ResultRealm.swift in Sources */,

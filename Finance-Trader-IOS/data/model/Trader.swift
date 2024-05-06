@@ -5,7 +5,7 @@ class Trader : Object {
     
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var name: String
-    @Persisted var email: String
+    @Persisted(indexed: true) var email: String
     @Persisted var accountType: Int
 
     override init() {

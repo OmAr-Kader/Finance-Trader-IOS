@@ -206,8 +206,6 @@ extension [StockPointData] {
     
 }
 
-
-
 extension List<StockPoint> {
     
     @BackgroundActor
@@ -218,11 +216,18 @@ extension List<StockPoint> {
     }
 }
 
-
-
+extension [StockInfo] {
+    
+    @BackgroundActor
+    func toStockInfoData() -> [StockInfoData] {
+        return self.map { it in
+            StockInfoData(stockInfo: it)
+        }
+    }
+    
+}
 
 extension [StockHolderData] {
-    
     
     @BackgroundActor
     func toStockHolder() -> List<StockHolder> {
@@ -232,8 +237,6 @@ extension [StockHolderData] {
     }
     
 }
-
-
 
 extension List<StockHolder> {
     
@@ -245,4 +248,12 @@ extension List<StockHolder> {
     }
 }
 
-
+extension [SupplyDemand] {
+    
+    @BackgroundActor
+    func toSupplyDemandData() -> [SupplyDemandData] {
+        return self.map { it in
+            SupplyDemandData(supplyDemand: it)
+        }
+    }
+}

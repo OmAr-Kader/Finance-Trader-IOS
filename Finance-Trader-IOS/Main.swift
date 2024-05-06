@@ -5,7 +5,7 @@ struct Main: View {
     
     @Inject
     private var theme: Theme
-        
+
     var body: some View {
         let isSplash = app.state.homeScreen == Screen.SPLASH_SCREEN_ROUTE
         ZStack {
@@ -21,12 +21,12 @@ struct Main: View {
         }.background(theme.background).ignoresSafeArea()
     }
 }
-/*
+
 #Preview {
     VStack {
         Main(app: AppObserve())
     }
-}*/
+}
 
 
 struct SplashScreen : View {

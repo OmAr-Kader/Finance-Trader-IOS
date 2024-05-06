@@ -34,4 +34,12 @@ class StockInformationData {
         await repository.getAllStockInfo(invoke: invoke)
     }
     
+    @BackgroundActor
+    func getStockInfo(
+        id: String,
+        invoke: (ResultRealm<StockInfo?>) -> Unit
+    ) async {
+        await repository.getStockInfo(id: id, invoke: invoke)
+    }
+    
 }

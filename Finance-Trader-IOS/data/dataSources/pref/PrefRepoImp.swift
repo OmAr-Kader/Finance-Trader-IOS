@@ -68,7 +68,8 @@ class PrefRepoImp : PrefRepo {
                 }
             }
             invoke(prefs.first)
-        } catch {
+        } catch let e {
+            print(e.localizedDescription)
             invoke(nil)
         }
     }
