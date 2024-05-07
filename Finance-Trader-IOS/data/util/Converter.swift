@@ -257,3 +257,13 @@ extension [SupplyDemand] {
         }
     }
 }
+
+extension [StockSession] {
+    
+    @BackgroundActor
+    func toStockData() -> [StockData] {
+        return self.map { it in
+            StockData(it)
+        }
+    }
+}

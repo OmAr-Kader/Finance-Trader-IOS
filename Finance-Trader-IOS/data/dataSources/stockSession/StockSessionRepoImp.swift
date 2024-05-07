@@ -23,6 +23,21 @@ class StockSessionRepoImp : BaseRepoImp, StockSessionRepo {
         )
     }
     
+    @BackgroundActor
+    func getAStockSession(
+        stockId: String,
+        stringData: String,
+        invoke: (ResultRealm<StockSession?>) -> Unit
+    ) async {
+        await querySingle(
+            invoke,
+            "getAStockSession\(stockId + stringData)",
+            "%K == %@ AND %K == %@",
+            "stockId", NSString(string: stockId),
+            "stringData", NSString(string: stringData)
+        )
+    }
+    
     func getStockSessions(stockId: String, stringData: [String], stockSessions: (ResultRealm<[StockSession]>) -> Unit) async {
         let filterArguments = NSMutableArray()
         filterArguments.add(stringData)
@@ -31,6 +46,17 @@ class StockSessionRepoImp : BaseRepoImp, StockSessionRepo {
             "%K == %@ AND ANY %K IN %@",
             "stockId", NSString(string: stockId),
             "stringData", filterArguments
+        )
+    }
+    
+    @BackgroundActor
+    func getAllStockSessions(
+        stockId: String,
+        stockSessions: (ResultRealm<[StockSession]>) -> Unit
+    ) async {
+        await queryLess(stockSessions,
+            "%K == %@",
+            "stockId", NSString(string: stockId)
         )
     }
 

@@ -89,7 +89,7 @@ class HomeTraderObserve : ObservableObject {
     
     @BackgroundActor
     private func loadPrediction(_ stock: StockData, mode: ChartMode) async -> StockData {
-        let stockPred = stock.injectStatus(mode: mode).injectPredictions().injectPredictionStatus(mode: mode)
+        let stockPred = stock.injectStatus(mode: mode).injectPredictions(predictions: []).injectPredictionStatus(mode: mode)
         let stockMulti = [stockPred.values, stockPred.valuesPrediction]
         guard let stockBoarderPred = stockPred.values.minAndMaxValues(mode)  else {
             return stock

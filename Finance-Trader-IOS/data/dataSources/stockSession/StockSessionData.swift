@@ -29,12 +29,29 @@ class StockSessionData {
     }
     
     @BackgroundActor
+    func getAStockSession(
+        stockId: String,
+        stringData: String,
+        invoke: (ResultRealm<StockSession?>) -> Unit
+    ) async {
+        await repository.getAStockSession(stockId: stockId, stringData: stringData, invoke: invoke)
+    }
+    
+    @BackgroundActor
     func getStockSessions(
         stockId: String,
         stringData: [String],
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async {
         await repository.getStockSessions(stockId: stockId, stringData: stringData, stockSessions: stockSessions)
+    }
+    
+    @BackgroundActor
+    func getAllStockSessions(
+        stockId: String,
+        stockSessions: (ResultRealm<[StockSession]>) -> Unit
+    ) async {
+        await repository.getAllStockSessions(stockId: stockId, stockSessions: stockSessions)
     }
     
     @BackgroundActor

@@ -28,7 +28,6 @@ struct Main: View {
     }
 }
 
-
 struct SplashScreen : View {
     
     @Inject
