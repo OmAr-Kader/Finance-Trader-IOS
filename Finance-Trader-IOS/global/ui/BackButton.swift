@@ -9,7 +9,7 @@ struct BackButtonModifier: ViewModifier {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    BackButton(action: onBackPressed)
+                    BackPressButton(action: onBackPressed)
                 }
             }
     }
@@ -65,6 +65,44 @@ struct BackButton: View {
     }
 }
 
+
+
+struct BackPressButton: View {
+
+    let title: String
+    let action: () -> Void
+    
+    init(title: String = "", action: @escaping () -> Void) {
+        self.title = title
+        self.action = action
+    }
+    
+    var body: some View {
+        Button(action: {
+            action()
+        }) {
+            HStack {
+                Image(
+                    uiImage: UIImage(
+                        named: "chevron.backward"
+                    )?.withTintColor(
+                        UIColor(Color.cyan)
+                    ) ?? UIImage()
+                ).resizable()
+                    .imageScale(.medium)
+                    .scaledToFit().frame(
+                        width: 20, height: 22, alignment: .topLeading
+                    )
+                Text(
+                    "Back"
+                ).font(.system(size: 17))
+                    .foregroundStyle(
+                        Color(red: 9 / 255, green: 131 / 255, blue: 1)
+                    ).padding(leading: -7)
+            }.frame(width: 90, height: 45)
+        }
+    }
+}
 
 struct ToolBarButton: View {
     let icon: String

@@ -14,8 +14,15 @@ class SupplyDemandRepoImp : BaseRepoImp, SupplyDemandRepo {
         }
     }
     
-    func getSupplysAndDemands(stockId: String, invoke: (ResultRealm<[SupplyDemand]>) -> Unit) async {
+    func getSupplysAndDemands(stockId: String, invoke: @escaping (ResultRealm<[SupplyDemand]>) -> Unit) async {
         await query(invoke, "getSupplysAndDemands\(stockId)", "%K == %@", "stockId", NSString(string: stockId))
+    }
+    
+    func getSupplysAndDemandsLive(
+        stockId: String,
+        invoke: @escaping ([SupplyDemand]) -> Unit
+    ) async -> AnyCancellable? {
+        return await queryFlow(invoke, "getSupplysAndDemandsLive\(stockId)", "%K == %@", "stockId", NSString(string: stockId))
     }
     
     func deleteSupplyDemand(supplyDemand: SupplyDemand) async -> Int {

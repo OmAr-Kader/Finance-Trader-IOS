@@ -7,18 +7,18 @@ struct Main: View {
     private var theme: Theme
 
     var body: some View {
-        let isSplash = app.state.homeScreen == Screen.SPLASH_SCREEN_ROUTE
+        //let isSplash = app.state.homeScreen == Screen.SPLASH_SCREEN_ROUTE
         ZStack {
             NavigationStack(path: $app.navigationPath) {
                 targetScreen(
                     app.state.homeScreen, app
                 ).navigationDestination(for: Screen.self) { route in
-                    targetScreen(route, app).toolbar(.hidden, for: .navigationBar)
+                    targetScreen(route, app)//.toolbar(.hidden, for: .navigationBar)
                 }
-            }.prepareStatusBarConfigurator(
+            }/*.prepareStatusBarConfigurator(
                 isSplash ? theme.background : theme.primary, isSplash, theme.isDarkStatusBarText
-            )
-        }.background(theme.background).ignoresSafeArea()
+            )*/
+        }.background(theme.background).safeArea()//.ignoresSafeArea()
     }
 }
 

@@ -55,7 +55,7 @@ class PrefRepoImp : PrefRepo {
     }
     
     @BackgroundActor
-    func insertPref(_ prefs: [Preference],_ invoke: @escaping ((Preference?) -> Unit)) async {
+    func insertPref(_ prefs: [Preference],_ invoke: @escaping (([Preference]?) -> Unit)) async {
         do {
             let realm = await realmApi.local()
             guard let realm else {
@@ -67,7 +67,7 @@ class PrefRepoImp : PrefRepo {
                     realm.add(pref, update: .all)
                 }
             }
-            invoke(prefs.first)
+            invoke(prefs)
         } catch let e {
             print(e.localizedDescription)
             invoke(nil)

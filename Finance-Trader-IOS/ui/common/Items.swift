@@ -17,7 +17,7 @@ struct StockChartHeadView : View {
             HStack {
                 Text("Prce:").foregroundStyle(theme.textColor).font(.subheadline)
                 ImageAsset(icon: isGain ? "up" : "down", tint: isGain ? .green : .red).frame(width: 10, height: 10)
-                Text(String(stockPrice) + " $").foregroundStyle(isGain ? .green : .red).font(.subheadline)
+                Text(stockPrice.toStr() + " $").foregroundStyle(isGain ? .green : .red).font(.subheadline)
             }.padding()
         }.frame(height: 40).onTapGesture {
             onClick()

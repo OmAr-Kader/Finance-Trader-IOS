@@ -24,7 +24,6 @@ class AppObserve : ObservableObject {
         sinkPrefs?.cancel()
         prefsTask = scope.launchRealm {
             self.sinkPrefs = await self.project.preference.prefsBack { list in
-                print("=====>" + "Done" + String(list.count))
                 self.preferences = list
             }
         }
@@ -68,10 +67,19 @@ class AppObserve : ObservableObject {
         state = state.copy(route, screenConfig)
     }
     
-    func signOut(_ invoke: @escaping () -> Unit,_ failed: @escaping () -> Unit) {
+    @MainActor
+    func signOut(_ invoke: @escaping @MainActor () -> Unit,_ failed: @escaping @MainActor () -> Unit) {
         scope.launchRealm {
-            await self.project.preference.deletePrefAll()
-            invoke()
+            let result = await self.project.preference.deletePrefAll()
+            if result == REALM_SUCCESS {
+                self.scope.launchMain {
+                    invoke()
+                }
+            } else {
+                self.scope.launchMain {
+                    failed()
+                }
+            }
         }
     }
     
@@ -83,8 +91,9 @@ class AppObserve : ObservableObject {
             invoke(nil)
             return
         }
-        invoke(TraderData(id: "6638fe6c19a7050bba0ad215", name: "Omar", email: "omar@gmail.com", accountType: 1))
-        /*if (preferences.isEmpty) {
+        //invoke(TraderData(id: "663bb05fadc20930950c11c2", name: "Ramo", email: "ramo@gmail.com", accountType: 1))
+        //invoke(TraderData(id: "6638fe6c19a7050bba0ad215", name: "Omar", email: "omar@gmail.com", accountType: 1))
+        if (preferences.isEmpty) {
             inti { it in
                 let userBase = self.fetchUserBase(it)
                 self.scope.launchMain {
@@ -99,20 +108,19 @@ class AppObserve : ObservableObject {
                     invoke(userBase)
                 }
             }
-        }*/
+        }
     }
 
     @BackgroundActor
     private func fetchUserBase(_ list: [Preference]) -> TraderData? {
-        print(list.count)
-        let id = list.first { it in it.ketString == PREF_USER_ID }?.value
-        let name = list.first { it in it.ketString == PREF_USER_NAME }?.value
-        let email = list.first { it in it.ketString == PREF_USER_EMAIL }?.value
-        let userType = list.first { it in it.ketString == PREF_USER_TYPE }?.value as? Int
+        let id = list.last { it in it.ketString == PREF_USER_ID }?.value
+        let name = list.last { it in it.ketString == PREF_USER_NAME }?.value
+        let email = list.last { it in it.ketString == PREF_USER_EMAIL }?.value
+        let userType = list.last { it in it.ketString == PREF_USER_TYPE }?.value
         if (id == nil || name == nil || email == nil || userType == nil) {
             return nil
         }
-        return TraderData(id: id!, name: name!, email: email!, accountType: userType!)
+        return TraderData(id: id!, name: name!, email: email!, accountType: Int(userType!)!)
     }
 
     func updateUserBase(trader: TraderData, invoke: @escaping @MainActor () -> Unit) {
@@ -123,7 +131,6 @@ class AppObserve : ObservableObject {
             list.append(Preference(ketString: PREF_USER_EMAIL, value: trader.email))
             list.append(Preference(ketString: PREF_USER_TYPE, value: String(trader.accountType)))
             await self.project.preference.insertPref(list) { newPref in
-                print(newPref?.description ?? "nil")
                 self.inti { it in
                     self.scope.launchMain {
                         self.preferences = it

@@ -146,7 +146,7 @@ struct NegotiateSheet : View {
                 }
                 Spacer()
                 HStack {
-                    Text("Prce:").foregroundStyle(theme.textColor).font(.title3)
+                    Text("Price:").foregroundStyle(theme.textColor).font(.title3)
                     Text(String(supplyDemandData.price) + " $").foregroundStyle(theme.textColor).font(.title3)
                 }
                 Spacer()
@@ -208,6 +208,7 @@ struct NegotiateSheet : View {
 
 enum SupplyDemandScreenMode : Hashable {
     case IsOwnerEdit
+    case IsOwnerDelete
     case IsBuy
     case IsBuyNegotiate
     case IsAcceptSell

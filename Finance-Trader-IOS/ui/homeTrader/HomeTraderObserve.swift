@@ -35,20 +35,18 @@ class HomeTraderObserve : ObservableObject {
         self.scope.launchRealm {
             await self.project.stockInfo.getAllStockInfo { it in
                 let stockInfos = it.value.toStockInfoData()
-                /*let ids = stockInfos.map { it in
+                let ids = stockInfos.map { it in
                     it.id
-                }*/
-                /*self.scope.launchRealm {
-                    await self.project.stockSession.getStocksSessions(
-                        stockId: ids,
-                        stringData: []
+                }
+                self.scope.launchRealm {
+                    await self.project.stockSession.getAllStocksSessions(
+                        stockId: ids
                     ) { it in
-                        
+                        let stocks: [StockData] = stockInfos.toHomeStockData(it.value.toStockData())
+                        self.scope.launchMain {
+                            self.state = self.state.copy(stocks: stocks, isLoading: false, dummy: self.state.dummy + 1)
+                        }
                     }
-                }*/
-                let stocks: [StockData] = stockInfos.toHomeStockData([])
-                self.scope.launchMain {
-                    self.state = self.state.copy(stocks: stocks, isLoading: false, dummy: self.state.dummy + 1)
                 }
             }
         }

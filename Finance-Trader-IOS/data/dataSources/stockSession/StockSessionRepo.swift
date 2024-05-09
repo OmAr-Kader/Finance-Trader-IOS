@@ -42,4 +42,11 @@ protocol StockSessionRepo {
         stringData: [String],
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async
+    
+    @BackgroundActor
+    func getAllStocksSessions(
+        stockId: [String],
+        stockSessions: (ResultRealm<[StockSession]>) -> Unit
+    ) async
+    
 }

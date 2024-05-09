@@ -1,5 +1,6 @@
 import SwiftUI
 
+//* Change Already Token + Aleady Token Not Work + Good Night
 
 struct ListingStockScreen : View {
     
@@ -133,10 +134,11 @@ struct ListingStockScreen : View {
                 shares = String(stockInfoData.numberOfShares)
                 price = String(stockInfoData.stockPrice)
             }
-            BackButton {
-                app.backPress()
-            }
             LoadingScreen(isLoading: state.isLoading)
-        }.background(theme.backDark).toastView(toast: $toast)
+        }.toastView(toast: $toast)
+            .background(theme.backDark)
+            .withCustomBackButton {
+                app.backPress()
+            }.toolbarRole(.navigationStack)
     }
 }

@@ -13,9 +13,9 @@ class SignObserve  : ObservableObject {
     
     @MainActor
     func setIsLogin(_ it: Bool) {
-        self.state = self.state.copy(isLogin: it)
+        self.state = self.state.copy(isLogin: it, isPressed: false)
     }
-    
+ 
     @MainActor
     func login(
         email: String,
@@ -27,7 +27,12 @@ class SignObserve  : ObservableObject {
             failed("Failed: Internet is disconnected")
             return
         }
-        self.state = self.state.copy(isLoading: true)
+        
+        if password.isEmpty || email.isEmpty {
+            self.state = self.state.copy(isPressed: true)
+            return
+        }
+        self.state = self.state.copy(isLoading: true, isPressed: false)
         doLogIn(email: email, password: password, invoke, failed)
     }
 
@@ -78,7 +83,11 @@ class SignObserve  : ObservableObject {
             failed("Failed: Internet is disconnected")
             return
         }
-        self.state = self.state.copy(isLoading: true)
+        if password.isEmpty || email.isEmpty || name.isEmpty {
+            self.state = self.state.copy(isPressed: true)
+            return
+        }
+        self.state = self.state.copy(isLoading: true, isPressed: false)
         doSignUp(name: name, email: email, password: password, invoke, failed)
     }
         
@@ -160,20 +169,19 @@ class SignObserve  : ObservableObject {
         
         var trader: TraderData = TraderData()
         var isLoading: Bool = false
-        var isLogin: Bool = false
-
-        var dummy: Int = 1
+        var isLogin: Bool = true
+        var isPressed: Bool = false
 
         mutating func copy(
             trader: TraderData? = nil,
             isLoading: Bool? = nil,
             isLogin: Bool? = nil,
-            dummy: Int? = nil
+            isPressed: Bool? = nil
         ) -> Self {
             self.trader = trader ?? self.trader
             self.isLoading = isLoading ?? self.isLoading
             self.isLogin = isLogin ?? self.isLogin
-            self.dummy = dummy ?? self.dummy
+            self.isPressed = isPressed ?? self.isPressed
             return self
         }
     }

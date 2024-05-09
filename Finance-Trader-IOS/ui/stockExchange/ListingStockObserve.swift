@@ -12,8 +12,21 @@ class ListingStockObserve : ObservableObject {
     
     @MainActor
     func loadData(stockInfo: StockInfoData? = nil) {
-        // Load All StockInfoData Names And Symbols to not conflict with the new Name
-        self.state = self.state.copy(stockInfo: stockInfo)
+        //* Load All StockInfoData Names And Symbols to not conflict with the new Name
+        self.state = self.state.copy(isLoading: true)
+        self.scope.launchRealm {
+            await self.project.stockInfo.getAllStockInfo { it in
+                let names = it.value.map { it in
+                    it.name
+                }
+                let symbols = it.value.map { it in
+                    it.symbol
+                }
+                self.scope.launchMain {
+                    self.state = self.state.copy(stockInfo: stockInfo, names: names, symbols: symbols, isLoading: false)
+                }
+            }
+        }
     }
     
     @MainActor

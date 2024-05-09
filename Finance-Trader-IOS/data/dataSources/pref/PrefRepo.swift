@@ -12,7 +12,7 @@ protocol PrefRepo {
     func insertPref(_ pref: Preference,_ invoke: @escaping ((Preference?) async -> Unit)) async
     
     @BackgroundActor
-    func insertPref(_ prefs: [Preference],_ invoke: @escaping ((Preference?) -> Unit)) async
+    func insertPref(_ prefs: [Preference],_ invoke: @escaping (([Preference]?) -> Unit)) async
 
     @BackgroundActor
     func updatePref(

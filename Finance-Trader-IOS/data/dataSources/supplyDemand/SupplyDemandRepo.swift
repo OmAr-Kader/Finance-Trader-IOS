@@ -14,8 +14,14 @@ protocol SupplyDemandRepo {
     @BackgroundActor
     func getSupplysAndDemands(
         stockId: String,
-        invoke: (ResultRealm<[SupplyDemand]>) -> Unit
+        invoke: @escaping (ResultRealm<[SupplyDemand]>) -> Unit
     ) async
+    
+    @BackgroundActor
+    func getSupplysAndDemandsLive(
+        stockId: String,
+        invoke: @escaping ([SupplyDemand]) -> Unit
+    ) async -> AnyCancellable?
     
     @BackgroundActor
     func deleteSupplyDemand(supplyDemand: SupplyDemand) async -> Int

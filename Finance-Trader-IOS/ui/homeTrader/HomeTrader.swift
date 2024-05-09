@@ -30,19 +30,22 @@ struct HomeTrader : View {
     
     var body: some View {
         let state = obs.state
-        FullZStack {
-            switch  state.selectedIndex {
-            case 0: HomeTraderSearch()
-            case 1: HomeTraderOpportunity(state: state, traderData: traderData, onModeChange: obs.loadStockMode, onNavigate: app.navigateTo)
-            default: HomeTraderPortfolio()
+        ZStack {
+            VStack {
+                switch  state.selectedIndex {
+                case 0: HomeTraderSearch()
+                case 1: HomeTraderOpportunity(state: state, traderData: traderData, onModeChange: obs.loadStockMode, onNavigate: app.navigateTo)
+                default: HomeTraderPortfolio()
+                }
+                BottomBar(
+                    selectedIndex: state.selectedIndex,
+                    items: items, backColor: theme.backDark
+                ) { it in
+                    obs.onPageSelected(it)
+                    obs.loadData(it)
+                }.onBottom().frame(height: 60)
             }
-            BottomBar(
-                selectedIndex: state.selectedIndex,
-                items: items, backColor: theme.backDark
-            ) { it in
-                obs.onPageSelected(it)
-                obs.loadData(it)
-            }.onBottom().frame(height: 60)
+            LoadingScreen(isLoading: state.isLoading)
         }.onAppear {
             obs.loadData(state.selectedIndex)
         }.background(theme.background)
@@ -67,6 +70,16 @@ struct HomeTrader : View {
                     ImageAsset(icon: "compare", tint: colorBarIOS).frame(width: 28, height: 28).onTapGesture {
                         
                     }
+                }
+                ToolbarItem(placement: .secondaryAction) {
+                    Button("Sign out") {
+                        app.signOut {
+                            app.navigateHome(Screen.SIGN_ROUTE)
+                        } _: {
+                            
+                        }
+
+                    }.foregroundColor(theme.textColor)
                 }
             }.toolbarRole(.navigationStack).animation(.default, value: state.selectedIndex)
     }

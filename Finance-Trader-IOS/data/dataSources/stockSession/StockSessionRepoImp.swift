@@ -72,5 +72,18 @@ class StockSessionRepoImp : BaseRepoImp, StockSessionRepo {
         )
     }
     
+    @BackgroundActor
+    func getAllStocksSessions(
+        stockId: [String],
+        stockSessions: (ResultRealm<[StockSession]>) -> Unit
+    ) async {
+        let stockIdArguments = NSMutableArray()
+        stockIdArguments.addObjects(from: stockId)
+        await queryLess(stockSessions,
+            "%K IN %@",
+            "stockId", stockIdArguments
+        )
+    }
+    
 }
 

@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Create Add Supply Or Demand Modes
+//* Sale toDMY if Specifc Day => Hours
 
 struct StockScreen : View {
     
@@ -21,7 +21,6 @@ struct StockScreen : View {
         let state = obs.state
         ZStack {
             VStack {
-                Spacer().frame(height: 40)
                 ScrollView {
                     LazyVStack {
                         VStack {
@@ -62,16 +61,18 @@ struct StockScreen : View {
                             SupplyDemandItemView(supplyDemand: supplyDemand) { it in
                                 switch it {
                                 case .IsAcceptSell: obs.sellShare(demmandData: supplyDemand, fromTrader: trader.id, stockId: state.stockInfo.id
-                                ) {
-                                    obs.loadData(stockId: stockId, trader: trader, isDarkMode: theme.isDarkMode)
-                                } failed: {
+                                ) {} failed: {
                                     toast = Toast(style: .error, message: "Failed")
                                 }
                                 case .IsOwnerEdit: obs.showSupplyDemandSheet(supplyDemandData: supplyDemand)
-                                case .IsBuy: obs.buyShare(supplyData: supplyDemand, toTrader: trader.id, stockId: state.stockInfo.id
-                                ) {
-                                    obs.loadData(stockId: stockId, trader: trader, isDarkMode: theme.isDarkMode)
+                                case .IsOwnerDelete: obs.deleteSuppltDemand(supplyDemandData: supplyDemand) {
+                                    
                                 } failed: {
+                                    toast = Toast(style: .error, message: "Failed")
+                                }
+
+                                case .IsBuy: obs.buyShare(supplyData: supplyDemand, toTrader: trader.id, stockId: state.stockInfo.id
+                                ) {} failed: {
                                     toast = Toast(style: .error, message: "Failed")
                                 }
                                 case .IsBuyNegotiate: obs.showNegotiateSheet(supplyDemandData: supplyDemand)
@@ -114,13 +115,14 @@ struct StockScreen : View {
                     obs.pushNegotiate(supplyDemandData: supplyDemandData, trader: trader)
                 }
             }
-            BackButton {
-                app.backPress()
-            }
             LoadingScreen(isLoading: state.isLoading)
         }.onAppear {
             obs.loadData(stockId: stockId, trader: trader, isDarkMode: theme.isDarkMode)
-        }.background(theme.background).toastView(toast: $toast)
+        }.toastView(toast: $toast)
+            .background(theme.background)
+            .withCustomBackButton {
+                app.backPress()
+            }.toolbarRole(.navigationStack)
     }
 }
 
@@ -226,11 +228,11 @@ struct SupplyDemandActios : View {
                 }
                 Spacer()
                 SupplyDemandButton(text: "Cancel", color: Color.red.gradient) {
-
+                    onNavigate(.IsOwnerDelete)
                 }
             } else if status == .IsDemandAndIsHaveShares {
                 SupplyDemandButton(text: "Accept & Sell", color: Color.red.gradient) {
-                    onNavigate(.IsSellNegotiate)
+                    onNavigate(.IsAcceptSell)
                 }
                 Spacer()
                 SupplyDemandButton(text: "Negotiate", color: theme.primary.gradient) {

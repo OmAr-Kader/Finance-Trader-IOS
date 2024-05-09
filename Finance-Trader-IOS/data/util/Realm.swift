@@ -27,6 +27,7 @@ var listOfSchemaEmbeddedRealmClass: [ObjectBase.Type] {
     return [
         StockPoint.self,
         StockHolder.self,
+        Negotiate.self
     ]
 }
 

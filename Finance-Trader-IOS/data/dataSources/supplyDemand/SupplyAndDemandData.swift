@@ -24,9 +24,17 @@ class SupplyAndDemandData {
     @BackgroundActor
     func getSupplysAndDemands(
         stockId: String,
-        invoke: (ResultRealm<[SupplyDemand]>) -> Unit
+        invoke: @escaping (ResultRealm<[SupplyDemand]>) -> Unit
     ) async {
         await repository.getSupplysAndDemands(stockId: stockId, invoke: invoke)
+    }
+    
+    @BackgroundActor
+    func getSupplysAndDemandsLive(
+        stockId: String,
+        invoke: @escaping ([SupplyDemand]) -> Unit
+    ) async -> AnyCancellable? {
+        return await repository.getSupplysAndDemandsLive(stockId: stockId, invoke: invoke)
     }
     
     @BackgroundActor

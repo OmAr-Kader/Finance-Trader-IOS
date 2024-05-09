@@ -33,7 +33,7 @@ struct SignScreen : View {
                             .font(.headline)
                             .foregroundColor(state.isLogin ? .black : theme.textColor)
                             .background(
-                                state.isLogin ? theme.primary.gradient : theme.background.gradient
+                                state.isLogin ? theme.primary.gradient : theme.backDark.gradient
                             )
                             .clipShape(
                                 .rect(
@@ -55,7 +55,7 @@ struct SignScreen : View {
                             .font(.headline)
                             .foregroundColor(!state.isLogin ? .black : theme.textColor)
                             .background(
-                                !state.isLogin ? theme.primary.gradient : theme.background.gradient
+                                !state.isLogin ? theme.primary.gradient : theme.backDark.gradient
                             ).clipShape(
                                 .rect(
                                     topLeadingRadius: 0,
@@ -76,7 +76,7 @@ struct SignScreen : View {
                             self.name = it
                         },
                         hint: "Enter your Name",
-                        isError: name.isEmpty,
+                        isError: state.isPressed && name.isEmpty,
                         errorMsg: "Shouldn't be empty",
                         theme: theme,
                         cornerRadius: 15,
@@ -90,8 +90,8 @@ struct SignScreen : View {
                         self.email = it
                     },
                     hint: "Enter your email",
-                    isError: email.isEmpty,
-                    errorMsg: "Already Taken",
+                    isError: state.isPressed && email.isEmpty,
+                    errorMsg: "Shouldn't be empty",
                     theme: theme,
                     cornerRadius: 15,
                     lineLimit: 1,
@@ -103,7 +103,7 @@ struct SignScreen : View {
                         self.password = it
                     },
                     hint: "Enter your password",
-                    isError: password.isEmpty,
+                    isError: state.isPressed && password.isEmpty,
                     errorMsg: "Shouldn't be empty",
                     theme: theme,
                     cornerRadius: 15,
@@ -111,18 +111,7 @@ struct SignScreen : View {
                     keyboardType: UIKeyboardType.numberPad
                 ).padding()
                 Button {
-                    if self.password.isEmpty {
-                        return
-                    }
                     if !state.isLogin {
-                        if self.name.isEmpty {
-                            return
-                        }
-                    }
-                    if !state.isLogin {
-                        if self.name.isEmpty {
-                            return
-                        }
                         obs.signUp(name: name, email: email, password: password) { trader in
                             app.updateUserBase(trader: trader) {
                                 app.navigateTo(Screen.HOME_TRADER_ROUTE(traderData: trader))
@@ -154,6 +143,6 @@ struct SignScreen : View {
                 }.padding().onBottom()
             }
             LoadingScreen(isLoading: state.isLoading)
-        }.background(theme.backDark).toastView(toast: $toast)
+        }.background(theme.background).toastView(toast: $toast)
     }
 }

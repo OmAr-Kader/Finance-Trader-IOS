@@ -27,7 +27,7 @@ class PreferenceData {
     }
     
     @BackgroundActor
-    func insertPref(_ prefs: [Preference],_ invoke: @escaping ((Preference?) -> Unit)) async {
+    func insertPref(_ prefs: [Preference],_ invoke: @escaping (([Preference]?) -> Unit)) async {
         await repository.insertPref(prefs, invoke)
     }
 
