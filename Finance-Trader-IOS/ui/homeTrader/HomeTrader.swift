@@ -81,7 +81,9 @@ struct HomeTrader : View {
 
                     }.foregroundColor(theme.textColor)
                 }
-            }.toolbarRole(.navigationStack).animation(.default, value: state.selectedIndex)
+            }.toolbarRole(.navigationStack)
+            .navigationBarBackButtonHidden(true)
+            .animation(.default, value: state.selectedIndex)
     }
 }
 

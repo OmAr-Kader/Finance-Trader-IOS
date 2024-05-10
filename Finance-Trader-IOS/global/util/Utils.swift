@@ -126,6 +126,14 @@ extension Int64 {
             from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
         )
     }
+    
+    var toStrHM: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        return dateFormatter.string(
+            from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
+        )
+    }
 
 }
 

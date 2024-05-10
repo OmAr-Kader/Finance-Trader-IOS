@@ -22,7 +22,7 @@ struct AddSheet : View {
                     Text("Supply")
                         .padding(10)
                         .frame(minWidth: 80)
-                        .foregroundColor(isSupply ? .black : theme.textColor)
+                        .foregroundColor(isSupply ? theme.textForPrimaryColor : theme.textColor)
                         .background(
                             isSupply ? theme.primary.gradient : theme.background.gradient
                         )
@@ -43,7 +43,7 @@ struct AddSheet : View {
                     Text("Demand")
                         .padding(10)
                         .frame(minWidth: 80)
-                        .foregroundColor(!isSupply ? .black : theme.textColor)
+                        .foregroundColor(!isSupply ? theme.textForPrimaryColor : theme.textColor)
                         .background(
                             !isSupply ? theme.primary.gradient : theme.background.gradient
                         ).clipShape(

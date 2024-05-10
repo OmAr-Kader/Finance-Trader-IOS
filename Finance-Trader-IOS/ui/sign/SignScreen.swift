@@ -31,7 +31,7 @@ struct SignScreen : View {
                             .padding(10)
                             .frame(minWidth: 100)
                             .font(.headline)
-                            .foregroundColor(state.isLogin ? .black : theme.textColor)
+                            .foregroundColor(state.isLogin ? theme.textForPrimaryColor : theme.textColor)
                             .background(
                                 state.isLogin ? theme.primary.gradient : theme.backDark.gradient
                             )
@@ -53,7 +53,7 @@ struct SignScreen : View {
                             .padding(10)
                             .frame(minWidth: 100)
                             .font(.headline)
-                            .foregroundColor(!state.isLogin ? .black : theme.textColor)
+                            .foregroundColor(!state.isLogin ? theme.textForPrimaryColor : theme.textColor)
                             .background(
                                 !state.isLogin ? theme.primary.gradient : theme.backDark.gradient
                             ).clipShape(
@@ -143,6 +143,6 @@ struct SignScreen : View {
                 }.padding().onBottom()
             }
             LoadingScreen(isLoading: state.isLoading)
-        }.background(theme.background).toastView(toast: $toast)
+        }.background(theme.background).toastView(toast: $toast).toolbar(.hidden)
     }
 }
