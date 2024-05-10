@@ -12,6 +12,12 @@ protocol SupplyDemandRepo {
     ) async -> ResultRealm<SupplyDemand?>
     
     @BackgroundActor
+    func getSupplyDemand(
+        id: String,
+        invoke: @escaping (ResultRealm<SupplyDemand?>) -> Unit
+    ) async
+    
+    @BackgroundActor
     func getSupplysAndDemands(
         stockId: String,
         invoke: @escaping (ResultRealm<[SupplyDemand]>) -> Unit

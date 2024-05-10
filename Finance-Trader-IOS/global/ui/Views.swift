@@ -74,6 +74,47 @@ extension View {
         }
     }
     
+    @inlinable func onLeadingCurvedText(textColor: Color, backgroundColor: AnyGradient) -> some View {
+        return padding(10)
+        .frame(minWidth: 80)
+        .foregroundColor(textColor)
+        .background(backgroundColor)
+        .clipShape(
+            .rect(
+                topLeadingRadius: 20,
+                bottomLeadingRadius: 20,
+                bottomTrailingRadius: 0,
+                topTrailingRadius: 0
+            )
+        )
+        .transition(.move(edge: .trailing))
+    }
+    
+    @inlinable func onTrailingCurvedText(textColor: Color, backgroundColor: AnyGradient) -> some View {
+        return padding(10)
+        .frame(minWidth: 80)
+        .foregroundColor(textColor)
+        .background(backgroundColor)
+        .clipShape(
+            .rect(
+                topLeadingRadius: 0,
+                bottomLeadingRadius: 0,
+                bottomTrailingRadius: 20,
+                topTrailingRadius: 20
+            )
+        )
+        .transition(.move(edge: .trailing))
+    }
+    
+    @inlinable func allCurvedText(textColor: Color, backgroundColor: AnyGradient) -> some View {
+        return padding(10)
+            .frame(minWidth: 80)
+            .foregroundColor(textColor)
+            .background(backgroundColor)
+            .clipShape(.rect(cornerRadius: 20))
+            .transition(.move(edge: .leading))
+    }
+    
     /*@inlinable func safeAreaSpace(_ edges: Edge.Set) -> some View {
         if #available(iOS 17.0, *) {
             return safeAreaPadding(edges)

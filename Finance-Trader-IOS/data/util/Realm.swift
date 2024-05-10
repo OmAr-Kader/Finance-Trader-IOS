@@ -31,6 +31,9 @@ var listOfSchemaEmbeddedRealmClass: [ObjectBase.Type] {
     ]
 }
 
+public func log(_ it: String, tag: String = "") {
+    print("==> \(tag) \(it)")
+}
 
 public func logger(_ tag: String,_ it: String) {
     let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "network")

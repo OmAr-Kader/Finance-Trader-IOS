@@ -40,8 +40,9 @@ class StockObserve : ObservableObject {
                                 let stock = stockInfo.toHomeStockData(sessions.value.toStockData())
                                 let supplyDemands = it.toSupplyDemandData().injectStatus(traderId: trader.id, haveShares: haveShares).injectColors(stackHolders: stockInfo.stockholders)
                                 self.scope.launchMain {
-                                    self.state = self.state.copy(stockInfo: stockInfo, supplyDemands: supplyDemands, isHaveShares: haveShares != nil, stock: stock, isLoading: false
-                                    )
+                                    withAnimation {
+                                        self.state = self.state.copy(stockInfo: stockInfo, supplyDemands: supplyDemands, isHaveShares: haveShares != nil, stock: stock, isLoading: false)
+                                    }
                                 }
                             }
                         }
@@ -147,27 +148,38 @@ class StockObserve : ObservableObject {
         failed: @escaping @MainActor () -> ()
     ) {
         self.scope.launchRealm {
-            await self.project.stockInfo.getStockInfo(id: stockId) { _stockInfo in
-                guard let stockInfo = _stockInfo.value else {
+            await self.project.supplyDemand.getSupplyDemand(id: supplyData.id) { it in
+                log(String(supplyData.ifEqual(supplyDemand: it.value)))
+                if !supplyData.ifEqual(supplyDemand: it.value) {
                     self.scope.launchMain {
                         self.loadingStatus(false)
                         failed()
                     }
-                    return
                 }
-                let stockInfoData = StockInfoData(stockInfo: stockInfo)
-    
-                guard let newStockInfoData = stockInfoData.adjustStockPrice(
-                    sharesToExchange: supplyData.shares,
-                    newPrice: supplyData.price
-                ).makeExchange(fromTrader: fromTrader, toTrader: toTrader, exchangedShares: supplyData.shares) else {
-                    self.scope.launchMain {
-                        self.loadingStatus(false)
-                        failed()
+                self.scope.launchRealm {
+                    await self.project.stockInfo.getStockInfo(id: stockId) { _stockInfo in
+                        guard let stockInfo = _stockInfo.value else {
+                            self.scope.launchMain {
+                                self.loadingStatus(false)
+                                failed()
+                            }
+                            return
+                        }
+                        let stockInfoData = StockInfoData(stockInfo: stockInfo)
+                        
+                        guard let newStockInfoData = stockInfoData.adjustStockPrice(
+                            sharesToExchange: supplyData.shares,
+                            newPrice: supplyData.price
+                        ).makeExchange(fromTrader: fromTrader, toTrader: toTrader, exchangedShares: supplyData.shares) else {
+                            self.scope.launchMain {
+                                self.loadingStatus(false)
+                                failed()
+                            }
+                            return
+                        }
+                        invoke(newStockInfoData)
                     }
-                    return
                 }
-                invoke(newStockInfoData)
             }
         }
     }
@@ -343,8 +355,16 @@ class StockObserve : ObservableObject {
     }
     
     private func loadingStatus(_ it: Bool) {
-        self.scope.launchMain {
-            self.state = self.state.copy(isLoading: it)
+        if it == true {
+            self.scope.launchMain {
+                self.state = self.state.copy(isLoading: it)
+            }
+        } else {
+            self.scope.launchMain {
+                withAnimation {
+                    self.state = self.state.copy(isLoading: it)
+                }
+            }
         }
     }
     

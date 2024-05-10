@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 class ListingStockObserve : ObservableObject {
     
@@ -12,7 +13,6 @@ class ListingStockObserve : ObservableObject {
     
     @MainActor
     func loadData(stockInfo: StockInfoData? = nil) {
-        //* Load All StockInfoData Names And Symbols to not conflict with the new Name
         self.state = self.state.copy(isLoading: true)
         self.scope.launchRealm {
             await self.project.stockInfo.getAllStockInfo { it in
@@ -23,14 +23,34 @@ class ListingStockObserve : ObservableObject {
                     it.symbol
                 }
                 self.scope.launchMain {
-                    self.state = self.state.copy(stockInfo: stockInfo, names: names, symbols: symbols, isLoading: false)
+                    withAnimation {
+                        self.state = self.state.copy(stockInfo: stockInfo, names: names, symbols: symbols, isLoading: false)
+                    }
                 }
             }
         }
     }
     
     @MainActor
-    func createStock(name: String, symbol: String, share: Int64, pri: Float64, traderId: String, invoke: @escaping @MainActor () -> (), failed: @escaping @MainActor () -> ()) {
+    func createStock(name: String, symbol: String, share: String, pri: String, traderId: String, invoke: @escaping @MainActor () -> (), failed: @escaping @MainActor () -> ()) {
+        if name.isEmpty || symbol.isEmpty{
+            withAnimation {
+                self.state = self.state.copy(isPressed: true)
+            }
+            return
+        }
+        guard let share = Int64(share) else {
+            withAnimation {
+                self.state = self.state.copy(isPressed: true)
+            }
+            return
+        }
+        guard let pri = Float64(pri) else {
+            withAnimation {
+                self.state = self.state.copy(isPressed: true)
+            }
+            return
+        }
         loadingStatus(true)
         self.scope.launchRealm {
             let stockInfoData = StockInfoData(
@@ -59,7 +79,25 @@ class ListingStockObserve : ObservableObject {
     }
     
     @MainActor
-    func editStock(name: String, symbol: String, share: Int64, pri: Float64, traderId: String, stockInfoData: StockInfoData, invoke: @escaping @MainActor () -> (), failed: @escaping @MainActor () -> ()) {
+    func editStock(name: String, symbol: String, share: String, pri: String, traderId: String, stockInfoData: StockInfoData, invoke: @escaping @MainActor () -> (), failed: @escaping @MainActor () -> ()) {
+        if name.isEmpty || symbol.isEmpty{
+            withAnimation {
+                self.state = self.state.copy(isPressed: true)
+            }
+            return
+        }
+        guard let share = Int64(share) else {
+            withAnimation {
+                self.state = self.state.copy(isPressed: true)
+            }
+            return
+        }
+        guard let pri = Float64(pri) else {
+            withAnimation {
+                self.state = self.state.copy(isPressed: true)
+            }
+            return
+        }
         loadingStatus(true)
         self.scope.launchRealm {
             var _stockInfoData = stockInfoData
@@ -83,7 +121,16 @@ class ListingStockObserve : ObservableObject {
 
     private func loadingStatus(_ it: Bool) {
         self.scope.launchMain {
-            self.state = self.state.copy(isLoading: it)
+            withAnimation {
+                self.state = self.state.copy(isLoading: it)
+            }
+        }
+    }
+    
+    @MainActor
+    func checkIsPressed() {
+        if self.state.isPressed {
+            self.state = self.state.copy(isPressed: false)
         }
     }
     
@@ -93,6 +140,7 @@ class ListingStockObserve : ObservableObject {
         var names: [String] = []
         var symbols: [String] = []
         var isLoading: Bool = false
+        var isPressed: Bool = false
 
         var dummy: Int = 1
 
@@ -101,12 +149,14 @@ class ListingStockObserve : ObservableObject {
             names: [String]? = nil,
             symbols: [String]? = nil,
             isLoading: Bool? = nil,
+            isPressed: Bool? = nil,
             dummy: Int? = nil
         ) -> Self {
             self.stockInfo = stockInfo ?? self.stockInfo
             self.names = names ?? self.names
             self.symbols = symbols ?? self.symbols
             self.isLoading = isLoading ?? self.isLoading
+            self.isPressed = isPressed ?? self.isPressed
             self.dummy = dummy ?? self.dummy
             return self
         }

@@ -88,6 +88,14 @@ extension String {
     }
 }
 
+extension Int {
+
+    func saveMin(_ num: Int) ->  Int {
+        let min = self - num
+        return min < 0 ? 0 : min
+    }
+}
+
 extension Int64 {
     
     var fetchHour: Int {
@@ -121,15 +129,39 @@ extension Int64 {
     
     var toStrDMY: String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMM yy" //"dd MMM yy" //"d MMM yyyy"//"YY/MM/dd"
+        dateFormatter.dateFormat = "dd MMM yy"
         return dateFormatter.string(
             from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
         )
     }
     
-    var toStrHM: String {
+    var toStrDay: String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
+        dateFormatter.dateFormat = "dd"
+        return dateFormatter.string(
+            from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
+        )
+    }
+    
+    var toStrMonth: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM"
+        return dateFormatter.string(
+            from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
+        )
+    }
+    
+    var toStrYear: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy"
+        return dateFormatter.string(
+            from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
+        )
+    }
+    
+    var toStrHMS: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
         return dateFormatter.string(
             from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
         )

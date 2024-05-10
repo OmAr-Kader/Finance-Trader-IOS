@@ -43,7 +43,7 @@ class StockSessionRepoImp : BaseRepoImp, StockSessionRepo {
         filterArguments.add(stringData)
         filterArguments.addObjects(from: stringData)
         await queryLess(stockSessions,
-            "%K == %@ AND ANY %K IN %@",
+            "%K == %@ AND %K IN %@",
             "stockId", NSString(string: stockId),
             "stringData", filterArguments
         )
@@ -66,7 +66,7 @@ class StockSessionRepoImp : BaseRepoImp, StockSessionRepo {
         let stockIdArguments = NSMutableArray()
         stockIdArguments.addObjects(from: stockId)
         await queryLess(stockSessions,
-            "%K IN %@ AND ANY %K IN %@",
+            "%K IN %@ AND %K IN %@",
             "stockId", stockIdArguments,
             "stringData", stringDataArguments
         )

@@ -1,7 +1,5 @@
 import SwiftUI
 
-//* Change Already Token + Aleady Token Not Work + Good Night
-
 struct ListingStockScreen : View {
     
     @StateObject var app: AppObserve
@@ -36,10 +34,11 @@ struct ListingStockScreen : View {
                     text: self.name,
                     onChange: { it in
                         self.name = it
+                        obs.checkIsPressed()
                     },
                     hint: "Enter your Company Name",
-                    isError: name.isEmpty || state.names.contains(name),
-                    errorMsg: "Already Taken",
+                    isError: (state.isPressed && name.isEmpty) || state.names.contains(name),
+                    errorMsg: (state.isPressed && name.isEmpty) ? "Shouldn't be empty" : "Already Taken",
                     theme: theme,
                     cornerRadius: 15,
                     lineLimit: 1,
@@ -49,23 +48,25 @@ struct ListingStockScreen : View {
                     text: self.symbol,
                     onChange: { it in
                         self.symbol = it.uppercased()
+                        obs.checkIsPressed()
                     },
-                    hint: "Enter your Compant Symbol",
-                    isError: symbol.isEmpty || state.symbols.contains(symbol),
-                    errorMsg: "Already Taken",
+                    hint: "Enter your Company Symbol",
+                    isError: (state.isPressed && symbol.isEmpty) || state.symbols.contains(symbol),
+                    errorMsg: (state.isPressed && symbol.isEmpty) ? "Shouldn't be empty" : "Already Taken",
                     theme: theme,
                     cornerRadius: 15,
                     lineLimit: 1,
-                    keyboardType: UIKeyboardType.decimalPad
+                    keyboardType: UIKeyboardType.default
                 ).padding()
                 OutlinedTextField(
                     text: self.shares,
                     onChange: { it in
                         self.shares = it
+                        obs.checkIsPressed()
                     },
                     hint: "Enter your stock Shares",
-                    isError: Int64(shares) == nil,
-                    errorMsg: "Shouldn't be empty",
+                    isError: state.isPressed && Int64(shares) == nil,
+                    errorMsg: "Wrong Formatted",
                     theme: theme,
                     cornerRadius: 15,
                     lineLimit: 1,
@@ -76,37 +77,26 @@ struct ListingStockScreen : View {
                     text: self.price,
                     onChange: { it in
                         self.price = it
+                        obs.checkIsPressed()
                     },
                     hint: "Enter your desired Price",
-                    isError: Float64(price) == nil,
-                    errorMsg: "Shouldn't be empty",
+                    isError: state.isPressed && Float64(price) == nil,
+                    errorMsg: "Wrong Formatted",
                     theme: theme,
                     cornerRadius: 15,
                     lineLimit: 1,
                     keyboardType: UIKeyboardType.numberPad
                 ).padding()
                 Button {
-                    if self.name.isEmpty {
-                        return
-                    }
-                    if self.symbol.isEmpty {
-                        return
-                    }
-                    guard let share = Int64(shares) else {
-                        return
-                    }
-                    guard let pri = Float64(price) else {
-                        return
-                    }
                     guard let stockInfoData = self.stockInfoData else {
-                        obs.createStock(name: name, symbol: symbol, share: share, pri: pri, traderId: trader.id) {
+                        obs.createStock(name: name, symbol: symbol, share: shares, pri: price, traderId: trader.id) {
                             app.backPress()
                         } failed: {
                             toast = Toast(style: .error, message: "Failed")
                         }
                         return
                     }
-                    obs.editStock(name: name, symbol: symbol, share: share, pri: pri, traderId: trader.id, stockInfoData: stockInfoData) {
+                    obs.editStock(name: name, symbol: symbol, share: shares, pri: price, traderId: trader.id, stockInfoData: stockInfoData) {
                         app.backPress()
                     } failed: {
                         toast = Toast(style: .error, message: "Failed")
@@ -124,17 +114,19 @@ struct ListingStockScreen : View {
                             .fill(Color.green.gradient)
                         )
                 }.padding().onBottom()
-            }.onAppear {
-                guard let stockInfoData = self.stockInfoData else  {
-                    return
-                }
-                imageUrl = stockInfoData.name
-                name = stockInfoData.name
-                symbol = stockInfoData.symbol
-                shares = String(stockInfoData.numberOfShares)
-                price = String(stockInfoData.stockPrice)
             }
             LoadingScreen(isLoading: state.isLoading)
+        }.onAppear {
+            obs.loadData(stockInfo: stockInfoData)
+
+            guard let stockInfoData = self.stockInfoData else  {
+                return
+            }
+            imageUrl = stockInfoData.name
+            name = stockInfoData.name
+            symbol = stockInfoData.symbol
+            shares = String(stockInfoData.numberOfShares)
+            price = String(stockInfoData.stockPrice)
         }.toastView(toast: $toast)
             .background(theme.backDark)
             .withCustomBackButton {

@@ -14,6 +14,14 @@ class SupplyDemandRepoImp : BaseRepoImp, SupplyDemandRepo {
         }
     }
     
+    @BackgroundActor
+    func getSupplyDemand(
+        id: String,
+        invoke: @escaping (ResultRealm<SupplyDemand?>) -> Unit
+    ) async {
+        await querySingleLess(invoke, "%K == %@", "_id", try! ObjectId.init(string: id))
+    }
+    
     func getSupplysAndDemands(stockId: String, invoke: @escaping (ResultRealm<[SupplyDemand]>) -> Unit) async {
         await query(invoke, "getSupplysAndDemands\(stockId)", "%K == %@", "stockId", NSString(string: stockId))
     }

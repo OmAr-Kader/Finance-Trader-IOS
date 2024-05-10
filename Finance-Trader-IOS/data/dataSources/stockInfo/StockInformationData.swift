@@ -35,6 +35,21 @@ class StockInformationData {
     }
     
     @BackgroundActor
+    func getAllStockInfoLive(
+        invoke: @escaping ([StockInfo]) -> Unit
+    ) async -> AnyCancellable? {
+        return await repository.getAllStockInfoLive(invoke: invoke)
+    }
+    
+    @BackgroundActor
+    func getTraderStocksInfoLive(
+        traderId: String,
+        invoke: @escaping ([StockInfo]) -> Unit
+    ) async -> AnyCancellable? {
+        return await repository.getTraderStocksInfoLive(traderId: traderId, invoke: invoke)
+    }
+    
+    @BackgroundActor
     func getStockInfo(
         id: String,
         invoke: (ResultRealm<StockInfo?>) -> Unit

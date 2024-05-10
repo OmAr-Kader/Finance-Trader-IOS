@@ -1,5 +1,6 @@
 import Foundation
 import RealmSwift
+import SwiftUI
 
 class SignObserve  : ObservableObject {
     
@@ -29,10 +30,12 @@ class SignObserve  : ObservableObject {
         }
         
         if password.isEmpty || email.isEmpty {
-            self.state = self.state.copy(isPressed: true)
+            withAnimation {
+                self.state = self.state.copy(isPressed: true)
+            }
             return
         }
-        self.state = self.state.copy(isLoading: true, isPressed: false)
+        self.state = self.state.copy(isLoading: true)
         doLogIn(email: email, password: password, invoke, failed)
     }
 
@@ -84,10 +87,12 @@ class SignObserve  : ObservableObject {
             return
         }
         if password.isEmpty || email.isEmpty || name.isEmpty {
-            self.state = self.state.copy(isPressed: true)
+            withAnimation {
+                self.state = self.state.copy(isPressed: true)
+            }
             return
         }
-        self.state = self.state.copy(isLoading: true, isPressed: false)
+        self.state = self.state.copy(isLoading: true)
         doSignUp(name: name, email: email, password: password, invoke, failed)
     }
         
@@ -164,6 +169,12 @@ class SignObserve  : ObservableObject {
         }
     }
     
+    @MainActor
+    func checkIsPressed() {
+        if self.state.isPressed {
+            self.state = self.state.copy(isPressed: false)
+        }
+    }
     
     struct State {
         

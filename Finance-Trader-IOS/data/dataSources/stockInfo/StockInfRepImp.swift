@@ -29,4 +29,18 @@ class StockInfRepImp : BaseRepoImp, StockInfoRep {
         await queryAll(invoke)
     }
     
+    @BackgroundActor
+    func getTraderStocksInfoLive(
+        traderId: String,
+        invoke: @escaping ([StockInfo]) -> Unit
+    ) async -> AnyCancellable? {
+        await queryFlow(invoke, "getTraderStocksInfoLive\(traderId)", "%K CONTAINS %@", "queryHolders", NSString(string: traderId))
+    }
+    
+    func getAllStockInfoLive(
+        invoke: @escaping ([StockInfo]) -> Unit
+    ) async -> AnyCancellable? {
+        return await queryAllFlow(invoke, "getAllStockInfoLive")
+    }
+    
 }

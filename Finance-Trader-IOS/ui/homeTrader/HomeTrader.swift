@@ -35,19 +35,19 @@ struct HomeTrader : View {
                 switch  state.selectedIndex {
                 case 0: HomeTraderSearch()
                 case 1: HomeTraderOpportunity(state: state, traderData: traderData, onModeChange: obs.loadStockMode, onNavigate: app.navigateTo)
-                default: HomeTraderPortfolio()
+                default: HomeTraderPortfolio(state: state, traderData: traderData, onModeChange: obs.loadMyStockMode, onNavigate: app.navigateTo, createSupply: obs.createSupply, setAddSheet: obs.setAddSheet)
                 }
                 BottomBar(
                     selectedIndex: state.selectedIndex,
                     items: items, backColor: theme.backDark
                 ) { it in
                     obs.onPageSelected(it)
-                    obs.loadData(it)
+                    obs.loadData(it, traderId: traderData.id)
                 }.onBottom().frame(height: 60)
             }
             LoadingScreen(isLoading: state.isLoading)
         }.onAppear {
-            obs.loadData(state.selectedIndex)
+            obs.loadData(state.selectedIndex, traderId: traderData.id)
         }.background(theme.background)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -105,7 +105,7 @@ struct HomeTraderOpportunity : View {
     let traderData: TraderData
     let onModeChange: (Int, ChartMode) -> Unit
     let onNavigate: (Screen) -> ()
-    
+
     var body: some View {
         VStack {
             VStack {
@@ -157,17 +157,102 @@ struct HomeTraderOpportunity : View {
 }
 
 struct HomeTraderPortfolio : View {
+    
+    @Inject
+    private var theme: Theme
+    
+    let state: HomeTraderObserve.State
+    let traderData: TraderData
+    let onModeChange: (Int, ChartMode) -> Unit
+    let onNavigate: (Screen) -> ()
+    let createSupply: (Bool, String, String, Int64, Float64, @escaping @MainActor () -> (), @escaping @MainActor () -> ()) -> ()
+    let setAddSheet: (Bool, String) -> ()
+
+    @State private var addHeight: CGFloat = 0
+
+    @State private var toast: Toast? = nil
+
     var body: some View {
-        FullZStack {
+        VStack {
+            VStack {
+                ScrollView {
+                    LazyVStack {
+                        ForEach(state.myStocks) { stock in
+                            VStack {
+                                StockChartHeadView(
+                                    symbol: stock.symbol,
+                                    isGain: stock.isGain,
+                                    stockPrice: stock.lastPrice
+                                ) {
+                                    onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: traderData, stockId: stock.id))
+                                }
+                                ScrollViewReader { value in
+                                    ScrollView(Axis.Set.horizontal, showsIndicators: false) {
+                                        LazyHStack {
+                                            ForEach(ChartMode.allCases, id: \.key) { data in
+                                                ChartModeItemView(selectedMode: stock.mode, item: data) {
+                                                    onModeChange(state.myStocks.firstIndex(of: stock) ?? -1, data.key)
+                                                }
+                                            }
+                                            .animation(.default, value: stock.mode)
+                                        }
+                                    }.frame(height: 60).onAppear {
+                                        value.scrollTo( 5, anchor: .leading)
+                                    }
+                                }
+                                ZStack {
+                                    switch stock.mode {
+                                    case .StockWave : StockWaveView(stock: stock, isLoading: stock.isLoading)
+                                    case .StockSMA: StockSMAView(stock: stock, isLoading: stock.isLoading)
+                                    case .StockEMA: StockEMAView(stock: stock, isLoading: stock.isLoading)
+                                    case .StockRSI: StockRSIView(stock: stock, isLoading: stock.isLoading)
+                                    case .StockTrad: StockTradView(stock: stock, isLoading: stock.isLoading)
+                                    case .StockPrediction: StockPredictionView(stock: stock, isLoading: stock.isLoading)
+                                    }
+                                    LoadingBar(isLoading: stock.isLoading)
+                                }.scrollDisabled(true)
+                                Button {
+                                    setAddSheet(true, stock.stockId)
+                                } label: {
+                                    Text("Sell")
+                                        .padding(10)
+                                        .frame(minWidth: 80)
+                                        .foregroundColor(.black)
+                                        .background(
+                                            RoundedRectangle(
+                                                cornerRadius: 15,
+                                                style: .continuous
+                                            )
+                                            .fill(Color.red.gradient)
+                                        )
+                                }.padding().onCenter()
+                            }.background(theme.backDark).cornerRadius(15).padding(top: 15, leading: 15, bottom: 0, trailing: 15)
+                                .animation(.spring(), value: stock.mode)
+                        }
+                    }
+                }
+            }
             Spacer()
+        }.bottomSheet(
+            theme.backDarkSec,
+            Binding(get: {
+                state.isAddSheet
+            }, set: { it in
+                setAddSheet(it, state.supplyStockId)
+            }),
+            $addHeight
+        ) {
+            AddSheet(addSheetMode: .Supply) { shares, prices, isSupply in
+                if state.supplyStockId.isEmpty {
+                    setAddSheet(false, state.supplyStockId)
+                    return
+                }
+                createSupply(isSupply, traderData.id, state.supplyStockId, shares, prices) {
+                    setAddSheet(false, state.supplyStockId)
+                } _: {
+                    toast = Toast(style: .error, message: "Failed")
+                }
+            }
         }
     }
 }
-
-/*
-#Preview {
-    VStack {
-        HomeTrader(app: AppObserve())
-    }
-}*/
-

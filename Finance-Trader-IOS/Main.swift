@@ -7,18 +7,15 @@ struct Main: View {
     private var theme: Theme
 
     var body: some View {
-        //let isSplash = app.state.homeScreen == Screen.SPLASH_SCREEN_ROUTE
         ZStack {
             NavigationStack(path: $app.navigationPath) {
                 targetScreen(
                     app.state.homeScreen, app
                 ).navigationDestination(for: Screen.self) { route in
-                    targetScreen(route, app)//.toolbar(.hidden, for: .navigationBar)
+                    targetScreen(route, app)
                 }
-            }/*.prepareStatusBarConfigurator(
-                isSplash ? theme.background : theme.primary, isSplash, theme.isDarkStatusBarText
-            )*/
-        }.background(theme.background).safeArea()//.ignoresSafeArea()
+            }
+        }.background(theme.background)
     }
 }
 
@@ -35,7 +32,6 @@ struct SplashScreen : View {
     
     @StateObject var app: AppObserve
 
-    @State private var scale: Double = 1
     @State private var width: CGFloat = 50
   
     var body: some View {
@@ -47,10 +43,9 @@ struct SplashScreen : View {
                     UIColor(theme.textColor)
                 ) ?? UIImage()
             ).resizable().cornerRadius(25)
-                .scaleEffect(scale)
                 .frame(width: width, height: width, alignment: .center)
                 .onAppear {
-                    withAnimation() {
+                    withAnimation(.easeInOut(duration: 0.35)) {
                         width = 150
                     }
                     app.findUserBase { it in
@@ -61,6 +56,6 @@ struct SplashScreen : View {
                         app.navigateHome(.HOME_TRADER_ROUTE(traderData: it))
                     }
                 }
-        }.background(theme.background)
+        }.background(theme.background).toolbar(.hidden)
     }
 }

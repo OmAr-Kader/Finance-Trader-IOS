@@ -1,11 +1,18 @@
 import SwiftUI
 
+enum AddSheetMode {
+    case SupplyAndDemand
+    case Supply
+    case Demand
+}
+
 struct AddSheet : View {
     
-    let isHaveShares: Bool
-    let pushNegotiate: (Int64, Float64, Bool) -> ()
+    let addSheetMode: AddSheetMode
+    let onSupplyDemand: (Int64, Float64, Bool) -> ()
     
     @State private var isSupply: Bool = false
+    @State private var isPressed: Bool = false
     @State private var shares: String = ""
     @State private var price: String = ""
 
@@ -13,70 +20,39 @@ struct AddSheet : View {
     private var theme: Theme
     
     var body: some View {
-        if isHaveShares {
+        switch addSheetMode {
+        case .SupplyAndDemand:
             HStack(spacing: 0) {
                 Spacer()
                 Button(action: {
                     isSupply = true
                 }) {
                     Text("Supply")
-                        .padding(10)
-                        .frame(minWidth: 80)
-                        .foregroundColor(isSupply ? theme.textForPrimaryColor : theme.textColor)
-                        .background(
-                            isSupply ? theme.primary.gradient : theme.background.gradient
-                        )
-                        .clipShape(
-                            .rect(
-                                topLeadingRadius: 20,
-                                bottomLeadingRadius: 20,
-                                bottomTrailingRadius: 0,
-                                topTrailingRadius: 0
-                            )
-                        )
-                        .transition(.move(edge: .trailing))
+                        .onLeadingCurvedText(textColor: isSupply ? theme.textForPrimaryColor : theme.textColor, backgroundColor: isSupply ? theme.primary.gradient : theme.background.gradient)
                         .animation(.easeInOut(duration: 0.5), value: isSupply)
                 }
                 Button(action: {
                     isSupply = false
                 }) {
                     Text("Demand")
-                        .padding(10)
-                        .frame(minWidth: 80)
-                        .foregroundColor(!isSupply ? theme.textForPrimaryColor : theme.textColor)
-                        .background(
-                            !isSupply ? theme.primary.gradient : theme.background.gradient
-                        ).clipShape(
-                            .rect(
-                                topLeadingRadius: 0,
-                                bottomLeadingRadius: 0,
-                                bottomTrailingRadius: 20,
-                                topTrailingRadius: 20
-                            )
-                        )
-                        .transition(.move(edge: .leading))
+                        .onTrailingCurvedText(textColor: isSupply ? theme.textForPrimaryColor : theme.textColor, backgroundColor: isSupply ? theme.primary.gradient : theme.background.gradient)
                         .animation(.easeInOut(duration: 0.5), value: isSupply)
                 }
                 Spacer()
             }.padding()
-        } else {
-            Text("Creata a Demand")
-                .padding(10)
-                .frame(minWidth: 80)
-                .foregroundColor(.black)
-                .background(theme.primary.gradient).clipShape(.rect(cornerRadius: 20))
-                .transition(.move(edge: .leading))
-                .animation(.easeInOut(duration: 0.5), value: isSupply)
+        case .Demand: Text("Creata a Demand").allCurvedText(textColor: theme.textForPrimaryColor, backgroundColor: theme.primary.gradient)
+        case .Supply: Text("Creata a Supply").allCurvedText(textColor: theme.textForPrimaryColor, backgroundColor: theme.primary.gradient)
         }
         HStack {
             OutlinedTextField(
                 text: self.shares,
                 onChange: { it in
                     self.shares = it
+                    isPressed = false
                 },
                 hint: "Enter your desired Shares",
-                isError: Int64(shares) == nil,
-                errorMsg: "Shouldn't be empty",
+                isError: isPressed && Int64(shares) == nil,
+                errorMsg: "Wrong Formatted",
                 theme: theme,
                 cornerRadius: 25,
                 lineLimit: 1,
@@ -88,10 +64,11 @@ struct AddSheet : View {
                 text: self.price,
                 onChange: { it in
                     self.price = it
+                    isPressed = false
                 },
                 hint: "Enter your desired Price",
-                isError: Float64(price) == nil,
-                errorMsg: "Shouldn't be empty",
+                isError: isPressed && Float64(price) == nil,
+                errorMsg: "Wrong Formatted",
                 theme: theme,
                 cornerRadius: 25,
                 lineLimit: 1,
@@ -100,12 +77,18 @@ struct AddSheet : View {
         }
         Button {
             guard let share = Int64(shares) else {
+                withAnimation {
+                    isPressed = true
+                }
                 return
             }
             guard let pri = Float64(price) else {
+                withAnimation {
+                    isPressed = true
+                }
                 return
             }
-            pushNegotiate(share, pri, isSupply)
+            onSupplyDemand(share, pri, isSupply)
         } label: {
             Text("Done")
                 .padding(10)
@@ -129,6 +112,7 @@ struct NegotiateSheet : View {
     
     @State private var shares: String = ""
     @State private var price: String = ""
+    @State private var isPressed: Bool = false
 
     @Inject
     private var theme: Theme
@@ -156,6 +140,7 @@ struct NegotiateSheet : View {
                     text: self.shares,
                     onChange: { it in
                         self.shares = it
+                        isPressed = false
                     },
                     hint: "Enter your desired Shares",
                     isError: Int64(shares) == nil,
@@ -171,6 +156,7 @@ struct NegotiateSheet : View {
                     text: self.price,
                     onChange: { it in
                         self.price = it
+                        isPressed = false
                     },
                     hint: "Enter your desired Price",
                     isError: Float64(price) == nil,
@@ -183,9 +169,15 @@ struct NegotiateSheet : View {
             }
             Button {
                 guard let share = Int64(shares) else {
+                    withAnimation {
+                        isPressed = true
+                    }
                     return
                 }
                 guard let pri = Float64(price) else {
+                    withAnimation {
+                        isPressed = true
+                    }
                     return
                 }
                 pushNegotiate(supplyDemandData, share, pri)

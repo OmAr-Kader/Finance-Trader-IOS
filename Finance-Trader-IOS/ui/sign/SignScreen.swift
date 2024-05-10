@@ -74,6 +74,7 @@ struct SignScreen : View {
                         text: self.name,
                         onChange: { it in
                             self.name = it
+                            obs.checkIsPressed()
                         },
                         hint: "Enter your Name",
                         isError: state.isPressed && name.isEmpty,
@@ -88,6 +89,7 @@ struct SignScreen : View {
                     text: self.email,
                     onChange: { it in
                         self.email = it
+                        obs.checkIsPressed()
                     },
                     hint: "Enter your email",
                     isError: state.isPressed && email.isEmpty,
@@ -95,12 +97,13 @@ struct SignScreen : View {
                     theme: theme,
                     cornerRadius: 15,
                     lineLimit: 1,
-                    keyboardType: UIKeyboardType.decimalPad
+                    keyboardType: UIKeyboardType.emailAddress
                 ).padding()
                 OutlinedTextField(
                     text: self.password,
                     onChange: { it in
                         self.password = it
+                        obs.checkIsPressed()
                     },
                     hint: "Enter your password",
                     isError: state.isPressed && password.isEmpty,
@@ -108,7 +111,7 @@ struct SignScreen : View {
                     theme: theme,
                     cornerRadius: 15,
                     lineLimit: 1,
-                    keyboardType: UIKeyboardType.numberPad
+                    keyboardType: UIKeyboardType.default
                 ).padding()
                 Button {
                     if !state.isLogin {

@@ -21,6 +21,15 @@ class SupplyAndDemandData {
         await repository.updateSupplyDemand(supplyDemandData: supplyDemandData)
     }
     
+    
+    @BackgroundActor
+    func getSupplyDemand(
+        id: String,
+        invoke: @escaping (ResultRealm<SupplyDemand?>) -> Unit
+    ) async {
+        await repository.getSupplyDemand(id: id, invoke: invoke)
+    }
+    
     @BackgroundActor
     func getSupplysAndDemands(
         stockId: String,

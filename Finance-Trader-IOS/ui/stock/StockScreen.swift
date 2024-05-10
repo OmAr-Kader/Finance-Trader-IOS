@@ -1,6 +1,7 @@
 import SwiftUI
 
 //* Sale toDMY if Specifc Day => Hours
+//* Stock isLoasing + Candlestick
 
 struct StockScreen : View {
     
@@ -94,7 +95,7 @@ struct StockScreen : View {
                 }),
                 $addHeight
             ) {
-                AddSheet(isHaveShares: state.isHaveShares) { shares, prices, isSupply in
+                AddSheet(addSheetMode: state.isHaveShares ? .SupplyAndDemand : .Demand) { shares, prices, isSupply in
                     obs.createSupply(isSupply: isSupply, traderId: trader.id, stockId: stockId, shares: shares, price: prices) {
                         obs.setAddSheet(false)
                     } failed: {

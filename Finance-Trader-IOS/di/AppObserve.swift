@@ -93,17 +93,21 @@ class AppObserve : ObservableObject {
         }
         //invoke(TraderData(id: "663bb05fadc20930950c11c2", name: "Ramo", email: "ramo@gmail.com", accountType: 1))
         //invoke(TraderData(id: "6638fe6c19a7050bba0ad215", name: "Omar", email: "omar@gmail.com", accountType: 1))
-        if (preferences.isEmpty) {
-            inti { it in
-                let userBase = self.fetchUserBase(it)
-                self.scope.launchMain {
-                    self.preferences = it
-                    invoke(userBase)
+        if (self.preferences.isEmpty) {
+            self.inti { it in
+                self.scope.launchRealm {
+                    let userBase = await self.fetchUserBase(it)
+                    try? await Task.sleep(nanoseconds: 350000000) // 0.35 Seconds
+                    self.scope.launchMain {
+                        self.preferences = it
+                        invoke(userBase)
+                    }
                 }
             }
         } else {
-            scope.launchRealm {
-                let userBase = self.fetchUserBase(self.preferences)
+            self.scope.launchRealm {
+                let userBase = await self.fetchUserBase(self.preferences)
+                try? await Task.sleep(nanoseconds: 350000000) // 0.35 Seconds
                 self.scope.launchMain {
                     invoke(userBase)
                 }
@@ -112,7 +116,7 @@ class AppObserve : ObservableObject {
     }
 
     @BackgroundActor
-    private func fetchUserBase(_ list: [Preference]) -> TraderData? {
+    private func fetchUserBase(_ list: [Preference]) async -> TraderData? {
         let id = list.last { it in it.ketString == PREF_USER_ID }?.value
         let name = list.last { it in it.ketString == PREF_USER_NAME }?.value
         let email = list.last { it in it.ketString == PREF_USER_EMAIL }?.value
