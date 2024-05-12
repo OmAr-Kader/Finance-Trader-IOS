@@ -39,7 +39,7 @@ class StockObserve : ObservableObject {
                                     it.holderId == trader.id
                                 }
                                 let stock = stockInfo.toHomeStockData(sessions.value.toStockData())
-                                let splitStock = stock.splitStock(timeScope: 7)
+                                let splitStock = stock.splitStock(timeScope: stock.timeScope)
                                 let supplyDemands = it.toSupplyDemandData().injectStatus(traderId: trader.id, haveShares: haveShares).injectColors(stackHolders: stockInfo.stockholders)
                                 self.scope.launchMain {
                                     withAnimation {

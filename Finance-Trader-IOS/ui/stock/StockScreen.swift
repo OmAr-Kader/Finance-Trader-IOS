@@ -24,37 +24,11 @@ struct StockScreen : View {
             VStack {
                 ScrollView {
                     LazyVStack {
-                        VStack {
-                            StockChartHeadView(
-                                symbol: state.stock.symbol,
-                                isGain: state.stock.isGain,
-                                stockPrice: state.stock.lastPrice,
-                                timeScope: state.stock.timeScope
-                            ) { it in
-                                obs.loadTimeScope(timeScope: it)
-                            } onClick: {}
-                            ScrollView(Axis.Set.horizontal, showsIndicators: false) {
-                                LazyHStack {
-                                    ForEach(ChartMode.allCases, id: \.key) { (key: ChartMode, value: String) in
-                                        ChartModeItemView(selectedMode: state.stock.mode, item: (key, value)) {
-                                            obs.loadStocks(mode: key)
-                                        }
-                                    }
-                                    .animation(.default, value: state.stock.mode)
-                                }
-                            }.frame(height: 60)
-                            ZStack {
-                                switch state.stock.mode {
-                                case .StockWave : StockWaveView(stock: state.stock, isLoading: state.isLoading)
-                                case .StockSMA: StockSMAView(stock: state.stock, isLoading: state.isLoading)
-                                case .StockEMA: StockEMAView(stock: state.stock, isLoading: state.isLoading)
-                                case .StockRSI: StockRSIView(stock: state.stock, isLoading: state.isLoading)
-                                case .StockTrad: StockTradView(stock: state.stock, isLoading: state.isLoading)
-                                case .StockPrediction: StockPredictionView(stock: state.stock, isLoading: state.isLoading)
-                                }
-                                LoadingBar(isLoading: state.isLoading)
-                            }.scrollDisabled(true)
-                        }.background(theme.backDark).cornerRadius(15).padding(top: 15, leading: 15, bottom: 0, trailing: 15)
+                        ChartMainView(
+                            stock: state.stock, traderData: trader, onModeChange: obs.loadStocks, onTimeScope: obs.loadTimeScope, onNavigate: {_ in }
+                        ) {
+                            Spacer(minLength: 0)
+                        }
                         StockDetailView(stockInfo: state.stockInfo) {
                             obs.setAddSheet(true)
                         }

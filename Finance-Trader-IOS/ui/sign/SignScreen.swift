@@ -99,7 +99,7 @@ struct SignScreen : View {
                     lineLimit: 1,
                     keyboardType: UIKeyboardType.emailAddress
                 ).padding()
-                OutlinedTextField(
+                OutlinedSecureField(
                     text: self.password,
                     onChange: { it in
                         self.password = it

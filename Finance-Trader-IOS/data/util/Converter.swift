@@ -154,16 +154,56 @@ extension [StockData] {
         let colors: [ColorUI] = [.blue, .green, .red, .orange, .pink, .purple, .mint, .cyan, .teal]
         var stocks = self
         for i in self.indices {
-            let c = colors[safe: i] ?? ColorUI.random()
-            stocks[i].copyObj(color: c)
+            if stocks[i].color == .clear {
+                let c = colors[safe: i] ?? ColorUI.random()
+                stocks[i].copyObj(color: c)
+            }
         }
         return stocks
     }
     
+    @BackgroundActor
+    func changeStockMode(nativeStocks: [StockData], index: Int, mode: ChartMode) -> (newStocks: [StockData], newNativeStocks: [StockData]) {
+        guard let stock: StockData = self[safe: index] else {
+            return (self, nativeStocks)
+        }
+        guard let nativeStock: StockData = nativeStocks.first(where: { it in it.stockId == stock.stockId }) else {
+            return (self, nativeStocks)
+        }
+        let _newNativeStock = switch mode {
+        case .StockWave: nativeStock.loadWave()
+        case .StockSMA: nativeStock.loadSMA()
+        case .StockEMA: nativeStock.loadEMA()
+        case .StockRSI: nativeStock.loadRSI()
+        case .StockTrad: nativeStock.loadTrad()
+        case .StockPrediction: nativeStock.loadPrediction()
+        }
+        let newNativeStocks = nativeStocks.updateStocks(index, _newNativeStock)
+        let newStocks =  self.updateStocks(index, _newNativeStock.splitStock(timeScope: stock.timeScope))
+        return (newStocks, newNativeStocks)
+    }
+    
+    @BackgroundActor
+    func changeTimeScope(nativeStocks: [StockData], index: Int, timeScope: Int64) -> Self {
+        guard let stock: StockData = self[safe: index] else {
+            return self
+        }
+        guard let nativeStock: StockData = nativeStocks.first(where: { it in it.stockId == stock.stockId }) else {
+            return self
+        }
+        let newStock = nativeStock.splitStock(timeScope: timeScope).copy(timeScope: timeScope)
+        return self.updateStocks(index, newStock)
+    }
     
     func updateStocks(_ index: Int,_ stockData: StockData) -> [StockData] {
         var stocks = self
         stocks[index] = stockData.copy(isLoading: false)
+        return stocks
+    }
+    
+    func appendToStocks(_ it: StockData) -> Self {
+        var stocks = self
+        stocks.append(it)
         return stocks
     }
 

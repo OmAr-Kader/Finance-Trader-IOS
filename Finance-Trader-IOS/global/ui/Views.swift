@@ -19,6 +19,19 @@ extension View {
         )
     }
     
+    @inlinable public func padding(
+        all: CGFloat
+    ) -> some View {
+        return padding(
+            EdgeInsets(
+                top: all,
+                leading: all,
+                bottom: all,
+                trailing: all
+            )
+        )
+    }
+    
     @inlinable public func onStart() -> some View {
         return HStack {
             self
@@ -136,7 +149,61 @@ extension View {
             }
         }
     }
+    
+    
+    func onAppearTask(delay: TimeInterval, perform: @escaping () async -> Void) -> some View {
+        if delay == 0 {
+            task {
+                await perform()
+            }
+        } else {
+            task {
+                do {
+                    try await Task.sleep(delay)
+                } catch {
+                    return
+                }
+                await perform()
+            }
+        }
+    }
 
+}
+
+public extension TimeInterval {
+    var nanoseconds: UInt64 {
+        return UInt64((self * 1_000_000_000).rounded())
+    }
+}
+
+@available(iOS 13.0, macOS 10.15, *)
+public extension Task where Success == Never, Failure == Never {
+    static func sleep(_ duration: TimeInterval) async throws {
+        try await Task.sleep(nanoseconds: duration.nanoseconds)
+    }
+}
+
+struct ButtonCurvedGradient : View {
+    
+    let cornerRadius: CGFloat
+    let color: AnyGradient
+    let action: () -> ()
+
+    var body: some View {
+        Button(action: action) {
+            Text("Sell")
+                .padding(10)
+                .frame(minWidth: 80)
+                .foregroundColor(.black)
+                .background(
+                    RoundedRectangle(
+                        cornerRadius: cornerRadius,
+                        style: .continuous
+                    )
+                    .fill(color)
+                )
+        }
+    }
 }
 
 struct CardButton : View {
@@ -330,7 +397,7 @@ struct CardAnimationButton : View {
                         .progressViewStyle(CircularProgressViewStyle(tint: textColor))
                 }
             }
-        }).padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
+        }).padding(top: 5, leading: 0, bottom: 5, trailing: 0)
             .background(
                 RoundedRectangle(cornerRadius: CGFloat(animated))
                     .fill(c)

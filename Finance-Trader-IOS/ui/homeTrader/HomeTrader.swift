@@ -25,6 +25,7 @@ struct HomeTrader : View {
             BottomBarItem(icon: "search", title: "Search", color: theme.primary),
             BottomBarItem(icon: "graph", title: "Opportunities", color: theme.primary),
             BottomBarItem(icon: "portfolio", title: "Portfolio", color: theme.primary),
+            BottomBarItem(icon: "article", title: "Portfolio", color: theme.primary),
         ]
     }
     
@@ -33,9 +34,10 @@ struct HomeTrader : View {
         ZStack {
             VStack {
                 switch  state.selectedIndex {
-                case 0: HomeTraderSearch()
+                case 0: HomeTraderSearch(state: state, traderData: traderData, onSearch: obs.onSearch, onNavigate: app.navigateTo)
                 case 1: HomeTraderOpportunity(state: state, traderData: traderData, onModeChange: obs.loadStockMode, onTimeScope: obs.loadTimeScope, onNavigate: app.navigateTo)
-                default: HomeTraderPortfolio(state: state, traderData: traderData, onModeChange: obs.loadMyStockMode, onTimeScope: obs.loadTimeScope, onNavigate: app.navigateTo, createSupply: obs.createSupply, setAddSheet: obs.setAddSheet)
+                case 2: HomeTraderPortfolio(state: state, traderData: traderData, onModeChange: obs.loadMyStockMode, onTimeScope: obs.loadTimeScope, onNavigate: app.navigateTo, createSupply: obs.createSupply, setAddSheet: obs.setAddSheet)
+                default: HomeTraderArticle()
                 }
                 BottomBar(
                     selectedIndex: state.selectedIndex,
@@ -62,13 +64,13 @@ struct HomeTrader : View {
                 } else if state.selectedIndex == 0 {
                     ToolbarItem(placement: .primaryAction) {
                         ImageAsset(icon: "search", tint: colorBarIOS).frame(width: 28, height: 28).onTapGesture {
-                            
+                            obs.setIsSearch()
                         }.animation(.default, value: state.selectedIndex)
                     }
                 }
                 ToolbarItem(placement: .primaryAction) {
                     ImageAsset(icon: "compare", tint: colorBarIOS).frame(width: 28, height: 28).onTapGesture {
-                        
+                        app.navigateTo(Screen.STOCK_COMPARE_ROUTE)
                     }
                 }
                 ToolbarItem(placement: .secondaryAction) {
@@ -88,10 +90,78 @@ struct HomeTrader : View {
 }
 
 struct HomeTraderSearch : View {
+    
+    @Inject
+    private var theme: Theme
+    
+    let state: HomeTraderObserve.State
+    let traderData: TraderData
+    let onSearch: (String) -> ()
+    let onNavigate: (Screen) -> ()
+    
+    @State private var search: String = ""
+    @State private var isSearch: Bool = false
+
     var body: some View {
-        FullZStack {
+        VStack {
+            VStack {
+                //VStack { }.frame(height: 10)
+                if isSearch {
+                    HStack {
+                        Spacer()
+                        OutlinedTextField(
+                            text: search,
+                            onChange: { it in
+                                search = it
+                                onSearch(it)
+                            },
+                            hint: "Search",
+                            isError: false,
+                            errorMsg: "Shouldn't be empty",
+                            theme: theme,
+                            cornerRadius: 15,
+                            lineLimit: 1,
+                            keyboardType: UIKeyboardType.default,
+                            backColor: theme.background,
+                            isInitFocused: true
+                        ).padding()
+                        Spacer()
+                    }.background(theme.backDarkSec)
+                }
+                ScrollView {
+                    LazyVStack {
+                        ForEach(Array(state.stocksSearch.enumerated()), id: \.element.id) { index, date in
+                            let stockInfo = date as StockInfoData
+                            HStack(alignment: .center) {
+                                Text(stockInfo.name).foregroundStyle(theme.textColor).frame(minWidth: 80)
+                                Spacer()
+                                HStack {
+                                    Text("Prce:").foregroundStyle(theme.textColor).font(.subheadline)
+                                    ImageAsset(icon: stockInfo.isGain ? "up" : "down", tint: stockInfo.isGain ? .green : .red).frame(width: 10, height: 10)
+                                    Text(stockInfo.stockPrice.toStr() + " $").foregroundStyle(stockInfo.isGain ? .green : .red).font(.subheadline)
+                                }.padding().frame(height: 20)
+                                Spacer()
+                            }.padding(all: 5).onTapGesture {
+                                onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: traderData, stockId: stockInfo.id))
+                            }
+                        }
+                    }
+                }
+            }
             Spacer()
+        }.onChange(state.isSearch) { it in
+            if it {
+                withAnimation(.bouncy(duration: 0.35)) {
+                    isSearch = true
+                }
+            } else {
+                withAnimation(.bouncy(duration: 0.35)) {
+                    isSearch = false
+                }
+                search = ""
+            }
         }
+
     }
 }
 
@@ -114,44 +184,15 @@ struct HomeTraderOpportunity : View {
                     LazyVStack {
                         ForEach(Array(state.stocks.enumerated()), id: \.element.stockId) { index, date in
                             let stock = date as StockData
-                            VStack {
-                                StockChartHeadView(
-                                    symbol: stock.symbol,
-                                    isGain: stock.isGain,
-                                    stockPrice: stock.lastPrice,
-                                    timeScope: stock.timeScope
-                                ) { it in
+                            ChartMainView(
+                                stock: stock, traderData: traderData, onModeChange: { it in
+                                    onModeChange(index, it)
+                                }, onTimeScope: { it in
                                     onTimeScope(index, it)
-                                } onClick: {
-                                    onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: traderData, stockId: stock.id))
-                                }
-                                ScrollViewReader { value in
-                                    ScrollView(Axis.Set.horizontal, showsIndicators: false) {
-                                        LazyHStack {
-                                            ForEach(ChartMode.allCases, id: \.key) { data in
-                                                ChartModeItemView(selectedMode: stock.mode, item: data) {
-                                                    onModeChange(state.stocks.firstIndex(of: stock) ?? -1, data.key)
-                                                }
-                                            }
-                                            .animation(.default, value: stock.mode)
-                                        }
-                                    }.frame(height: 60).onAppear {
-                                        value.scrollTo( 5, anchor: .leading)
-                                    }
-                                }
-                                ZStack {
-                                    switch stock.mode {
-                                    case .StockWave : StockWaveView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockSMA: StockSMAView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockEMA: StockEMAView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockRSI: StockRSIView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockTrad: StockTradView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockPrediction: StockPredictionView(stock: stock, isLoading: stock.isLoading)
-                                    }
-                                    LoadingBar(isLoading: stock.isLoading)
-                                }.scrollDisabled(true)
-                            }.background(theme.backDark).cornerRadius(15).padding(top: 15, leading: 15, bottom: 0, trailing: 15)
-                                .animation(.spring(), value: stock.mode)
+                                }, onNavigate: onNavigate
+                            ) {
+                                Spacer(minLength: 0)
+                            }
                         }
                     }
                 }
@@ -185,59 +226,17 @@ struct HomeTraderPortfolio : View {
                     LazyVStack {
                         ForEach(Array(state.myStocks.enumerated()), id: \.element.stockId) { index, date in
                             let stock = date as StockData
-                            VStack {
-                                StockChartHeadView(
-                                    symbol: stock.symbol,
-                                    isGain: stock.isGain,
-                                    stockPrice: stock.lastPrice,
-                                    timeScope: stock.timeScope
-                                ) { it in
+                            ChartMainView(
+                                stock: stock, traderData: traderData, onModeChange: { it in
+                                    onModeChange(index, it)
+                                }, onTimeScope: { it in
                                     onTimeScope(index, it)
-                                } onClick: {
-                                    onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: traderData, stockId: stock.id))
-                                }
-                                ScrollViewReader { value in
-                                    ScrollView(Axis.Set.horizontal, showsIndicators: false) {
-                                        LazyHStack {
-                                            ForEach(ChartMode.allCases, id: \.key) { data in
-                                                ChartModeItemView(selectedMode: stock.mode, item: data) {
-                                                    onModeChange(state.myStocks.firstIndex(of: stock) ?? -1, data.key)
-                                                }
-                                            }
-                                            .animation(.default, value: stock.mode)
-                                        }
-                                    }.frame(height: 60).onAppear {
-                                        value.scrollTo( 5, anchor: .leading)
-                                    }
-                                }
-                                ZStack {
-                                    switch stock.mode {
-                                    case .StockWave : StockWaveView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockSMA: StockSMAView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockEMA: StockEMAView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockRSI: StockRSIView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockTrad: StockTradView(stock: stock, isLoading: stock.isLoading)
-                                    case .StockPrediction: StockPredictionView(stock: stock, isLoading: stock.isLoading)
-                                    }
-                                    LoadingBar(isLoading: stock.isLoading)
-                                }.scrollDisabled(true)
-                                Button {
+                                }, onNavigate: onNavigate
+                            ) {
+                                ButtonCurvedGradient(cornerRadius: 15, color: Color.red.gradient) {
                                     setAddSheet(true, stock.stockId)
-                                } label: {
-                                    Text("Sell")
-                                        .padding(10)
-                                        .frame(minWidth: 80)
-                                        .foregroundColor(.black)
-                                        .background(
-                                            RoundedRectangle(
-                                                cornerRadius: 15,
-                                                style: .continuous
-                                            )
-                                            .fill(Color.red.gradient)
-                                        )
                                 }.padding().onCenter()
-                            }.background(theme.backDark).cornerRadius(15).padding(top: 15, leading: 15, bottom: 0, trailing: 15)
-                                .animation(.spring(), value: stock.mode)
+                            }
                         }
                     }
                 }
@@ -266,3 +265,12 @@ struct HomeTraderPortfolio : View {
         }
     }
 }
+
+struct HomeTraderArticle : View {
+    var body: some View {
+        FullZStack {
+            Spacer()
+        }
+    }
+}
+
