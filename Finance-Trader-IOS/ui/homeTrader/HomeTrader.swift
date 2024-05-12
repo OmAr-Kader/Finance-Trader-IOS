@@ -34,8 +34,8 @@ struct HomeTrader : View {
             VStack {
                 switch  state.selectedIndex {
                 case 0: HomeTraderSearch()
-                case 1: HomeTraderOpportunity(state: state, traderData: traderData, onModeChange: obs.loadStockMode, onNavigate: app.navigateTo)
-                default: HomeTraderPortfolio(state: state, traderData: traderData, onModeChange: obs.loadMyStockMode, onNavigate: app.navigateTo, createSupply: obs.createSupply, setAddSheet: obs.setAddSheet)
+                case 1: HomeTraderOpportunity(state: state, traderData: traderData, onModeChange: obs.loadStockMode, onTimeScope: obs.loadTimeScope, onNavigate: app.navigateTo)
+                default: HomeTraderPortfolio(state: state, traderData: traderData, onModeChange: obs.loadMyStockMode, onTimeScope: obs.loadTimeScope, onNavigate: app.navigateTo, createSupply: obs.createSupply, setAddSheet: obs.setAddSheet)
                 }
                 BottomBar(
                     selectedIndex: state.selectedIndex,
@@ -104,6 +104,7 @@ struct HomeTraderOpportunity : View {
     let state: HomeTraderObserve.State
     let traderData: TraderData
     let onModeChange: (Int, ChartMode) -> Unit
+    let onTimeScope: (Int, Int64) -> Unit
     let onNavigate: (Screen) -> ()
 
     var body: some View {
@@ -111,13 +112,17 @@ struct HomeTraderOpportunity : View {
             VStack {
                 ScrollView {
                     LazyVStack {
-                        ForEach(state.stocks) { stock in
+                        ForEach(Array(state.stocks.enumerated()), id: \.element.stockId) { index, date in
+                            let stock = date as StockData
                             VStack {
                                 StockChartHeadView(
                                     symbol: stock.symbol,
                                     isGain: stock.isGain,
-                                    stockPrice: stock.lastPrice
-                                ) {
+                                    stockPrice: stock.lastPrice,
+                                    timeScope: stock.timeScope
+                                ) { it in
+                                    onTimeScope(index, it)
+                                } onClick: {
                                     onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: traderData, stockId: stock.id))
                                 }
                                 ScrollViewReader { value in
@@ -164,6 +169,7 @@ struct HomeTraderPortfolio : View {
     let state: HomeTraderObserve.State
     let traderData: TraderData
     let onModeChange: (Int, ChartMode) -> Unit
+    let onTimeScope: (Int, Int64) -> Unit
     let onNavigate: (Screen) -> ()
     let createSupply: (Bool, String, String, Int64, Float64, @escaping @MainActor () -> (), @escaping @MainActor () -> ()) -> ()
     let setAddSheet: (Bool, String) -> ()
@@ -177,13 +183,17 @@ struct HomeTraderPortfolio : View {
             VStack {
                 ScrollView {
                     LazyVStack {
-                        ForEach(state.myStocks) { stock in
+                        ForEach(Array(state.myStocks.enumerated()), id: \.element.stockId) { index, date in
+                            let stock = date as StockData
                             VStack {
                                 StockChartHeadView(
                                     symbol: stock.symbol,
                                     isGain: stock.isGain,
-                                    stockPrice: stock.lastPrice
-                                ) {
+                                    stockPrice: stock.lastPrice,
+                                    timeScope: stock.timeScope
+                                ) { it in
+                                    onTimeScope(index, it)
+                                } onClick: {
                                     onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: traderData, stockId: stock.id))
                                 }
                                 ScrollViewReader { value in

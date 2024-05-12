@@ -15,10 +15,11 @@ class StockObserve : ObservableObject {
     private var cancelInfo: AnyCancellable? = nil
     private var cancelSupplysAndDemands: AnyCancellable? = nil
 
-    @MainActor 
+    @MainActor
     func loadData(stockId: String, trader: TraderData, isDarkMode: Bool) {
         loadingStatus(true)
         self.scope.launchRealm {
+            //let scope = (currentTime - (timeScope * 86400000)).toDate
             self.cancelInfo = await self.project.stockInfo.getStockInfoLive(id: stockId) { it in
                 guard let _stockInfo = it else {
                     self.loadingStatus(false)
@@ -38,10 +39,11 @@ class StockObserve : ObservableObject {
                                     it.holderId == trader.id
                                 }
                                 let stock = stockInfo.toHomeStockData(sessions.value.toStockData())
+                                let splitStock = stock.splitStock(timeScope: 7)
                                 let supplyDemands = it.toSupplyDemandData().injectStatus(traderId: trader.id, haveShares: haveShares).injectColors(stackHolders: stockInfo.stockholders)
                                 self.scope.launchMain {
                                     withAnimation {
-                                        self.state = self.state.copy(stockInfo: stockInfo, supplyDemands: supplyDemands, isHaveShares: haveShares != nil, stock: stock, isLoading: false)
+                                        self.state = self.state.copy(stockInfo: stockInfo, supplyDemands: supplyDemands, isHaveShares: haveShares != nil, stock: splitStock, nativeStock: stock, isLoading: false)
                                     }
                                 }
                             }
@@ -53,20 +55,33 @@ class StockObserve : ObservableObject {
     }
     
     @MainActor
-    func loadStocks(mode: ChartMode) {
-        let stock = self.state.stock
-        scope.launchRealm {
-            let newStock = switch mode {
-            case .StockWave: stock.loadWave()
-            case .StockSMA: stock.loadSMA()
-            case .StockEMA: stock.loadEMA()
-            case .StockRSI: stock.loadRSI()
-            case .StockTrad: stock.loadTrad()
-            case .StockPrediction: self.loadPrediction(stock, mode: mode)
-            }
-            
+    func loadTimeScope(timeScope: Int64) {
+        let nativeStock = state.nativeStock
+        self.scope.launchRealm {
+            let stock = nativeStock.splitStock(timeScope: timeScope).copy(timeScope: timeScope)
             self.scope.launchMain {
-                self.state = self.state.copy(stock: newStock)
+                self.state = self.state.copy(stock: stock)
+            }
+        }
+    }
+    
+    @MainActor
+    func loadStocks(mode: ChartMode) {
+        let state = self.state
+        scope.launchRealm {
+            let stock = state.stock
+            let nativeStock = state.nativeStock
+            let newNativeStock = switch mode {
+            case .StockWave: nativeStock.loadWave()
+            case .StockSMA: nativeStock.loadSMA()
+            case .StockEMA: nativeStock.loadEMA()
+            case .StockRSI: nativeStock.loadRSI()
+            case .StockTrad: nativeStock.loadTrad()
+            case .StockPrediction: self.loadPrediction(nativeStock, mode: mode)
+            }
+            let newStock = newNativeStock.splitStock(timeScope: stock.timeScope)
+            self.scope.launchMain {
+                self.state = self.state.copy(stock: newStock, nativeStock: newNativeStock)
             }
         }
     }
@@ -235,7 +250,7 @@ class StockObserve : ObservableObject {
     ) {
         self.scope.launchRealm {
             var _stockData = StockData(stockSession)
-            _stockData.values.append(StockPointData(time: currentTime, newPrice: newStockInfoData.stockPrice))
+            _stockData.appendPoint(StockPointData(time: currentTime, newPrice: newStockInfoData.stockPrice))
             let stockData = _stockData
             self.scope.launchRealm {
                 let newStockSession = await self.project.stockSession.updateSession(id: stockData.id, stockData: stockData)
@@ -375,7 +390,7 @@ class StockObserve : ObservableObject {
         var isHaveShares: Bool = false
 
         var stock: StockData = StockData()
-
+        var nativeStock: StockData = StockData()
         var isLoading: Bool = false
         
         var isAddSheet: Bool = false
@@ -388,6 +403,7 @@ class StockObserve : ObservableObject {
             supplyDemands: [SupplyDemandData]? = nil,
             isHaveShares: Bool? = nil,
             stock: StockData? = nil,
+            nativeStock: StockData? = nil,
             isLoading: Bool? = nil,
             isAddSheet: Bool? = nil,
             supplyDemandData: SupplyDemandData? = nil,
@@ -399,6 +415,7 @@ class StockObserve : ObservableObject {
             self.supplyDemands = supplyDemands ?? self.supplyDemands
             self.isHaveShares = isHaveShares ?? self.isHaveShares
             self.stock = stock ?? self.stock
+            self.nativeStock = nativeStock ?? self.nativeStock
             self.isLoading = isLoading ?? self.isLoading
             self.isAddSheet = isAddSheet ?? self.isAddSheet
             self.supplyDemandData = supplyDemandData ?? self.supplyDemandData

@@ -28,10 +28,11 @@ struct StockScreen : View {
                             StockChartHeadView(
                                 symbol: state.stock.symbol,
                                 isGain: state.stock.isGain,
-                                stockPrice: state.stock.lastPrice
-                            ) {
-                                
-                            }
+                                stockPrice: state.stock.lastPrice,
+                                timeScope: state.stock.timeScope
+                            ) { it in
+                                obs.loadTimeScope(timeScope: it)
+                            } onClick: {}
                             ScrollView(Axis.Set.horizontal, showsIndicators: false) {
                                 LazyHStack {
                                     ForEach(ChartMode.allCases, id: \.key) { (key: ChartMode, value: String) in
@@ -139,7 +140,10 @@ struct StockDetailView : View {
     var body: some View {
         HStack(alignment: .top) {
             VStack {
-                Text(stockInfo.name).foregroundStyle(theme.textColor).font(.headline.bold()).padding().onStart()
+                HStack {
+                    ImageCacheView(stockInfo.logoUrl, isVideoPreview: false, contentMode: ContentMode.fit).frame(width: 70, height: 70).clipShape(.rect(cornerRadius: 20)).padding()
+                    Text(stockInfo.name).foregroundStyle(theme.textColor).font(.headline.bold()).padding().onStart()
+                }
                 Spacer()
                 HStack {
                     Text("Shares:").foregroundStyle(theme.textColor).font(.subheadline)

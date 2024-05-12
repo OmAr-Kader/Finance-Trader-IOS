@@ -31,6 +31,9 @@ protocol StockSessionRepo {
     ) async
     
     @BackgroundActor
+    func getStockSessions(stockId: String, dateScope: Date, invoke: @escaping (ResultRealm<StockSession?>) -> Unit) async
+    
+    @BackgroundActor
     func getAllStockSessions(
         stockId: String,
         stockSessions: (ResultRealm<[StockSession]>) -> Unit

@@ -47,6 +47,11 @@ class StockSessionData {
     }
     
     @BackgroundActor
+    func getStockSessions(stockId: String, dateScope: Date, invoke: @escaping (ResultRealm<StockSession?>) -> Unit) async {
+        await repository.getStockSessions(stockId: stockId, dateScope: dateScope, invoke: invoke)
+    }
+    
+    @BackgroundActor
     func getAllStockSessions(
         stockId: String,
         stockSessions: (ResultRealm<[StockSession]>) -> Unit

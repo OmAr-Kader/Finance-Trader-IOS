@@ -2,6 +2,7 @@ import Foundation
 import AVFoundation
 import SwiftUI
 import Combine
+import _PhotosUI_SwiftUI
 
 struct ImageAsset : View {
     
@@ -22,11 +23,13 @@ struct ImageAsset : View {
     }
 }
 
-struct ImageCacheView: View {
+struct ImageCacheView : View {
+    
     private let urlString: String
     private let isVideoPreview: Bool
     private let contentMode: ContentMode
     @StateObject private var obs: UrlImageModel
+    
     init(_ urlString: String, isVideoPreview: Bool = false, contentMode: ContentMode = .fit) {
         self.urlString = urlString
         self.isVideoPreview = isVideoPreview
@@ -35,7 +38,7 @@ struct ImageCacheView: View {
             wrappedValue: UrlImageModel(url: URL(string: urlString), isPreview: isVideoPreview)
         )
     }
-
+    
     var body: some View {
         Image(uiImage: obs.image ?? UIImage())
             .resizable()
@@ -49,7 +52,7 @@ struct ImageCacheView: View {
                 }
             }
     }
-
+    
 }
 
 
@@ -191,3 +194,45 @@ extension ImageCache {
     }
 }
 
+struct PhotoPiceker<Content : View> : View {
+
+    @State private var selectedItem: PhotosPickerItem?
+
+    let pickerType: PHPickerFilter
+    @ViewBuilder let content: () -> Content
+    let imagePicked: (URL) -> Unit
+    var body: some View {
+
+        PhotosPicker(
+            selection: $selectedItem,
+            matching: pickerType
+        ) {
+            //ImageAsset(icon: "upload", tint: .white).frame(width: 45, height: 45).padding(5)
+            content()
+        }.onChange(selectedItem, forChangePhoto(imagePicked))
+    }
+}
+
+struct DataPicker : View {
+
+    @Inject private var theme: Theme
+    
+    let isDateTimeError: Bool
+    let dataPicked: (Int64) -> ()
+
+    var body: some View {
+        VStack {
+            DatePicker("Enter Timeline Date", selection: Binding(get: {
+                Date.now
+            }, set: { it in
+                dataPicked(Int64(it.timeIntervalSince1970) * 1000)
+            }), displayedComponents: [.date, .hourAndMinute])
+            .labelsHidden()
+            .frame(maxHeight: 400)
+            .foregroundColor(isDateTimeError ? theme.error : theme.textColor
+            )
+        }.frame(maxHeight: 400).padding(5).background(
+            RoundedRectangle(cornerRadius: 5).stroke(isDateTimeError ? theme.error : Color.clear, lineWidth: 1)
+        )
+    }
+}

@@ -47,10 +47,13 @@ class HomeTraderObserve : ObservableObject {
                     await self.project.stockSession.getAllStocksSessions(
                         stockId: ids
                     ) { it in
-                        let stocks: [StockData] = stockInfos.toHomeStockData(it.value.toStockData())
+                        let nativeStocks: [StockData] = stockInfos.toHomeStockData(it.value.toStockData())
+                        let stocks = nativeStocks.map { it in
+                            it.splitStock(timeScope: it.timeScope)
+                        }
                         self.scope.launchMain {
                             withAnimation {
-                                self.state = self.state.copy(stocks: stocks, isLoading: false, dummy: self.state.dummy + 1)
+                                self.state = self.state.copy(stocks: stocks, nativeStocks: nativeStocks, isLoading: false, dummy: self.state.dummy + 1)
                             }
                         }
                     }
@@ -61,36 +64,51 @@ class HomeTraderObserve : ObservableObject {
   
     @MainActor
     func loadStockMode(index: Int, mode: ChartMode) {
-        guard var _stock: StockData = state.stocks[safe: index] else {
+        let state = state
+        guard let stock: StockData = state.stocks[safe: index] else {
             return
         }
-        _stock.isLoading = true
-        let stock = _stock
-        self.state = self.state.copy(stocks: self.updateStocks(index, stock))
+        self.state = self.state.copy(stocks: state.stocks.updateStocks(index, stock.copy(isLoading: true)), dummy: self.state.dummy + 1)
+        
         self.scope.launchRealm {
-            let newStock = switch mode {
-            case .StockWave: stock.loadWave()
-            case .StockSMA: stock.loadSMA()
-            case .StockEMA: stock.loadEMA()
-            case .StockRSI: stock.loadRSI()
-            case .StockTrad: stock.loadTrad()
-            case .StockPrediction: stock.loadPrediction()
+            guard let nativeStock: StockData = state.nativeStocks.first(where: { it in it.stockId == stock.stockId }) else {
+                return
             }
+            let _newNativeStock = switch mode {
+            case .StockWave: nativeStock.loadWave()
+            case .StockSMA: nativeStock.loadSMA()
+            case .StockEMA: nativeStock.loadEMA()
+            case .StockRSI: nativeStock.loadRSI()
+            case .StockTrad: nativeStock.loadTrad()
+            case .StockPrediction: nativeStock.loadPrediction()
+            }
+            let newNativeStocks = state.nativeStocks.updateStocks(index, _newNativeStock)
+            let newStocks = state.stocks.updateStocks(index, _newNativeStock.splitStock(timeScope: stock.timeScope))
             self.scope.launchMain {
-                self.state = self.state.copy(stocks: self.updateStocks(index, newStock), dummy: self.state.dummy + 1)
+                self.state = self.state.copy(stocks: newStocks, nativeStocks: newNativeStocks, dummy: self.state.dummy + 1)
             }
         }
     }
     
     @MainActor
-    func updateStocks(_ index: Int,_ stockData: StockData) -> [StockData] {
-        var stocks = state.stocks
-        var _stockData = stockData
-        _stockData.isLoading = false
-        stocks[index] = _stockData
-        return stocks
+    func loadTimeScope(index: Int, timeScope: Int64) {
+        let state = state
+        self.scope.launchRealm {
+            print(String(index) + "   " + String(timeScope))
+            guard let stock: StockData = state.stocks[safe: index] else {
+                return
+            }
+            guard let nativeStock: StockData = state.nativeStocks.first(where: { it in it.stockId == stock.stockId }) else {
+                return
+            }
+            let newStock = nativeStock.splitStock(timeScope: timeScope).copy(timeScope: timeScope)
+            let newStocks = state.stocks.updateStocks(index, newStock)
+            self.scope.launchMain {
+                self.state = self.state.copy(stocks: newStocks, dummy: self.state.dummy + 1)
+            }
+        }
     }
-
+    
     @MainActor
     func loadMyStocks(traderId: String) {
         self.state = self.state.copy(isLoading: true)
@@ -105,10 +123,13 @@ class HomeTraderObserve : ObservableObject {
                     await self.project.stockSession.getAllStocksSessions(
                         stockId: ids
                     ) { it in
-                        let myStocks: [StockData] = stockInfos.toHomeStockData(it.value.toStockData())
+                        let nativeMyStocks: [StockData] = stockInfos.toHomeStockData(it.value.toStockData())
+                        let myStocks = nativeMyStocks.map { it in
+                            it.splitStock(timeScope: it.timeScope)
+                        }
                         self.scope.launchMain {
                             withAnimation {
-                                self.state = self.state.copy(myStocks: myStocks, isLoading: false, dummy: self.state.dummy + 1)
+                                self.state = self.state.copy(myStocks: myStocks, nativeMyStocks: nativeMyStocks, isLoading: false, dummy: self.state.dummy + 1)
                             }
                         }
                     }
@@ -116,37 +137,53 @@ class HomeTraderObserve : ObservableObject {
             }
         }
     }
-  
+    
     @MainActor
     func loadMyStockMode(index: Int, mode: ChartMode) {
-        guard var _stock: StockData = state.myStocks[safe: index] else {
+        let state = state
+        guard let myStock: StockData = state.myStocks[safe: index] else {
             return
         }
-        _stock.isLoading = true
-        let stock = _stock
-        self.state = self.state.copy(stocks: self.updateStocks(index, stock))
+        self.state = self.state.copy(myStocks: state.myStocks.updateStocks(index, myStock.copy(isLoading: true)), dummy: self.state.dummy + 1)
+        
         self.scope.launchRealm {
-            let newStock = switch mode {
-            case .StockWave: stock.loadWave()
-            case .StockSMA: stock.loadSMA()
-            case .StockEMA: stock.loadEMA()
-            case .StockRSI: stock.loadRSI()
-            case .StockTrad: stock.loadTrad()
-            case .StockPrediction: stock.loadPrediction()
+            guard let nativeMyStock: StockData = state.nativeMyStocks.first(where: { it in it.stockId == myStock.stockId }) else {
+                return
             }
+            let _newNativeMyStock = switch mode {
+            case .StockWave: nativeMyStock.loadWave()
+            case .StockSMA: nativeMyStock.loadSMA()
+            case .StockEMA: nativeMyStock.loadEMA()
+            case .StockRSI: nativeMyStock.loadRSI()
+            case .StockTrad: nativeMyStock.loadTrad()
+            case .StockPrediction: nativeMyStock.loadPrediction()
+            }
+            let newNativeMyStocks = state.nativeMyStocks.updateStocks(index, _newNativeMyStock)
+            let newmyStocks = state.myStocks.updateStocks(index, _newNativeMyStock.splitStock(timeScope: myStock.timeScope))
             self.scope.launchMain {
-                self.state = self.state.copy(stocks: self.updateStocks(index, newStock), dummy: self.state.dummy + 1)
+                self.state = self.state.copy(myStocks: newmyStocks, nativeMyStocks: newNativeMyStocks, dummy: self.state.dummy + 1)
             }
         }
     }
     
+    
     @MainActor
-    func updateMyStocks(_ index: Int,_ stockData: StockData) -> [StockData] {
-        var stocks = state.myStocks
-        var _stockData = stockData
-        _stockData.isLoading = false
-        stocks[index] = _stockData
-        return stocks
+    func loadMyTimeScope(index: Int, timeScope: Int64) {
+        let state = state
+        self.scope.launchRealm {
+            print(String(index) + "   " + String(timeScope))
+            guard let stock: StockData = state.myStocks[safe: index] else {
+                return
+            }
+            guard let nativeMyStock: StockData = state.nativeMyStocks.first(where: { it in it.stockId == stock.stockId }) else {
+                return
+            }
+            let newMyStock = nativeMyStock.splitStock(timeScope: timeScope).copy(timeScope: timeScope)
+            let newMyStocks = state.myStocks.updateStocks(index, newMyStock)
+            self.scope.launchMain {
+                self.state = self.state.copy(stocks: newMyStocks, dummy: self.state.dummy + 1)
+            }
+        }
     }
     
     @MainActor
@@ -189,7 +226,9 @@ class HomeTraderObserve : ObservableObject {
     
     struct State {
         var stocks: [StockData] = []
+        var nativeStocks: [StockData] = []
         var myStocks: [StockData] = []
+        var nativeMyStocks: [StockData] = []
         var isLoading: Bool = false
         var selectedIndex: Int = 1
 
@@ -200,7 +239,9 @@ class HomeTraderObserve : ObservableObject {
 
         mutating func copy(
             stocks: [StockData]? = nil,
+            nativeStocks: [StockData]? = nil,
             myStocks: [StockData]? = nil,
+            nativeMyStocks: [StockData]? = nil,
             selectedIndex: Int? = nil,
             isLoading: Bool? = nil,
             supplyStockId: String? = nil,
@@ -208,7 +249,9 @@ class HomeTraderObserve : ObservableObject {
             dummy: Int? = nil
         ) -> Self {
             self.stocks = stocks ?? self.stocks
+            self.nativeStocks = nativeStocks ?? self.nativeStocks
             self.myStocks = myStocks ?? self.myStocks
+            self.nativeMyStocks = nativeMyStocks ?? self.nativeMyStocks
             self.selectedIndex = selectedIndex ?? self.selectedIndex
             self.isLoading = isLoading ?? self.isLoading
             self.supplyStockId = supplyStockId ?? self.supplyStockId

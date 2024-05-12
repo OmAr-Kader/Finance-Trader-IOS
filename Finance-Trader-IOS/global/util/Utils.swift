@@ -82,10 +82,21 @@ extension String {
         dateFormatter.dateFormat = "dd MMM yy"
         let date = dateFormatter.date(from: self)!
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month, .day, .hour], from: date)
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
         let time = calendar.date(from: components)!.timeIntervalSince1970 * 1000
         return Int64(time)
     }
+
+    func toTimeDate() -> Date {
+        let dateFormatter = DateFormatter()
+        //dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+        dateFormatter.dateFormat = "dd MMM yy"
+        let date = dateFormatter.date(from: self)!
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        return calendar.date(from: components)!
+    }
+
 }
 
 extension Int {
@@ -93,6 +104,13 @@ extension Int {
     func saveMin(_ num: Int) ->  Int {
         let min = self - num
         return min < 0 ? 0 : min
+    }
+}
+
+extension Date {
+    
+    var toTimeInmillis: Int64 {
+        return Int64(timeIntervalSince1970 * 1000.0)
     }
 }
 
@@ -110,6 +128,9 @@ extension Int64 {
         )
     }
     
+    var toDate: Date {
+        return Date(timeIntervalSince1970: Double(self) / 1000)
+    }
     
     func fetchTimeFromCalender(hour: Int, minute: Int) -> Int64 {
         let time = Calendar.current.date(bySettingHour: hour, minute: minute, second: 0,

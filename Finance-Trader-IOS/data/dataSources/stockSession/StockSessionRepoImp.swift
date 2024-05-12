@@ -50,13 +50,26 @@ class StockSessionRepoImp : BaseRepoImp, StockSessionRepo {
     }
     
     @BackgroundActor
+    func getStockSessions(stockId: String, dateScope: Date, invoke: @escaping (ResultRealm<StockSession?>) -> Unit) async {
+        await querySingle(
+            invoke,
+            "getStockSessions\(stockId)\(dateScope.timeIntervalSince1970)",
+            "%K == %@ AND %K > %@", "stockId",
+            NSString(string: stockId), "dateSession", NSDate(timeIntervalSince1970: dateScope.timeIntervalSince1970)
+        )
+    }
+    
+    @BackgroundActor
     func getAllStockSessions(
         stockId: String,
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async {
-        await queryLess(stockSessions,
+        await queryLess(
+            stockSessions,
             "%K == %@",
-            "stockId", NSString(string: stockId)
+            //"%K == %@ AND %K > %@",
+            "stockId", NSString(string: stockId)//,
+            //"dateSession", NSDate(timeIntervalSince1970: (currentTime - (84 * 86400000)).toStrDMY.toTimeDate().timeIntervalSince1970)
         )
     }
 

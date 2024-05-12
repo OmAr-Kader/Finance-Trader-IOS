@@ -35,7 +35,7 @@ struct AddSheet : View {
                     isSupply = false
                 }) {
                     Text("Demand")
-                        .onTrailingCurvedText(textColor: isSupply ? theme.textForPrimaryColor : theme.textColor, backgroundColor: isSupply ? theme.primary.gradient : theme.background.gradient)
+                        .onTrailingCurvedText(textColor: !isSupply ? theme.textForPrimaryColor : theme.textColor, backgroundColor: !isSupply ? theme.primary.gradient : theme.background.gradient)
                         .animation(.easeInOut(duration: 0.5), value: isSupply)
                 }
                 Spacer()
@@ -101,7 +101,13 @@ struct AddSheet : View {
                     )
                     .fill(Color.green.gradient)
                 )
-        }.padding().onCenter()
+        }.padding().onCenter().onAppear {
+            isSupply = switch addSheetMode {
+            case .Demand: false
+            case .Supply: true
+            case .SupplyAndDemand: false
+            }
+        }
     }
 }
 

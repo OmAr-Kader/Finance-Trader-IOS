@@ -154,8 +154,16 @@ extension [StockData] {
         let colors: [ColorUI] = [.blue, .green, .red, .orange, .pink, .purple, .mint, .cyan, .teal]
         var stocks = self
         for i in self.indices {
-            stocks[i].color = colors[safe: i] ?? ColorUI.random()
+            let c = colors[safe: i] ?? ColorUI.random()
+            stocks[i].copyObj(color: c)
         }
+        return stocks
+    }
+    
+    
+    func updateStocks(_ index: Int,_ stockData: StockData) -> [StockData] {
+        var stocks = self
+        stocks[index] = stockData.copy(isLoading: false)
         return stocks
     }
 
