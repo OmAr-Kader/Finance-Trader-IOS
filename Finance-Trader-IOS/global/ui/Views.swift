@@ -185,16 +185,18 @@ public extension Task where Success == Never, Failure == Never {
 
 struct ButtonCurvedGradient : View {
     
+    let text: String
     let cornerRadius: CGFloat
+    let textColor: Color
     let color: AnyGradient
     let action: () -> ()
 
     var body: some View {
         Button(action: action) {
-            Text("Sell")
+            Text(text)
                 .padding(10)
                 .frame(minWidth: 80)
-                .foregroundColor(.black)
+                .foregroundColor(textColor)
                 .background(
                     RoundedRectangle(
                         cornerRadius: cornerRadius,
@@ -741,13 +743,21 @@ struct ListBodyEditAdditional<D, Content: View, Additional: View> : View {
 struct ImageForCurveItem : View {
     let imageUri: String
     let size: CGFloat
+    let cornerRadius: CGFloat
+    
+    init(imageUri: String, size: CGFloat, cornerRadius: CGFloat? = nil) {
+        self.imageUri = imageUri
+        self.size = size
+        self.cornerRadius = cornerRadius ?? 15
+    }
+
     var body: some View {
         VStack {
             ImageCacheView(imageUri, contentMode: .fill)
                 .frame(width: size, height: size, alignment: .center)
         }.frame(width: size, height: size, alignment: .center)
             .clipShape(
-                .rect(cornerRadius: 15)
+                .rect(cornerRadius: cornerRadius)
             )
     }
 }

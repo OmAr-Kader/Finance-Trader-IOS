@@ -115,10 +115,10 @@ struct StockDetailView : View {
         HStack(alignment: .top) {
             VStack {
                 HStack {
-                    ImageCacheView(stockInfo.logoUrl, isVideoPreview: false, contentMode: ContentMode.fit).frame(width: 70, height: 70).clipShape(.rect(cornerRadius: 20)).padding()
-                    Text(stockInfo.name).foregroundStyle(theme.textColor).font(.headline.bold()).padding().onStart()
-                }
-                Spacer()
+                    ImageCacheView(stockInfo.logoUrl, contentMode: .fill)
+                        .frame(height: 40).padding()
+                    Text(stockInfo.name).foregroundStyle(theme.textColor).font(.headline.bold()).padding()
+                }.padding(all: 2)
                 HStack {
                     Text("Shares:").foregroundStyle(theme.textColor).font(.subheadline)
                     Text(String(stockInfo.numberOfShares)).foregroundStyle(theme.textHintColor).font(.subheadline)

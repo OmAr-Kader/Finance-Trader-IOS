@@ -49,201 +49,7 @@ extension Array where Element : Object {
     }
 }
 
-extension [StockBoarder] {
-    
-    @BackgroundActor
-    func minAndMaxValues(_ mode: ChartMode, values: (_ stockBoarder: StockBoarder) -> (), failed: () -> ()) {
-        var minXStock: [Int64] = []
-        var maxXStock: [Int64] = []
-        var minYStock: [Float64] = []
-        var maxYStock: [Float64] = []
-        self.forEach { stockBoarder in
-            minXStock.append(stockBoarder.minX)
-            maxXStock.append(stockBoarder.maxX)
-            minYStock.append(stockBoarder.minY)
-            maxYStock.append(stockBoarder.maxY)
-        }
-        guard let minX = minXStock.sorted().first else {
-            failed()
-            return
-        }
-        guard let maxX = maxXStock.sorted().last else {
-            failed()
-            return
-        }
-        guard let minY = minYStock.sorted().first else {
-            failed()
-            return
-        }
-        guard let maxY = maxYStock.sorted().last else {
-            failed()
-            return
-        }
-        values(StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY))
-    }
-    
-}
-
-extension [[StockPointData]] {
-    
-    @BackgroundActor
-    func minAndMaxValues(_ mode: ChartMode) -> StockBoarder? {
-        var minXStock: [Int64] = []
-        var maxXStock: [Int64] = []
-        var minYStock: [Float64] = []
-        var maxYStock: [Float64] = []
-        for values in self {
-            guard let stockBoarder = values.minAndMaxValues(mode) else {
-                continue
-            }
-            minXStock.append(stockBoarder.minX)
-            maxXStock.append(stockBoarder.maxX)
-            minYStock.append(stockBoarder.minY)
-            maxYStock.append(stockBoarder.maxY)
-        }
-        guard let minX = minXStock.sorted().first else {
-            return nil
-        }
-        guard let maxX = maxXStock.sorted().last else {
-            return nil
-        }
-        guard let minY = minYStock.sorted().first else {
-            return nil
-        }
-        guard let maxY = maxYStock.sorted().last else {
-            return nil
-        }
-        return StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY)
-    }
-    
-}
-
-extension [StockData] {
-    
-    @BackgroundActor
-    func minAndMaxValues(_ mode: ChartMode) -> StockBoarder? {
-        var minXStock: [Int64] = []
-        var maxXStock: [Int64] = []
-        var minYStock: [Float64] = []
-        var maxYStock: [Float64] = []
-        for stock in self {
-            guard let stockBoarder = stock.values.minAndMaxValues(mode) else {
-                continue
-            }
-            minXStock.append(stockBoarder.minX)
-            maxXStock.append(stockBoarder.maxX)
-            minYStock.append(stockBoarder.minY)
-            maxYStock.append(stockBoarder.maxY)
-        }
-        guard let minX = minXStock.sorted().first else {
-            return nil
-        }
-        guard let maxX = maxXStock.sorted().last else {
-            return nil
-        }
-        guard let minY = minYStock.sorted().first else {
-            return nil
-        }
-        guard let maxY = maxYStock.sorted().last else {
-            return nil
-        }
-        return StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY)
-    }
-    
-    func injectColor() -> [StockData] {
-        let colors: [ColorUI] = [.blue, .green, .red, .orange, .pink, .purple, .mint, .cyan, .teal]
-        var stocks = self
-        for i in self.indices {
-            if stocks[i].color == .clear {
-                let c = colors[safe: i] ?? ColorUI.random()
-                stocks[i].copyObj(color: c)
-            }
-        }
-        return stocks
-    }
-    
-    @BackgroundActor
-    func changeStockMode(nativeStocks: [StockData], index: Int, mode: ChartMode) -> (newStocks: [StockData], newNativeStocks: [StockData]) {
-        guard let stock: StockData = self[safe: index] else {
-            return (self, nativeStocks)
-        }
-        guard let nativeStock: StockData = nativeStocks.first(where: { it in it.stockId == stock.stockId }) else {
-            return (self, nativeStocks)
-        }
-        let _newNativeStock = switch mode {
-        case .StockWave: nativeStock.loadWave()
-        case .StockSMA: nativeStock.loadSMA()
-        case .StockEMA: nativeStock.loadEMA()
-        case .StockRSI: nativeStock.loadRSI()
-        case .StockTrad: nativeStock.loadTrad()
-        case .StockPrediction: nativeStock.loadPrediction()
-        }
-        let newNativeStocks = nativeStocks.updateStocks(index, _newNativeStock)
-        let newStocks =  self.updateStocks(index, _newNativeStock.splitStock(timeScope: stock.timeScope))
-        return (newStocks, newNativeStocks)
-    }
-    
-    @BackgroundActor
-    func changeTimeScope(nativeStocks: [StockData], index: Int, timeScope: Int64) -> Self {
-        guard let stock: StockData = self[safe: index] else {
-            return self
-        }
-        guard let nativeStock: StockData = nativeStocks.first(where: { it in it.stockId == stock.stockId }) else {
-            return self
-        }
-        let newStock = nativeStock.splitStock(timeScope: timeScope).copy(timeScope: timeScope)
-        return self.updateStocks(index, newStock)
-    }
-    
-    func updateStocks(_ index: Int,_ stockData: StockData) -> [StockData] {
-        var stocks = self
-        stocks[index] = stockData.copy(isLoading: false)
-        return stocks
-    }
-    
-    func appendToStocks(_ it: StockData) -> Self {
-        var stocks = self
-        stocks.append(it)
-        return stocks
-    }
-
-}
-
 extension [StockPointData] {
-    
-    @BackgroundActor
-    func minAndMaxValues(_ mode: ChartMode) -> StockBoarder? {
-        let xSorted = self.sorted { $0.time < $1.time }
-        let ySorted = switch mode {
-        case .StockSMA: self.sorted { $0.sma < $1.sma }
-        case .StockEMA: self.sorted { $0.ema < $1.ema }
-        case .StockRSI: self.sorted { $0.rsi < $1.rsi }
-        default: self.sorted { $0.value < $1.value }
-        }
-        guard let minX = xSorted.first?.time else {
-            return nil
-        }
-        guard let maxX = xSorted.last?.time else {
-            return nil
-        }
-        guard let minY = switch mode {
-        case .StockSMA: ySorted.first?.sma
-        case .StockEMA: ySorted.first?.ema
-        case .StockRSI: ySorted.first?.rsi
-        default: ySorted.first?.value
-        } else {
-            return nil
-        }
-        guard let maxY = switch mode {
-        case .StockSMA: ySorted.last?.sma
-        case .StockEMA: ySorted.last?.ema
-        case .StockRSI: ySorted.last?.rsi
-        default : ySorted.last?.value
-        } else {
-            return nil
-        }
-        return StockBoarder(minX: minX, maxX: maxX, minY: minY, maxY: maxY)
-    }
     
     @BackgroundActor
     func toStockPoint() -> List<StockPoint> {
@@ -275,6 +81,27 @@ extension [StockInfo] {
     
 }
 
+extension List<ArticleText> {
+    
+    @BackgroundActor
+    func toArticleTextData() -> [ArticleTextData] {
+        return self.toList().map { it in
+            ArticleTextData(font: it.font, text: it.text)
+        }
+    }
+}
+
+extension [ArticleTextData] {
+    
+    @BackgroundActor
+    func toArticleText() -> List<ArticleText> {
+        return self.map { it in
+            ArticleText(font: it.font, text: it.text)
+        }.toRealmList()
+    }
+    
+}
+
 extension [StockHolderData] {
     
     @BackgroundActor
@@ -296,12 +123,23 @@ extension List<StockHolder> {
     }
 }
 
+
+extension [Article] {
+    
+    @BackgroundActor
+    func toArticleData() -> [ArticleData] {
+        return self.map { it in
+            ArticleData(article: it, stockId: it.stockId)
+        }
+    }
+}
+
 extension [SupplyDemand] {
     
     @BackgroundActor
     func toSupplyDemandData() -> [SupplyDemandData] {
         return self.map { it in
-            SupplyDemandData(supplyDemand: it)
+            SupplyDemandData(supplyDemand: it, stockId: it.stockInfo?._id.stringValue)
         }
     }
 }
@@ -311,7 +149,18 @@ extension [StockSession] {
     @BackgroundActor
     func toStockData() -> [StockData] {
         return self.map { it in
-            StockData(it)
+            StockData(it, stockId: it.stockInfo?._id.stringValue)
+        }
+    }
+}
+
+
+extension LinkingObjects<StockSession> {
+    
+    @BackgroundActor
+    func toStockData(stockId: String) -> [StockData] {
+        return self.map { it in
+            StockData(it, stockId: stockId)
         }
     }
 }

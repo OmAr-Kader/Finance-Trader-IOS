@@ -33,6 +33,8 @@ class HomeTraderObserve : ObservableObject {
             if state.myStocks.isEmpty {
                 loadMyStocks(traderId: traderId)
             }
+        } else if it == 3 {
+            loadAllArticles()
         }
     }
     
@@ -42,23 +44,13 @@ class HomeTraderObserve : ObservableObject {
         self.scope.launchRealm {
             self.cancelAllLive?.cancel()
             self.cancelAllLive = await self.project.stockInfo.getAllStockInfoLive { it in
-                let stockInfos = it.toStockInfoData()
-                let ids = stockInfos.map { it in
-                    it.id
+                let nativeStocks: [StockData] = it.toHomeStockData()
+                let stocks = nativeStocks.map { it in
+                    it.splitStock(timeScope: it.timeScope)
                 }
-                self.scope.launchRealm {
-                    await self.project.stockSession.getAllStocksSessions(
-                        stockId: ids
-                    ) { it in
-                        let nativeStocks: [StockData] = stockInfos.toHomeStockData(it.value.toStockData())
-                        let stocks = nativeStocks.map { it in
-                            it.splitStock(timeScope: it.timeScope)
-                        }
-                        self.scope.launchMain {
-                            withAnimation {
-                                self.state = self.state.copy(stocks: stocks, nativeStocks: nativeStocks, isLoading: false, dummy: self.state.dummy + 1)
-                            }
-                        }
+                self.scope.launchMain {
+                    withAnimation {
+                        self.state = self.state.copy(stocks: stocks, nativeStocks: nativeStocks, isLoading: false, dummy: self.state.dummy + 1)
                     }
                 }
             }
@@ -71,23 +63,13 @@ class HomeTraderObserve : ObservableObject {
         self.scope.launchRealm {
             self.cancelAllLive?.cancel()
             self.cancelAllLive = await self.project.stockInfo.getTraderStocksInfoLive(traderId: traderId) { it in
-                let stockInfos = it.toStockInfoData()
-                let ids = stockInfos.map { it in
-                    it.id
+                let nativeMyStocks: [StockData] = it.toHomeStockData()
+                let myStocks = nativeMyStocks.map { it in
+                    it.splitStock(timeScope: it.timeScope)
                 }
-                self.scope.launchRealm {
-                    await self.project.stockSession.getAllStocksSessions(
-                        stockId: ids
-                    ) { it in
-                        let nativeMyStocks: [StockData] = stockInfos.toHomeStockData(it.value.toStockData())
-                        let myStocks = nativeMyStocks.map { it in
-                            it.splitStock(timeScope: it.timeScope)
-                        }
-                        self.scope.launchMain {
-                            withAnimation {
-                                self.state = self.state.copy(myStocks: myStocks, nativeMyStocks: nativeMyStocks, isLoading: false, dummy: self.state.dummy + 1)
-                            }
-                        }
+                self.scope.launchMain {
+                    withAnimation {
+                        self.state = self.state.copy(myStocks: myStocks, nativeMyStocks: nativeMyStocks, isLoading: false, dummy: self.state.dummy + 1)
                     }
                 }
             }
@@ -154,7 +136,6 @@ class HomeTraderObserve : ObservableObject {
         }
     }
     
-    
     @MainActor
     func loadMyTimeScope(index: Int, timeScope: Int64) {
         let state = state
@@ -170,18 +151,42 @@ class HomeTraderObserve : ObservableObject {
     func createSupply(isSupply: Bool, traderId: String, stockId: String, shares: Int64, price: Float64, invoke: @escaping @MainActor () -> (), failed: @escaping @MainActor () -> ()) {
         loadingStatus(true)
         self.scope.launchRealm {
-            await self.project.supplyDemand.insertSupplyDemand(
-                SupplyDemand(supplyDemandData: SupplyDemandData(id: "", isSupply: isSupply, traderId: traderId, stockId: stockId, shares: shares, price: price))) { it in
-                    self.scope.launchMain {
-                        guard it != nil else {
+            await self.project.stockInfo.getStockInfo(id: stockId) { it in
+                guard let stockInfo = it.value else {
+                    self.loadingStatus(false)
+                    return
+                }
+                self.scope.launchRealm {
+                    await self.project.supplyDemand.insertSupplyDemand(
+                        SupplyDemand(supplyDemandData: SupplyDemandData(id: "", isSupply: isSupply, traderId: traderId, stockId: stockId, shares: shares, price: price), stockInfo: stockInfo)
+                    ) { it in
+                        self.scope.launchMain {
+                            guard it != nil else {
+                                self.loadingStatus(false)
+                                failed()
+                                return
+                            }
                             self.loadingStatus(false)
-                            failed()
-                            return
+                            invoke()
                         }
-                        self.loadingStatus(false)
-                        invoke()
                     }
                 }
+            }
+        }
+    }
+    
+    @MainActor
+    func loadAllArticles() {
+        loadingStatus(true)
+        self.scope.launchRealm {
+            await self.project.article.getAllArticles { it in
+                let articles = it.value.toArticleData().sorted { it, it1 in
+                    it.releasedDate < it1.releasedDate
+                }
+                self.scope.launchMain {
+                    self.state = self.state.copy(articles: articles, isLoading: false)
+                }
+            }
         }
     }
     
@@ -233,10 +238,12 @@ class HomeTraderObserve : ObservableObject {
         var nativeMyStocks: [StockData] = []
         var stocksInfo: [StockInfoData] = []
         var stocksSearch: [StockInfoData] = []
-        
+
+        var articles: [ArticleData] = []
+
         var isSearch: Bool = false
         var isLoading: Bool = false
-        var selectedIndex: Int = 1
+        var selectedIndex: Int = 3
 
         var supplyStockId: String = ""
         var isAddSheet: Bool = false
@@ -250,6 +257,7 @@ class HomeTraderObserve : ObservableObject {
             nativeMyStocks: [StockData]? = nil,
             stocksInfo: [StockInfoData]? = nil,
             stocksSearch: [StockInfoData]? = nil,
+            articles: [ArticleData]? = nil,
             selectedIndex: Int? = nil,
             isLoading: Bool? = nil,
             isSearch: Bool? = nil,
@@ -263,6 +271,7 @@ class HomeTraderObserve : ObservableObject {
             self.nativeMyStocks = nativeMyStocks ?? self.nativeMyStocks
             self.stocksInfo = stocksInfo ?? self.stocksInfo
             self.stocksSearch = stocksSearch ?? self.stocksSearch
+            self.articles = articles ?? self.articles
             self.selectedIndex = selectedIndex ?? self.selectedIndex
             self.isSearch = isSearch ?? self.isSearch
             self.isLoading = isLoading ?? self.isLoading

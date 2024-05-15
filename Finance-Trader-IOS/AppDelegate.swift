@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+
     private(set) var appSet: AppObserve! = nil
     
     var app: AppObserve {

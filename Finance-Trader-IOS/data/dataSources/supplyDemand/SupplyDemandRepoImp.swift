@@ -27,10 +27,10 @@ class SupplyDemandRepoImp : BaseRepoImp, SupplyDemandRepo {
     }
     
     func getSupplysAndDemandsLive(
-        stockId: String,
+        stockInfo: StockInfo,
         invoke: @escaping ([SupplyDemand]) -> Unit
     ) async -> AnyCancellable? {
-        return await queryFlow(invoke, "getSupplysAndDemandsLive\(stockId)", "%K == %@", "stockId", NSString(string: stockId))
+        return await queryFlow(invoke, "getSupplysAndDemandsLive\(stockInfo._id.stringValue)", "%K == %@", "stockInfo", stockInfo)
     }
     
     func deleteSupplyDemand(supplyDemand: SupplyDemand) async -> Int {

@@ -23,6 +23,14 @@
 		07B16A772BF158DF00F124C7 /* StockCompareObserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B16A762BF158DF00F124C7 /* StockCompareObserve.swift */; };
 		07B286462BE57725009991B8 /* BottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B286452BE57725009991B8 /* BottomSheet.swift */; };
 		07B286482BE598A9009991B8 /* Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B286472BE598A9009991B8 /* Items.swift */; };
+		07BD64F02BF4EBD7003F8213 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD64EF2BF4EBD7003F8213 /* Article.swift */; };
+		07BD64F32BF51C63003F8213 /* ArticleObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD64F22BF51C63003F8213 /* ArticleObservable.swift */; };
+		07BD64F52BF51C74003F8213 /* ArticleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD64F42BF51C74003F8213 /* ArticleScreen.swift */; };
+		07BD64F72BF52257003F8213 /* CreateArticleScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD64F62BF52257003F8213 /* CreateArticleScreen.swift */; };
+		07BD64FA2BF5229F003F8213 /* CreateArticleObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD64F92BF5229F003F8213 /* CreateArticleObservable.swift */; };
+		07BD64FD2BF52ABF003F8213 /* ArticleStockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD64FC2BF52ABF003F8213 /* ArticleStockData.swift */; };
+		07BD64FF2BF52AC8003F8213 /* ArticleStockRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD64FE2BF52AC8003F8213 /* ArticleStockRepo.swift */; };
+		07BD65012BF52AD6003F8213 /* ArticleStockRepoImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD65002BF52AD6003F8213 /* ArticleStockRepoImp.swift */; };
 		07DD0E1F2BE3CF450006E25E /* RandomColor in Frameworks */ = {isa = PBXBuildFile; productRef = 07DD0E1E2BE3CF450006E25E /* RandomColor */; };
 		07E1ACD22BE7DDF300D2CD67 /* ListingStockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E1ACD12BE7DDF300D2CD67 /* ListingStockScreen.swift */; };
 		07E1ACD42BE7DE0900D2CD67 /* ListingStockObserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E1ACD32BE7DE0900D2CD67 /* ListingStockObserve.swift */; };
@@ -82,7 +90,7 @@
 		07F3EBF52BE8383E005017F2 /* StockSessionRepoImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F3EBF42BE8383E005017F2 /* StockSessionRepoImp.swift */; };
 		07F3EBF82BE84907005017F2 /* StockInformationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F3EBF72BE84907005017F2 /* StockInformationData.swift */; };
 		07F3EBFA2BE84913005017F2 /* StockInfoRep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F3EBF92BE84913005017F2 /* StockInfoRep.swift */; };
-		07F3EBFC2BE8491C005017F2 /* StockInfRepImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F3EBFB2BE8491C005017F2 /* StockInfRepImp.swift */; };
+		07F3EBFC2BE8491C005017F2 /* StockInfoRepImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F3EBFB2BE8491C005017F2 /* StockInfoRepImp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +110,14 @@
 		07B16A762BF158DF00F124C7 /* StockCompareObserve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockCompareObserve.swift; sourceTree = "<group>"; };
 		07B286452BE57725009991B8 /* BottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheet.swift; sourceTree = "<group>"; };
 		07B286472BE598A9009991B8 /* Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Items.swift; sourceTree = "<group>"; };
+		07BD64EF2BF4EBD7003F8213 /* Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
+		07BD64F22BF51C63003F8213 /* ArticleObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleObservable.swift; sourceTree = "<group>"; };
+		07BD64F42BF51C74003F8213 /* ArticleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleScreen.swift; sourceTree = "<group>"; };
+		07BD64F62BF52257003F8213 /* CreateArticleScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateArticleScreen.swift; sourceTree = "<group>"; };
+		07BD64F92BF5229F003F8213 /* CreateArticleObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateArticleObservable.swift; sourceTree = "<group>"; };
+		07BD64FC2BF52ABF003F8213 /* ArticleStockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleStockData.swift; sourceTree = "<group>"; };
+		07BD64FE2BF52AC8003F8213 /* ArticleStockRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleStockRepo.swift; sourceTree = "<group>"; };
+		07BD65002BF52AD6003F8213 /* ArticleStockRepoImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleStockRepoImp.swift; sourceTree = "<group>"; };
 		07E1ACD12BE7DDF300D2CD67 /* ListingStockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingStockScreen.swift; sourceTree = "<group>"; };
 		07E1ACD32BE7DE0900D2CD67 /* ListingStockObserve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingStockObserve.swift; sourceTree = "<group>"; };
 		07E9E5E22BE38EB7009EACAA /* StockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockScreen.swift; sourceTree = "<group>"; };
@@ -157,7 +173,7 @@
 		07F3EBF42BE8383E005017F2 /* StockSessionRepoImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockSessionRepoImp.swift; sourceTree = "<group>"; };
 		07F3EBF72BE84907005017F2 /* StockInformationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInformationData.swift; sourceTree = "<group>"; };
 		07F3EBF92BE84913005017F2 /* StockInfoRep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInfoRep.swift; sourceTree = "<group>"; };
-		07F3EBFB2BE8491C005017F2 /* StockInfRepImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInfRepImp.swift; sourceTree = "<group>"; };
+		07F3EBFB2BE8491C005017F2 /* StockInfoRepImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockInfoRepImp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +210,27 @@
 				0762E4A62BE9713F004E58EE /* SupplyDemandRepoImp.swift */,
 			);
 			path = supplyDemand;
+			sourceTree = "<group>";
+		};
+		07BD64F12BF51AEB003F8213 /* article */ = {
+			isa = PBXGroup;
+			children = (
+				07BD64F22BF51C63003F8213 /* ArticleObservable.swift */,
+				07BD64F42BF51C74003F8213 /* ArticleScreen.swift */,
+				07BD64F62BF52257003F8213 /* CreateArticleScreen.swift */,
+				07BD64F92BF5229F003F8213 /* CreateArticleObservable.swift */,
+			);
+			path = article;
+			sourceTree = "<group>";
+		};
+		07BD64FB2BF52AA5003F8213 /* article */ = {
+			isa = PBXGroup;
+			children = (
+				07BD64FC2BF52ABF003F8213 /* ArticleStockData.swift */,
+				07BD64FE2BF52AC8003F8213 /* ArticleStockRepo.swift */,
+				07BD65002BF52AD6003F8213 /* ArticleStockRepoImp.swift */,
+			);
+			path = article;
 			sourceTree = "<group>";
 		};
 		07E9E5E12BE38E64009EACAA /* stock */ = {
@@ -273,6 +310,7 @@
 		07EC2A3B2BD870BE002375F2 /* dataSources */ = {
 			isa = PBXGroup;
 			children = (
+				07BD64FB2BF52AA5003F8213 /* article */,
 				0762E4A12BE97105004E58EE /* supplyDemand */,
 				07F3EBF62BE848C5005017F2 /* stockInfo */,
 				07F3EBEF2BE83804005017F2 /* stockSession */,
@@ -291,6 +329,7 @@
 				070FD1442BED92B10072F986 /* StockExchange.swift */,
 				070FD1432BED92B00072F986 /* SupplyAndDemand.swift */,
 				070308AA2BE2D4370040A902 /* Trader.swift */,
+				07BD64EF2BF4EBD7003F8213 /* Article.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -406,6 +445,7 @@
 		07EC2A652BD870BF002375F2 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				07BD64F12BF51AEB003F8213 /* article */,
 				07F3EBEA2BE815E1005017F2 /* sign */,
 				072188A02BE4213500FC33B9 /* stockExchange */,
 				07E9E5E12BE38E64009EACAA /* stock */,
@@ -449,7 +489,7 @@
 			children = (
 				07F3EBF72BE84907005017F2 /* StockInformationData.swift */,
 				07F3EBF92BE84913005017F2 /* StockInfoRep.swift */,
-				07F3EBFB2BE8491C005017F2 /* StockInfRepImp.swift */,
+				07F3EBFB2BE8491C005017F2 /* StockInfoRepImp.swift */,
 			);
 			path = stockInfo;
 			sourceTree = "<group>";
@@ -542,8 +582,11 @@
 				07F3EBEC2BE815FC005017F2 /* SignScreen.swift in Sources */,
 				07EC2A6C2BD870BF002375F2 /* PreferenceData.swift in Sources */,
 				070FD14E2BED92E90072F986 /* ConverterUI.swift in Sources */,
+				07BD64FD2BF52ABF003F8213 /* ArticleStockData.swift in Sources */,
 				07EC2A772BD870BF002375F2 /* Const.swift in Sources */,
 				0762E4A32BE97125004E58EE /* SupplyAndDemandData.swift in Sources */,
+				07BD64FF2BF52AC8003F8213 /* ArticleStockRepo.swift in Sources */,
+				07BD64FA2BF5229F003F8213 /* CreateArticleObservable.swift in Sources */,
 				07EC2A832BD870BF002375F2 /* StatusBar.swift in Sources */,
 				07F3EBE72BE80949005017F2 /* TraderRepo.swift in Sources */,
 				0762E4A72BE9713F004E58EE /* SupplyDemandRepoImp.swift in Sources */,
@@ -554,8 +597,10 @@
 				07EC2A7A2BD870BF002375F2 /* Roots.swift in Sources */,
 				07F3EBF32BE83834005017F2 /* StockSessionRepo.swift in Sources */,
 				07EC2A6D2BD870BF002375F2 /* PrefRepo.swift in Sources */,
+				07BD65012BF52AD6003F8213 /* ArticleStockRepoImp.swift in Sources */,
 				07EC2A792BD870BF002375F2 /* Theme.swift in Sources */,
 				07F3EBF12BE8381C005017F2 /* StockSessionData.swift in Sources */,
+				07BD64F52BF51C74003F8213 /* ArticleScreen.swift in Sources */,
 				07EC2A892BD870BF002375F2 /* Main.swift in Sources */,
 				07B286462BE57725009991B8 /* BottomSheet.swift in Sources */,
 				07B286482BE598A9009991B8 /* Items.swift in Sources */,
@@ -582,10 +627,13 @@
 				07EC2A702BD870BF002375F2 /* ResultRealm.swift in Sources */,
 				07EC2A1E2BD87030002375F2 /* Finance_Trader_IOSApp.swift in Sources */,
 				070FD1482BED92B10072F986 /* Stock.swift in Sources */,
+				07BD64F72BF52257003F8213 /* CreateArticleScreen.swift in Sources */,
+				07BD64F32BF51C63003F8213 /* ArticleObservable.swift in Sources */,
 				07EC2A6F2BD870BF002375F2 /* Preference.swift in Sources */,
 				07E1ACD22BE7DDF300D2CD67 /* ListingStockScreen.swift in Sources */,
 				07EC2A8C2BD870BF002375F2 /* HomeTraderObserve.swift in Sources */,
 				07E9E5E52BE38EF6009EACAA /* StockObserve.swift in Sources */,
+				07BD64F02BF4EBD7003F8213 /* Article.swift in Sources */,
 				07EC2A682BD870BF002375F2 /* AppObserve.swift in Sources */,
 				07EC2A852BD870BF002375F2 /* Views.swift in Sources */,
 				07EC2A812BD870BF002375F2 /* NavigationDrawer.swift in Sources */,
@@ -596,7 +644,7 @@
 				07E9E5E32BE38EB7009EACAA /* StockScreen.swift in Sources */,
 				07F3EBE52BE80939005017F2 /* TraderUserData.swift in Sources */,
 				07EC2A6E2BD870BF002375F2 /* PrefRepoImp.swift in Sources */,
-				07F3EBFC2BE8491C005017F2 /* StockInfRepImp.swift in Sources */,
+				07F3EBFC2BE8491C005017F2 /* StockInfoRepImp.swift in Sources */,
 				07EC2A7C2BD870BF002375F2 /* BottomBar.swift in Sources */,
 				07EC2A7F2BD870BF002375F2 /* BackButton.swift in Sources */,
 				070308AB2BE2D4370040A902 /* Trader.swift in Sources */,

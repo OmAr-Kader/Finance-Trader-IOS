@@ -11,32 +11,32 @@ class StockInformationData {
     }
     
     @BackgroundActor
-    func insertStockInfo(_ stockInfo: StockInfo,_ invoke: @escaping ((StockInfo?) async -> Unit)) async {
+    func insertStockInfo(_ stockInfo: StockInfo,_ invoke: @escaping @BackgroundActor (StockInfo?) async -> Unit) async {
         await repository.insertStockInfo(stockInfo, invoke)
     }
     
     @BackgroundActor
-    func updateSession(
+    func updateStockInfo(
         stockInfoData: StockInfoData
     ) async -> ResultRealm<StockInfo?> {
-        await repository.updateSession(stockInfoData: stockInfoData)
+        await repository.updateStockInfo(stockInfoData: stockInfoData)
     }
     
     @BackgroundActor
-    func getStockInfoLive(id: String, invoke: @escaping (StockInfo?) -> Unit) async -> AnyCancellable? {
+    func getStockInfoLive(id: String, invoke: @escaping @BackgroundActor (StockInfo?) -> Unit) async -> AnyCancellable? {
         return await repository.getStockInfoLive(id: id, invoke: invoke)
     }
     
     @BackgroundActor
     func getAllStockInfo(
-        invoke: (ResultRealm<[StockInfo]>) -> Unit
+        invoke: @BackgroundActor (ResultRealm<[StockInfo]>) -> Unit
     ) async {
         await repository.getAllStockInfo(invoke: invoke)
     }
     
     @BackgroundActor
     func getAllStockInfoLive(
-        invoke: @escaping ([StockInfo]) -> Unit
+        invoke: @escaping @BackgroundActor ([StockInfo]) -> Unit
     ) async -> AnyCancellable? {
         return await repository.getAllStockInfoLive(invoke: invoke)
     }
@@ -44,7 +44,7 @@ class StockInformationData {
     @BackgroundActor
     func getTraderStocksInfoLive(
         traderId: String,
-        invoke: @escaping ([StockInfo]) -> Unit
+        invoke: @escaping @BackgroundActor ([StockInfo]) -> Unit
     ) async -> AnyCancellable? {
         return await repository.getTraderStocksInfoLive(traderId: traderId, invoke: invoke)
     }
@@ -52,7 +52,7 @@ class StockInformationData {
     @BackgroundActor
     func getStockInfo(
         id: String,
-        invoke: (ResultRealm<StockInfo?>) -> Unit
+        invoke: @BackgroundActor (ResultRealm<StockInfo?>) -> Unit
     ) async {
         await repository.getStockInfo(id: id, invoke: invoke)
     }

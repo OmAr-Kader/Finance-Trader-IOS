@@ -12,11 +12,12 @@ struct OutlinedTextField : View {
     let lineLimit: Int?
     let keyboardType: UIKeyboardType?
     let backColor: Color?
+    let font: CGFloat
     let isInitFocused: Bool
     
     @FocusState private var isFocused: Bool
 
-    init(text: String, onChange: @escaping (String) -> Unit, hint: String, isError: Bool, errorMsg: String, theme: Theme, cornerRadius: CGFloat, lineLimit: Int?, keyboardType: UIKeyboardType?, backColor: Color? = nil, isInitFocused: Bool = false
+    init(text: String, onChange: @escaping (String) -> Unit, hint: String, isError: Bool, errorMsg: String, theme: Theme, cornerRadius: CGFloat, lineLimit: Int?, keyboardType: UIKeyboardType?, backColor: Color? = nil, font: CGFloat? = nil, isInitFocused: Bool = false
     ) {
         self.text = text
         self.onChange = onChange
@@ -28,6 +29,7 @@ struct OutlinedTextField : View {
         self.lineLimit = lineLimit
         self.keyboardType = keyboardType
         self.backColor = backColor
+        self.font = font ?? 14
         self.isInitFocused = isInitFocused
     }
 
@@ -45,7 +47,7 @@ struct OutlinedTextField : View {
             ).placeholder(when: text.isEmpty, alignment: .leading) {
                 Text(hint).foregroundColor(theme.textHintColor)
             }.foregroundStyle(theme.textColor)
-                .font(.system(size: 14))
+                .font(.system(size: font))
                 .padding(
                     EdgeInsets(top: 15, leading: 20, bottom: 10, trailing: 15)
                 )

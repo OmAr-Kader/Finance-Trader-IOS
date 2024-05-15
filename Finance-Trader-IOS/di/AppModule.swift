@@ -15,8 +15,9 @@ func buildContainer() -> Container {
         preference: PreferenceData(repository: PrefRepoImp(realmApi: realmApi)),
         trader: TraderUserData(repository: TraderRepoImp(realmApi: realmApi)),
         stockSession: StockSessionData(repository: StockSessionRepoImp(realmApi: realmApi)),
-        stockInfo: StockInformationData(repository: StockInfRepImp(realmApi: realmApi)),
-        supplyDemand: SupplyAndDemandData(repository: SupplyDemandRepoImp(realmApi: realmApi))
+        stockInfo: StockInformationData(repository: StockInfoRepImp(realmApi: realmApi)),
+        supplyDemand: SupplyAndDemandData(repository: SupplyDemandRepoImp(realmApi: realmApi)),
+        article: ArticleStockData(repository: ArticleStockRepoImp(realmApi: realmApi))
     )
     let theme = Theme(isDarkMode: UITraitCollection.current.userInterfaceStyle.isDarkMode)
     container.register(RealmApi.self) { _  in

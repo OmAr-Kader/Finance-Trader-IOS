@@ -19,6 +19,10 @@ extension View {
             StockCompareScreen(app: app)
         case .LISTING_STOCK_ROUTE(let traderData, let stockInfoData):
             ListingStockScreen(app: app, trader: traderData, stockInfoData: stockInfoData)
+        case .CREATE_STOCK_ARTICLE_ROUTE:
+            CreateArticleScreen(app: app)
+        case .ARTICLE_SCREEN_ROUTE(let articleId):
+            ArticleScreen(app: app, articleId: articleId)
         }
     }
 }
@@ -31,6 +35,8 @@ enum Screen : Hashable {
     case STOCK_SCREEN_ROUTE(traderData: TraderData, stockId: String)
     case STOCK_COMPARE_ROUTE
     case LISTING_STOCK_ROUTE(traderData: TraderData, stockInfoData: StockInfoData?)
+    case CREATE_STOCK_ARTICLE_ROUTE
+    case ARTICLE_SCREEN_ROUTE(articleId: String)
 }
 
 

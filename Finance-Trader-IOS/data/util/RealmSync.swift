@@ -65,6 +65,7 @@ extension User {
             subs.append(QuerySubscription<StockSession>())
             subs.append(QuerySubscription<StockInfo>())
             subs.append(QuerySubscription<SupplyDemand>())
+            subs.append(QuerySubscription<Article>())
             subs.append(QuerySubscription<Trader>())
        })
         config.objectTypes = listOfSchemaRealmClass + listOfSchemaEmbeddedRealmClass

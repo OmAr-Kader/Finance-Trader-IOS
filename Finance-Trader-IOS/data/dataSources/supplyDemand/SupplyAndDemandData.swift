@@ -40,10 +40,10 @@ class SupplyAndDemandData {
     
     @BackgroundActor
     func getSupplysAndDemandsLive(
-        stockId: String,
+        stockInfo: StockInfo,
         invoke: @escaping ([SupplyDemand]) -> Unit
     ) async -> AnyCancellable? {
-        return await repository.getSupplysAndDemandsLive(stockId: stockId, invoke: invoke)
+        return await repository.getSupplysAndDemandsLive(stockInfo: stockInfo, invoke: invoke)
     }
     
     @BackgroundActor

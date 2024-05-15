@@ -106,7 +106,7 @@ class ListingStockObserve : ObservableObject {
             _stockInfoData.numberOfShares = share
             _stockInfoData.stockPrice = pri
             let stockInfo = _stockInfoData
-            guard (await self.project.stockInfo.updateSession(stockInfoData: stockInfo).value) != nil else {
+            guard (await self.project.stockInfo.updateStockInfo(stockInfoData: stockInfo).value) != nil else {
                 self.scope.launchMain {
                     failed()
                 }

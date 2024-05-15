@@ -20,6 +20,7 @@ var listOfSchemaRealmClass: [ObjectBase.Type] {
         StockInfo.self,
         Trader.self,
         SupplyDemand.self,
+        Article.self
     ]
 }
 
@@ -27,7 +28,8 @@ var listOfSchemaEmbeddedRealmClass: [ObjectBase.Type] {
     return [
         StockPoint.self,
         StockHolder.self,
-        Negotiate.self
+        Negotiate.self,
+        ArticleText.self
     ]
 }
 

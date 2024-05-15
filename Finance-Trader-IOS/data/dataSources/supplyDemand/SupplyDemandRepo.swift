@@ -25,7 +25,7 @@ protocol SupplyDemandRepo {
     
     @BackgroundActor
     func getSupplysAndDemandsLive(
-        stockId: String,
+        stockInfo: StockInfo,
         invoke: @escaping ([SupplyDemand]) -> Unit
     ) async -> AnyCancellable?
     

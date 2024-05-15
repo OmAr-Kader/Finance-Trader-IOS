@@ -25,7 +25,7 @@ struct HomeTrader : View {
             BottomBarItem(icon: "search", title: "Search", color: theme.primary),
             BottomBarItem(icon: "graph", title: "Opportunities", color: theme.primary),
             BottomBarItem(icon: "portfolio", title: "Portfolio", color: theme.primary),
-            BottomBarItem(icon: "article", title: "Portfolio", color: theme.primary),
+            BottomBarItem(icon: "article", title: "Article", color: theme.primary),
         ]
     }
     
@@ -36,8 +36,8 @@ struct HomeTrader : View {
                 switch  state.selectedIndex {
                 case 0: HomeTraderSearch(state: state, traderData: traderData, onSearch: obs.onSearch, onNavigate: app.navigateTo)
                 case 1: HomeTraderOpportunity(state: state, traderData: traderData, onModeChange: obs.loadStockMode, onTimeScope: obs.loadTimeScope, onNavigate: app.navigateTo)
-                case 2: HomeTraderPortfolio(state: state, traderData: traderData, onModeChange: obs.loadMyStockMode, onTimeScope: obs.loadTimeScope, onNavigate: app.navigateTo, createSupply: obs.createSupply, setAddSheet: obs.setAddSheet)
-                default: HomeTraderArticle()
+                case 2: HomeTraderPortfolio(state: state, traderData: traderData, onModeChange: obs.loadMyStockMode, onTimeScope: obs.loadMyTimeScope, onNavigate: app.navigateTo, createSupply: obs.createSupply, setAddSheet: obs.setAddSheet)
+                default: HomeTraderArticle(articles: state.articles, onNavigate: app.navigateTo)
                 }
                 BottomBar(
                     selectedIndex: state.selectedIndex,
@@ -55,13 +55,18 @@ struct HomeTrader : View {
                 ToolbarItem(placement: .topBarLeading) {
                     Text("Trader").font(.headline).foregroundStyle(colorBarIOS)
                 }
-                if state.selectedIndex == 1 && isCompany {
+                if (state.selectedIndex == 1 || state.selectedIndex == 3) && isCompany {
                     ToolbarItem(placement: .primaryAction) {
                         ImageAsset(icon: "create", tint: colorBarIOS).frame(width: 28, height: 28).onTapGesture {
-                            self.app.navigateTo(Screen.LISTING_STOCK_ROUTE(traderData: self.traderData, stockInfoData: nil))
+                            if state.selectedIndex == 1 {
+                                self.app.navigateTo(Screen.LISTING_STOCK_ROUTE(traderData: self.traderData, stockInfoData: nil))
+                            } else {
+                                self.app.navigateTo(Screen.CREATE_STOCK_ARTICLE_ROUTE)
+                            }
                         }.animation(.default, value: state.selectedIndex)
                     }
-                } else if state.selectedIndex == 0 {
+                }
+                if state.selectedIndex == 0 {
                     ToolbarItem(placement: .primaryAction) {
                         ImageAsset(icon: "search", tint: colorBarIOS).frame(width: 28, height: 28).onTapGesture {
                             obs.setIsSearch()
@@ -233,7 +238,7 @@ struct HomeTraderPortfolio : View {
                                     onTimeScope(index, it)
                                 }, onNavigate: onNavigate
                             ) {
-                                ButtonCurvedGradient(cornerRadius: 15, color: Color.red.gradient) {
+                                ButtonCurvedGradient(text: "Sell", cornerRadius: 15, textColor: Color.black, color: Color.red.gradient) {
                                     setAddSheet(true, stock.stockId)
                                 }.padding().onCenter()
                             }
@@ -267,8 +272,42 @@ struct HomeTraderPortfolio : View {
 }
 
 struct HomeTraderArticle : View {
+    
+    @Inject
+    private var theme: Theme
+    
+    let articles: [ArticleData]
+    let onNavigate: (Screen) -> ()
+
     var body: some View {
-        FullZStack {
+        VStack {
+            VStack {
+                ScrollView {
+                    LazyVStack {
+                        ForEach(Array(articles.enumerated()), id: \.element.stockId) { index, date in
+                            let article = date as ArticleData
+                            HStack(alignment: .top) {
+                                ImageForCurveItem(imageUri: article.imageUri, size: 80, cornerRadius: 15).onTop()
+                                VStack(alignment: .leading) {
+                                    Text(
+                                        article.title
+                                    ).foregroundStyle(theme.textColor)
+                                        .font(.system(size: 14))
+                                        .lineLimit(3)
+                                        .padding(top: 5, leading: 5, bottom: 2, trailing: 3)
+                                    Text(article.articleList.first?.text ?? "")
+                                        .multilineTextAlignment(.leading)
+                                        .font(.system(size: 12))
+                                        .padding(leading: 10, bottom: 10, trailing: 3)
+                                        .foregroundStyle(theme.textGrayColor)
+                                }.frame(alignment: .center).background(theme.backDark).cornerRadius(15)
+                            }.onTapGesture {
+                                onNavigate(Screen.ARTICLE_SCREEN_ROUTE(articleId: article.id))
+                            }
+                        }
+                    }
+                }
+            }
             Spacer()
         }
     }

@@ -19,7 +19,7 @@ struct StockCompareScreen : View {
                     StockMultiView(stocks: state.stocks, stockBoarderMulti: state.stockBoarderMulti, isLoading: state.isLoading)
                 }.background(theme.backDarkSec).cornerRadius(15).padding(top: 15, leading: 15, bottom: 0, trailing: 15)
                 VStack {
-                    StockCompareSearch(state: state, onSearch: obs.onSearch, addStock: obs.addStock)
+                    StockCompareSearch(stocksSearch: state.stocksSearch, onSearch: obs.onSearch, addStock: obs.addStock)
                 }.background(theme.backDark).cornerRadius(15).padding(top: 15, leading: 15, bottom: 0, trailing: 15)
             }.onAppear {
                 obs.loadData()
@@ -73,9 +73,9 @@ struct StockCompareTimeScope : View {
 
 struct StockCompareSearch : View {
     
-    let state: StockCompareObserve.State
-    let onSearch: (String) -> ()
-    let addStock: (String) -> ()
+    let stocksSearch: [StockInfoData]
+    let onSearch: @MainActor (String) -> ()
+    let addStock: @MainActor (StockInfoData) -> ()
     
     @State private var search: String = ""
 
@@ -104,13 +104,13 @@ struct StockCompareSearch : View {
                     ).padding()
                     Spacer()
                 }.background(theme.backDark)
-                ForEach(Array(state.stocksSearch.enumerated()), id: \.element.id) { index, date in
+                ForEach(Array(stocksSearch.enumerated()), id: \.element.id) { index, date in
                     let stockInfo = date as StockInfoData
                     HStack(alignment: .center) {
                         Text(stockInfo.name).foregroundStyle(theme.textColor).frame(minWidth: 80)
                         Spacer()
                     }.padding(all: 3).onTapGesture {
-                        addStock(stockInfo.id)
+                        addStock(stockInfo)
                     }
                 }
                 Spacer().frame(height: 15)

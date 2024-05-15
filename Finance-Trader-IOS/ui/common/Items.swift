@@ -13,18 +13,24 @@ struct StockChartHeadView : View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Text(stock.symbol).foregroundStyle(theme.textColor).frame(minWidth: 80).onTapGesture {
+            HStack {
+                VStack(alignment: .center) {
+                    Text(stock.symbol).foregroundStyle(theme.textColor).frame(minWidth: 80).onTapGesture {
+                        onClick()
+                    }
+                    HStack {
+                        Text("Prce:").foregroundStyle(theme.textColor).font(.subheadline)
+                        ImageAsset(icon: stock.isGain ? "up" : "down", tint: stock.isGain ? .green : .red).frame(width: 10, height: 10)
+                        Text(stock.lastPrice.toStr() + " $").foregroundStyle(stock.isGain ? .green : .red).font(.subheadline)
+                    }.padding().frame(height: 20).onTapGesture {
+                        onClick()
+                    }
+                }
+                Spacer()
+            }.onTapGesture {
                 onClick()
             }
-            Spacer()
             VStack {
-                HStack {
-                    Text("Prce:").foregroundStyle(theme.textColor).font(.subheadline)
-                    ImageAsset(icon: stock.isGain ? "up" : "down", tint: stock.isGain ? .green : .red).frame(width: 10, height: 10)
-                    Text(stock.lastPrice.toStr() + " $").foregroundStyle(stock.isGain ? .green : .red).font(.subheadline)
-                }.padding().frame(height: 20).onTapGesture {
-                    onClick()
-                }
                 Menu {
                     Picker("Time Scope", selection: Binding(get: {
                         stock.timeScope
@@ -41,10 +47,10 @@ struct StockChartHeadView : View {
                             Text(stock.stringData).foregroundStyle(theme.textColor).font(.subheadline)
                             ImageAsset(icon: "down", tint: theme.primary).frame(width: 10, height: 10)
                         }
-                    }.foregroundColor(.clear).padding().frame(height: 20)
+                    }.foregroundColor(.clear).padding()
                 }
-            }.padding()
-        }
+            }
+        }.padding(top: 15, leading: 10, bottom: 0, trailing: 10)
     }
 }
 

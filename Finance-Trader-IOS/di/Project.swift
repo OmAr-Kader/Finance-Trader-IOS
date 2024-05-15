@@ -8,4 +8,5 @@ struct Project {
     let stockSession: StockSessionData
     let stockInfo: StockInformationData
     let supplyDemand: SupplyAndDemandData
+    let article: ArticleStockData
 }

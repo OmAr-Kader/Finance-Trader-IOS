@@ -31,40 +31,31 @@ class StockCompareObserve  : ObservableObject {
     }
     
     @MainActor
-    func addStock(stockId: String) {
+    func addStock(_ stockInfoData: StockInfoData) {
         self.loadingStatus(true)
         let state = self.state
         self.scope.launchRealm {
-            await self.project.stockInfo.getStockInfo(id: stockId) { it in
+            await self.project.stockInfo.getStockInfo(id: stockInfoData.id) { it in
                 guard let _stockInfo = it.value else {
                     self.loadingStatus(false)
                     return
                 }
                 let stockInfo =  StockInfoData(stockInfo: _stockInfo)
-                self.scope.launchRealm {
-                    await self.project.stockSession.getAllStockSessions(
-                        stockId: stockInfo.id
-                    ) { it in
-                        let stock = stockInfo.toHomeStockData(it.value.toStockData()).injectStatus(mode: ChartMode.StockWave).injectColor(i: state.stocksNative.count)
-                        let splitStock = stock.splitStock(timeScope: stock.timeScope)
-                        let stocksNative = state.stocksNative.appendToStocks(stock)
-                        let stocks = state.stocks.appendToStocks(splitStock)
-                        let stockBoarderMulti = splitStock.values.minAndMaxValues(ChartMode.StockWave)
-                        
-                        let _ = print(splitStock.values.count)
-                        let _ = print("===" + String(stocks.first?.values.count ?? 0))
-                        self.scope.launchMain {
-                            self.state = self.state.copy(
-                                stocks: stocks,
-                                stocksNative: stocksNative,
-                                stockBoarderMulti: stockBoarderMulti,
-                                timeScope: splitStock.timeScope,
-                                stringData: splitStock.stringData,
-                                isLoading: false,
-                                dummy: self.state.dummy + 1
-                            )
-                        }
-                    }
+                let stock = stockInfo.toHomeStockData(_stockInfo.stockSessions.toStockData(stockId: stockInfo.id)).injectStatus(mode: ChartMode.StockWave).injectColor(i: state.stocksNative.count)
+                let splitStock = stock.splitStock(timeScope: stock.timeScope)
+                let stocksNative = state.stocksNative.appendToStocks(stock)
+                let stocks = state.stocks.appendToStocks(splitStock)
+                let stockBoarderMulti = splitStock.values.minAndMaxValues(ChartMode.StockWave)
+                self.scope.launchMain {
+                    self.state = self.state.copy(
+                        stocks: stocks,
+                        stocksNative: stocksNative,
+                        stockBoarderMulti: stockBoarderMulti,
+                        timeScope: splitStock.timeScope,
+                        stringData: splitStock.stringData,
+                        isLoading: false,
+                        dummy: self.state.dummy + 1
+                    )
                 }
             }
         }
