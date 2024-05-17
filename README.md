@@ -1,4 +1,4 @@
-# 📉📈 Trader(Demo): Finance IOS App For Traders And Stock Market
+# 📉📈 Trader(Demo): <br> Finance IOS App For Traders And Stock Market
 
 Overview
 --------
