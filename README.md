@@ -86,23 +86,21 @@ Usage
 Screenshot
 -------------
 
-<table><tr>
-  <td> <img src="screenshots/1.png"  width="300" height="667" alt="1"/> </td>
-  <td> <img src="screenshots/8.png"  width="300" height="667" alt="8"/> </td>
-</tr>
-<tr>
-  <td> <img src="screenshots/2.png"  width="300" height="667" alt="2"/> </td>
-  <td> <img src="screenshots/3.png"  width="300" height="667" alt="3"/> </td>
-</tr>
-<tr>
-  <td> <img src="screenshots/4.png"  width="300" height="667" alt="4"/> </td>
-  <td> <img src="screenshots/5.png"  width="300" height="667" alt="5"/> </td>
-</tr>
-<tr>
-  <td> <img src="screenshots/6.png"  width="300" height="667" alt="6"/> </td>
-  <td> <img src="screenshots/7.png"  width="300" height="667" alt="7"/> </td>
-</tr>
-<tr>
-  <td> <img src="screenshots/9.png"  width="300" height="667" alt="9"/> </td>
-  <td> <img src="screenshots/10.png"  width="300" height="667" alt="10"/> </td>
-</tr></table>
+<table>
+    <tr>
+      <td> <img src="Screenshots/1.png"  width="300" height="667" alt="1"/> </td>
+      <td> <img src="Screenshots/2.png"  width="300" height="667" alt="8"/> </td>
+    </tr>
+    <tr>
+      <td> <img src="Screenshots/3.png"  width="300" height="667" alt="2"/> </td>
+      <td> <img src="Screenshots/4.png"  width="300" height="667" alt="3"/> </td>
+    </tr>
+    <tr>
+      <td> <img src="Screenshots/5.png"  width="300" height="667" alt="4"/> </td>
+      <td> <img src="Screenshots/6.png"  width="300" height="667" alt="5"/> </td>
+    </tr>
+    <tr>
+      <td> <img src="Screenshots/7.png"  width="300" height="667" alt="6"/> </td>
+      <td> <img src="Screenshots/8.png"  width="300" height="667" alt="7"/> </td>
+    </tr>
+</table>
