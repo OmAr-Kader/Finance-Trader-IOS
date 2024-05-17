@@ -2,12 +2,23 @@ import SwiftUI
 
 
 struct BackButtonModifier: ViewModifier {
+
+    let title: String
     let onBackPressed: () -> Unit
     
     func body(content: Content) -> some View {
         content
             .navigationBarBackButtonHidden(true)
             .toolbar {
+                if !title.isEmpty {
+                    ToolbarItem(placement: .principal) {
+                        VStack(alignment: .center) {
+                            Text(title).font(.headline).foregroundStyle(
+                                Color(red: 9 / 255, green: 131 / 255, blue: 1)
+                            )
+                        }
+                    }
+                }
                 ToolbarItem(placement: .navigationBarLeading) {
                     BackPressButton(action: onBackPressed)
                 }
@@ -17,9 +28,12 @@ struct BackButtonModifier: ViewModifier {
 
 extension View {
     func withCustomBackButton(_ onBackPressed: @escaping () -> Unit) -> some View {
-        modifier(BackButtonModifier(onBackPressed: onBackPressed))
+        modifier(BackButtonModifier(title: "", onBackPressed: onBackPressed))
     }
-
+    
+    func withCustomBackButton(title: String,_ onBackPressed: @escaping () -> Unit) -> some View {
+        modifier(BackButtonModifier(title: title, onBackPressed: onBackPressed))
+    }
 }
 
 
@@ -34,7 +48,7 @@ struct BackButton: View {
     }
     
     var body: some View {
-        ZStack {
+        HStack {
             Button(action: {
                 action()
             }) {
@@ -57,11 +71,13 @@ struct BackButton: View {
                             Color(red: 9 / 255, green: 131 / 255, blue: 1)
                         ).padding(leading: -7)
                 }.frame(width: 90, height: 45)
-            }.onStart()
+            }
             Spacer()
-            Text(title).font(.headline).foregroundStyle(Color(red: 9 / 255, green: 131 / 255, blue: 1)).onCenter()
-            Spacer()
-        }.onTop()
+            if !title.isEmpty {
+                Text(title).font(.headline).foregroundStyle(Color(red: 9 / 255, green: 131 / 255, blue: 1)).onCenter()
+                Spacer()
+            }
+        }
     }
 }
 
@@ -69,11 +85,9 @@ struct BackButton: View {
 
 struct BackPressButton: View {
 
-    let title: String
     let action: () -> Void
     
-    init(title: String = "", action: @escaping () -> Void) {
-        self.title = title
+    init(action: @escaping () -> Void) {
         self.action = action
     }
     

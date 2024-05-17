@@ -42,7 +42,7 @@ class StockCompareObserve  : ObservableObject {
                 }
                 let stockInfo =  StockInfoData(stockInfo: _stockInfo)
                 let stock = stockInfo.toHomeStockData(_stockInfo.stockSessions.toStockData(stockId: stockInfo.id)).injectStatus(mode: ChartMode.StockWave).injectColor(i: state.stocksNative.count)
-                let splitStock = stock.splitStock(timeScope: stock.timeScope)
+                let splitStock = stock.splitStock(timeScope: stock.timeScope, mode: ChartMode.StockWave)
                 let stocksNative = state.stocksNative.appendToStocks(stock)
                 let stocks = state.stocks.appendToStocks(splitStock)
                 let stockBoarderMulti = splitStock.values.minAndMaxValues(ChartMode.StockWave)
@@ -67,7 +67,7 @@ class StockCompareObserve  : ObservableObject {
         let state = self.state
         self.scope.launchRealm {
             let stocks = state.stocksNative.map { it in
-                it.splitStock(timeScope: timeScope)
+                it.splitStock(timeScope: timeScope, mode: it.mode)
             }
             self.scope.launchMain {
                 self.state = self.state.copy(stocks: stocks, timeScope: timeScope, stringData: stocks.first?.stringData ?? "", isLoading: false)

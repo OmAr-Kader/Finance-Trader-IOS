@@ -27,7 +27,7 @@ struct StockCompareScreen : View {
             LoadingScreen(isLoading: state.isLoading)
         }.toastView(toast: $toast)
             .background(theme.background)
-            .withCustomBackButton {
+            .withCustomBackButton(title: "Compare") {
                 app.backPress()
             }.toolbarRole(.navigationStack)
     }

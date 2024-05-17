@@ -27,7 +27,7 @@ class StockObserve : ObservableObject {
                             it.holderId == trader.id
                         }
                         let stock = stockInfo.toHomeStockData(_stockInfo.stockSessions.toStockData(stockId: stockInfo.id))
-                        let splitStock = stock.splitStock(timeScope: stock.timeScope).loadWave()
+                        let splitStock = stock.splitStock(timeScope: stock.timeScope, mode: ChartMode.StockWave)
                         self.scope.launchRealm {
                             self.cancelSupplysAndDemands?.cancel()
                             self.cancelSupplysAndDemands = await self.project.supplyDemand.repository.getSupplysAndDemandsLive(stockInfo: _stockInfo) { it in
@@ -200,7 +200,6 @@ class StockObserve : ObservableObject {
                 stockData: StockData(
                     _id: "",
                     stockId: stockId,
-                    symbol: symbol,
                     values: [StockPointData(time: currentTime, newPrice: newStockInfoData.stockPrice)],
                     stringData: currentTime.toStrDMY
                 ), stockInfo: StockInfo(stockInfoData: newStockInfoData)

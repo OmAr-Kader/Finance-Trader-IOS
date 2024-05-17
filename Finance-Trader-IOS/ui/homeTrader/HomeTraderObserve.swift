@@ -46,7 +46,7 @@ class HomeTraderObserve : ObservableObject {
             self.cancelAllLive = await self.project.stockInfo.getAllStockInfoLive { it in
                 it.toHomeStockData().supplyBack { nativeStocks in
                     nativeStocks.map { it in
-                        it.splitStock(timeScope: it.timeScope).loadWave()
+                        it.splitStock(timeScope: it.timeScope, mode: ChartMode.StockWave)
                     }.supplyBack { stocks in
                         self.scope.launchMain {
                             withAnimation {
@@ -67,7 +67,7 @@ class HomeTraderObserve : ObservableObject {
             self.cancelAllLive = await self.project.stockInfo.getTraderStocksInfoLive(traderId: traderId) { it in
                 it.toHomeStockData().supplyBack { nativeMyStocks in
                     nativeMyStocks.map { it in
-                        it.splitStock(timeScope: it.timeScope)
+                        it.splitStock(timeScope: it.timeScope, mode: it.mode)
                     }.supplyBack { myStocks in
                         self.scope.launchMain {
                             withAnimation {

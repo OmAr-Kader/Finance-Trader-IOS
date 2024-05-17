@@ -31,6 +31,15 @@
 		07BD64FD2BF52ABF003F8213 /* ArticleStockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD64FC2BF52ABF003F8213 /* ArticleStockData.swift */; };
 		07BD64FF2BF52AC8003F8213 /* ArticleStockRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD64FE2BF52AC8003F8213 /* ArticleStockRepo.swift */; };
 		07BD65012BF52AD6003F8213 /* ArticleStockRepoImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BD65002BF52AD6003F8213 /* ArticleStockRepoImp.swift */; };
+		07CBD47F2BF7E19F00F22E98 /* 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CBD4772BF7E19D00F22E98 /* 6.png */; };
+		07CBD4802BF7E19F00F22E98 /* 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CBD4782BF7E19D00F22E98 /* 4.png */; };
+		07CBD4812BF7E19F00F22E98 /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CBD4792BF7E19D00F22E98 /* 1.png */; };
+		07CBD4822BF7E19F00F22E98 /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CBD47A2BF7E19E00F22E98 /* 2.png */; };
+		07CBD4832BF7E19F00F22E98 /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CBD47B2BF7E19E00F22E98 /* 5.png */; };
+		07CBD4842BF7E19F00F22E98 /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CBD47C2BF7E19E00F22E98 /* 3.png */; };
+		07CBD4852BF7E19F00F22E98 /* 7.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CBD47D2BF7E19F00F22E98 /* 7.png */; };
+		07CBD4862BF7E19F00F22E98 /* 8.png in Resources */ = {isa = PBXBuildFile; fileRef = 07CBD47E2BF7E19F00F22E98 /* 8.png */; };
+		07CBD4892BF8017000F22E98 /* SwiftDate in Frameworks */ = {isa = PBXBuildFile; productRef = 07CBD4882BF8017000F22E98 /* SwiftDate */; };
 		07DD0E1F2BE3CF450006E25E /* RandomColor in Frameworks */ = {isa = PBXBuildFile; productRef = 07DD0E1E2BE3CF450006E25E /* RandomColor */; };
 		07E1ACD22BE7DDF300D2CD67 /* ListingStockScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E1ACD12BE7DDF300D2CD67 /* ListingStockScreen.swift */; };
 		07E1ACD42BE7DE0900D2CD67 /* ListingStockObserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E1ACD32BE7DE0900D2CD67 /* ListingStockObserve.swift */; };
@@ -116,6 +125,14 @@
 		07BD64FC2BF52ABF003F8213 /* ArticleStockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleStockData.swift; sourceTree = "<group>"; };
 		07BD64FE2BF52AC8003F8213 /* ArticleStockRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleStockRepo.swift; sourceTree = "<group>"; };
 		07BD65002BF52AD6003F8213 /* ArticleStockRepoImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleStockRepoImp.swift; sourceTree = "<group>"; };
+		07CBD4772BF7E19D00F22E98 /* 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 6.png; sourceTree = "<group>"; };
+		07CBD4782BF7E19D00F22E98 /* 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4.png; sourceTree = "<group>"; };
+		07CBD4792BF7E19D00F22E98 /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
+		07CBD47A2BF7E19E00F22E98 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
+		07CBD47B2BF7E19E00F22E98 /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5.png; sourceTree = "<group>"; };
+		07CBD47C2BF7E19E00F22E98 /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
+		07CBD47D2BF7E19F00F22E98 /* 7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 7.png; sourceTree = "<group>"; };
+		07CBD47E2BF7E19F00F22E98 /* 8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 8.png; sourceTree = "<group>"; };
 		07E1ACD12BE7DDF300D2CD67 /* ListingStockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingStockScreen.swift; sourceTree = "<group>"; };
 		07E1ACD32BE7DE0900D2CD67 /* ListingStockObserve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingStockObserve.swift; sourceTree = "<group>"; };
 		07E9E5E22BE38EB7009EACAA /* StockScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockScreen.swift; sourceTree = "<group>"; };
@@ -179,6 +196,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07CBD4892BF8017000F22E98 /* SwiftDate in Frameworks */,
 				07EC2A972BD8711E002375F2 /* RealmSwift in Frameworks */,
 				07DD0E1F2BE3CF450006E25E /* RandomColor in Frameworks */,
 				07EC2A902BD870F9002375F2 /* Swinject in Frameworks */,
@@ -229,6 +247,21 @@
 			path = article;
 			sourceTree = "<group>";
 		};
+		07CBD46A2BF7DAEE00F22E98 /* Screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				07CBD4792BF7E19D00F22E98 /* 1.png */,
+				07CBD47A2BF7E19E00F22E98 /* 2.png */,
+				07CBD47C2BF7E19E00F22E98 /* 3.png */,
+				07CBD4782BF7E19D00F22E98 /* 4.png */,
+				07CBD47B2BF7E19E00F22E98 /* 5.png */,
+				07CBD4772BF7E19D00F22E98 /* 6.png */,
+				07CBD47D2BF7E19F00F22E98 /* 7.png */,
+				07CBD47E2BF7E19F00F22E98 /* 8.png */,
+			);
+			path = Screenshots;
+			sourceTree = "<group>";
+		};
 		07E9E5E12BE38E64009EACAA /* stock */ = {
 			isa = PBXGroup;
 			children = (
@@ -247,6 +280,7 @@
 				07EC2A2C2BD87054002375F2 /* LICENSE */,
 				07EC2A2B2BD87054002375F2 /* README.md */,
 				07EC2A1C2BD87030002375F2 /* Finance-Trader-IOS */,
+				07CBD46A2BF7DAEE00F22E98 /* Screenshots */,
 				07EC2A1B2BD87030002375F2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -510,6 +544,7 @@
 				07EC2A8F2BD870F9002375F2 /* Swinject */,
 				07EC2A962BD8711E002375F2 /* RealmSwift */,
 				07DD0E1E2BE3CF450006E25E /* RandomColor */,
+				07CBD4882BF8017000F22E98 /* SwiftDate */,
 			);
 			productName = "Finance-Trader-IOS";
 			productReference = 07EC2A1A2BD87030002375F2 /* Finance-Trader-IOS.app */;
@@ -543,6 +578,7 @@
 				07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */,
 				07EC2A932BD8711E002375F2 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				07DD0E1D2BE3CF450006E25E /* XCRemoteSwiftPackageReference "RandomColorSwift" */,
+				07CBD4872BF8017000F22E98 /* XCRemoteSwiftPackageReference "SwiftDate" */,
 			);
 			productRefGroup = 07EC2A1B2BD87030002375F2 /* Products */;
 			projectDirPath = "";
@@ -558,9 +594,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07CBD4842BF7E19F00F22E98 /* 3.png in Resources */,
+				07CBD47F2BF7E19F00F22E98 /* 6.png in Resources */,
+				07CBD4832BF7E19F00F22E98 /* 5.png in Resources */,
+				07CBD4852BF7E19F00F22E98 /* 7.png in Resources */,
+				07CBD4812BF7E19F00F22E98 /* 1.png in Resources */,
+				07CBD4802BF7E19F00F22E98 /* 4.png in Resources */,
 				07EC2A302BD87073002375F2 /* .gitignore in Resources */,
 				07EC2A2D2BD87054002375F2 /* README.md in Resources */,
 				07EC2A252BD87033002375F2 /* Preview Assets.xcassets in Resources */,
+				07CBD4862BF7E19F00F22E98 /* 8.png in Resources */,
+				07CBD4822BF7E19F00F22E98 /* 2.png in Resources */,
 				07EC2A2E2BD87054002375F2 /* LICENSE in Resources */,
 				07EC2A222BD87033002375F2 /* Assets.xcassets in Resources */,
 			);
@@ -854,6 +898,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		07CBD4872BF8017000F22E98 /* XCRemoteSwiftPackageReference "SwiftDate" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/malcommac/SwiftDate.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		07DD0E1D2BE3CF450006E25E /* XCRemoteSwiftPackageReference "RandomColorSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/RandomColorSwift.git";
@@ -881,6 +933,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		07CBD4882BF8017000F22E98 /* SwiftDate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07CBD4872BF8017000F22E98 /* XCRemoteSwiftPackageReference "SwiftDate" */;
+			productName = SwiftDate;
+		};
 		07DD0E1E2BE3CF450006E25E /* RandomColor */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 07DD0E1D2BE3CF450006E25E /* XCRemoteSwiftPackageReference "RandomColorSwift" */;

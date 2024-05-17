@@ -1,11 +1,13 @@
 import Foundation
+//import SwiftDate
 
 typealias Unit = Void
 
 
 var currentTime: Int64 {
-    return Int64(NSDate.now.timeIntervalSince1970 * 1000.0)
+    return Int64(Date.now.timeIntervalSince1970 * 1000.0)
 }
+
 
 @inlinable func catchy(completion: () throws -> ()) {
     do {
@@ -46,6 +48,7 @@ extension Array {
 }
 
 extension String {
+
     var firstCapital: String {
         // 1
         let firstLetter = self.prefix(1).capitalized
@@ -82,29 +85,24 @@ extension String {
         }
     }
     
-    //isoDate: String
     func toTime() -> Int64 {
         let dateFormatter = DateFormatter()
         //dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+        dateFormatter.timeZone = .current
         dateFormatter.dateFormat = "dd MMM yy"
-        let date = dateFormatter.date(from: self)!
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month, .day], from: date)
-        let time = calendar.date(from: components)!.timeIntervalSince1970 * 1000
-        return Int64(time)
+        return dateFormatter.date(from: self)!.toTimeInmillis
     }
 
     func toTimeDate() -> Date {
         let dateFormatter = DateFormatter()
         //dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+        dateFormatter.timeZone = .gmt
         dateFormatter.dateFormat = "dd MMM yy"
-        let date = dateFormatter.date(from: self)!
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month, .day], from: date)
-        return calendar.date(from: components)!
+        return dateFormatter.date(from: self)!
     }
 
 }
+
 
 extension Int {
 
@@ -118,6 +116,11 @@ extension Date {
     
     var toTimeInmillis: Int64 {
         return Int64(timeIntervalSince1970 * 1000.0)
+    }
+    
+    func convertToTimeZone(_ initTimeZone: TimeZone,_ timeZone: TimeZone) -> Date {
+         let delta = TimeInterval(timeZone.secondsFromGMT(for: self) - initTimeZone.secondsFromGMT(for: self))
+         return addingTimeInterval(delta)
     }
 }
 
@@ -136,7 +139,11 @@ extension Int64 {
     }
     
     var toDate: Date {
-        return Date(timeIntervalSince1970: Double(self) / 1000)
+        return Date(timeIntervalSince1970: TimeInterval(self) / 1000)
+    }
+    
+    var toDateConverted: Date {
+        return Date(timeIntervalSince1970: TimeInterval(self) / 1000).convertToTimeZone(.gmt, .current)
     }
     
     func fetchTimeFromCalender(hour: Int, minute: Int) -> Int64 {
@@ -222,3 +229,4 @@ extension Float64 {
     }
 
 }
+
