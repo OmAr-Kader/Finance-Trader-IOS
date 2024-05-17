@@ -1,7 +1,7 @@
 import Foundation
 import RealmSwift
 
-class RealmApi {
+class RealmApi : ScopeFunc {
     
     let realmApp: App
     private var realmLocal: Realm? = nil

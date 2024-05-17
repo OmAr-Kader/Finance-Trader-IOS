@@ -107,9 +107,9 @@ struct StockCompareSearch : View {
                 ForEach(Array(stocksSearch.enumerated()), id: \.element.id) { index, date in
                     let stockInfo = date as StockInfoData
                     HStack(alignment: .center) {
-                        Text(stockInfo.name).foregroundStyle(theme.textColor).frame(minWidth: 80)
+                        Text(stockInfo.name).foregroundStyle(theme.textColor)
                         Spacer()
-                    }.padding(all: 3).onTapGesture {
+                    }.padding(top: 2, leading: 5, bottom: 2, trailing: 2).onTapGesture {
                         addStock(stockInfo)
                     }
                 }

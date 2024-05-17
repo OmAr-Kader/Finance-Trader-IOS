@@ -1,7 +1,7 @@
 import Foundation
 import RealmSwift
 
-struct Project {
+struct Project : ScopeFunc {
     let realmApi: RealmApi    
     let preference: PreferenceData
     let trader: TraderUserData

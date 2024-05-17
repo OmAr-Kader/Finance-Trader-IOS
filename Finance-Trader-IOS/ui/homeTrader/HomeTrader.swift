@@ -138,22 +138,22 @@ struct HomeTraderSearch : View {
                         ForEach(Array(state.stocksSearch.enumerated()), id: \.element.id) { index, date in
                             let stockInfo = date as StockInfoData
                             HStack(alignment: .center) {
-                                Text(stockInfo.name).foregroundStyle(theme.textColor).frame(minWidth: 80)
+                                Text(stockInfo.name).foregroundStyle(theme.textColor)
                                 Spacer()
                                 HStack {
-                                    Text("Prce:").foregroundStyle(theme.textColor).font(.subheadline)
+                                    Text("Price:").foregroundStyle(theme.textColor).font(.subheadline)
                                     ImageAsset(icon: stockInfo.isGain ? "up" : "down", tint: stockInfo.isGain ? .green : .red).frame(width: 10, height: 10)
                                     Text(stockInfo.stockPrice.toStr() + " $").foregroundStyle(stockInfo.isGain ? .green : .red).font(.subheadline)
-                                }.padding().frame(height: 20)
-                                Spacer()
-                            }.padding(all: 5).onTapGesture {
+                                    Spacer()
+                                }.padding().frame(width: 200, height: 20)
+                            }.padding(top: 2, leading: 5, bottom: 2, trailing: 2).onTapGesture {
                                 onNavigate(Screen.STOCK_SCREEN_ROUTE(traderData: traderData, stockId: stockInfo.id))
                             }
                         }
                     }
                 }
             }
-            Spacer()
+            Spacer(minLength: 0)
         }.onChange(state.isSearch) { it in
             if it {
                 withAnimation(.bouncy(duration: 0.35)) {
@@ -202,7 +202,7 @@ struct HomeTraderOpportunity : View {
                     }
                 }
             }
-            Spacer()
+            Spacer(minLength: 0)
         }
     }
 }
@@ -246,7 +246,7 @@ struct HomeTraderPortfolio : View {
                     }
                 }
             }
-            Spacer()
+            Spacer(minLength: 0)
         }.bottomSheet(
             theme.backDarkSec,
             Binding(get: {
@@ -308,7 +308,7 @@ struct HomeTraderArticle : View {
                     }
                 }
             }
-            Spacer()
+            Spacer(minLength: 0)
         }
     }
 }

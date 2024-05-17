@@ -25,7 +25,7 @@ struct StockScreen : View {
                 ScrollView {
                     LazyVStack {
                         ChartMainView(
-                            stock: state.stock, traderData: trader, onModeChange: obs.loadStocks, onTimeScope: obs.loadTimeScope, onNavigate: {_ in }
+                            stock: state.stock, traderData: trader, onModeChange: obs.loadStockMode, onTimeScope: obs.loadTimeScope, onNavigate: {_ in }
                         ) {
                             Spacer(minLength: 0)
                         }
@@ -36,7 +36,7 @@ struct StockScreen : View {
                         ForEach(state.supplyDemands, id: \.id) { supplyDemand in
                             SupplyDemandItemView(supplyDemand: supplyDemand) { it in
                                 switch it {
-                                case .IsAcceptSell: obs.sellShare(demmandData: supplyDemand, fromTrader: trader.id, stockId: state.stockInfo.id
+                                case .IsAcceptSell: obs.sellShare(demmandData: supplyDemand, fromTrader: trader.id, stockInfo: state.stockInfo
                                 ) {} failed: {
                                     toast = Toast(style: .error, message: "Failed")
                                 }
@@ -47,7 +47,7 @@ struct StockScreen : View {
                                     toast = Toast(style: .error, message: "Failed")
                                 }
 
-                                case .IsBuy: obs.buyShare(supplyData: supplyDemand, toTrader: trader.id, stockId: state.stockInfo.id
+                                case .IsBuy: obs.buyShare(supplyData: supplyDemand, toTrader: trader.id, stockInfo: state.stockInfo
                                 ) {} failed: {
                                     toast = Toast(style: .error, message: "Failed")
                                 }
@@ -116,17 +116,23 @@ struct StockDetailView : View {
             VStack {
                 HStack {
                     ImageCacheView(stockInfo.logoUrl, contentMode: .fill)
-                        .frame(height: 40).padding()
-                    Text(stockInfo.name).foregroundStyle(theme.textColor).font(.headline.bold()).padding()
-                }.padding(all: 2)
+                        .frame(width: 60, height: 20)
+                    Spacer().frame(width: 5)
+                    Text(stockInfo.name).foregroundStyle(theme.textColor).font(.headline.bold())
+                    Spacer()
+                    ButtonCurvedGradient(text: "Subscribe", cornerRadius: 35, textColor: theme.primary, color: theme.backDark.gradient) {
+                        
+                    }
+                    Spacer().frame(width: 20)
+                }
                 HStack {
                     Text("Shares:").foregroundStyle(theme.textColor).font(.subheadline)
-                    Text(String(stockInfo.numberOfShares)).foregroundStyle(theme.textHintColor).font(.subheadline)
-                }.padding().onStart()
-                Spacer()
-            }
-            Spacer()
-            StockHolderChartView(holders: stockInfo.stockholders).padding()
+                    Text(stockInfo.numberOfShares.toMillionOrBillon).foregroundStyle(theme.textHintColor).font(.subheadline)
+                    Spacer()
+                    StockHolderChartView(holders: stockInfo.stockholders)
+                    Spacer().frame(width: 20)
+                }
+            }.padding()
             Spacer()
         }
         HStack {

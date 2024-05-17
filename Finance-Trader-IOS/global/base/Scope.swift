@@ -58,43 +58,68 @@ struct Scope {
     }
 }
 
+
 protocol ScopeFunc {}
 extension NSObject: ScopeFunc {}
+extension Array : ScopeFunc {}
+extension Int : ScopeFunc {}
+extension Float : ScopeFunc {}
+
 
 extension Optional where Wrapped: ScopeFunc {
 
-    @inline(__always) func letSus<R>(block: (Wrapped) -> R) -> R? {
+    @inline(__always) func `let`<R>(_ block: (Wrapped) -> R) -> R? {
         guard let self = self else { return nil }
         return block(self)
     }
     
-    @inline(__always) func letBack<R>(block: (Wrapped) async -> R) async -> R? {
+    @BackgroundActor
+    @inline(__always) func letBack<R>(_ block: @BackgroundActor (Wrapped) -> R) -> R? {
+        guard let self = self else { return nil }
+        return block(self)
+    }
+    
+    
+    @BackgroundActor
+    @inline(__always) func letBackN<R>(_ block: @BackgroundActor (Wrapped?) -> R?) -> R? {
+        guard let self = self else { return nil }
+        return block(self)
+    }
+
+    @inline(__always) func letSusBack<R>(_ block: @BackgroundActor (Wrapped) async -> R) async -> R? {
         guard let self = self else { return nil }
         return await block(self)
     }
     
-    @inline(__always) func letBackN<R>(block: (Wrapped?) async -> R?) async -> R? {
-        guard let self = self else { return nil }
-        return await block(self)
-    }
-    
-    @inline(__always) func apply(_ block: (Self) -> ()) -> Self {
+    @inline(__always) func apply(_ block: (Self) -> ()) -> Self? {
         guard let self = self else { return nil }
         block(self)
         return self
     }
+    
 }
 
 
 extension Optional where Wrapped == ScopeFunc? {
 
-    @inline(__always) func letSus<R>(block: (Wrapped?) -> R) -> R? {
+    @inline(__always) func `let`<R>(_ block: (Wrapped) -> R) -> R? {
         guard let self = self else { return nil }
         return block(self)
     }
     
+    @BackgroundActor
+    @inline(__always) func letBack<R>(_ block: @BackgroundActor (Wrapped) -> R) -> R? {
+        guard let self = self else { return nil }
+        return block(self)
+    }
     
-    @inline(__always) func letBack<R>(block: (Wrapped?) async -> R) async -> R? {
+    @BackgroundActor
+    @inline(__always) func letBackN<R>(_ block: @BackgroundActor (Wrapped?) -> R?) -> R? {
+        guard let self = self else { return nil }
+        return block(self)
+    }
+
+    @inline(__always) func letSusBack<R>(_ block: @BackgroundActor (Wrapped) async -> R) async -> R? {
         guard let self = self else { return nil }
         return await block(self)
     }
@@ -106,3 +131,39 @@ extension Optional where Wrapped == ScopeFunc? {
     }
 }
 
+
+
+extension Optional {
+    func `let`(do: (Wrapped)->()) {
+        guard let v = self else { return }
+        `do`(v)
+    }
+}
+
+extension ScopeFunc {
+    
+    @inline(__always) func apply(_ block: (Self) -> ()) -> Self {
+        block(self)
+        return self
+    }
+    
+    @inline(__always) func supply(_ block: (Self) -> ()) {
+        block(self)
+    }
+    
+    @BackgroundActor
+    @inline(__always) func applyBack(_ block: @BackgroundActor (Self) -> ()) -> Self {
+        block(self)
+        return self
+    }
+    
+    @BackgroundActor
+    @inline(__always) func supplyBack(_ block: @BackgroundActor (Self) -> ()) {
+        block(self)
+    }
+    
+    @inline(__always) func `let`<R>(_ block: (Self) -> R) -> R {
+        return block(self)
+    }
+    
+}

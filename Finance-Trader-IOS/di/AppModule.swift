@@ -2,6 +2,7 @@ import Foundation
 import RealmSwift
 import SwiftUI
 import Swinject
+
 //https://github.com/realm/realm-swift
 //https://github.com/firebase/firebase-ios-sdk
 //https://github.com/Swinject/Swinject
@@ -9,6 +10,7 @@ import Swinject
 
 func buildContainer() -> Container {
     let container = Container()
+    
     let realmApi = RealmApi(realmApp: App(id: REALM_APP_ID))
     let pro = Project(
         realmApi: realmApi,

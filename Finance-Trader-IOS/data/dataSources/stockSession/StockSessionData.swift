@@ -24,55 +24,55 @@ class StockSessionData {
     
     
     @BackgroundActor
-    func getSessionLive(stockId: String, invoke: @escaping (StockSession?) -> Unit) async -> AnyCancellable? {
-        return await repository.getSessionLive(stockId: stockId, invoke: invoke)
+    func getSessionLive(stockInfo: StockInfo, invoke: @escaping (StockSession?) -> Unit) async -> AnyCancellable? {
+        return await repository.getSessionLive(stockInfo: stockInfo, invoke: invoke)
     }
     
     @BackgroundActor
     func getAStockSession(
-        stockId: String,
+        stockInfo: StockInfo,
         stringData: String,
         invoke: (ResultRealm<StockSession?>) -> Unit
     ) async {
-        await repository.getAStockSession(stockId: stockId, stringData: stringData, invoke: invoke)
+        await repository.getAStockSession(stockInfo: stockInfo, stringData: stringData, invoke: invoke)
     }
     
     @BackgroundActor
     func getStockSessions(
-        stockId: String,
+        stockInfo: StockInfo,
         stringData: [String],
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async {
-        await repository.getStockSessions(stockId: stockId, stringData: stringData, stockSessions: stockSessions)
+        await repository.getStockSessions(stockInfo: stockInfo, stringData: stringData, stockSessions: stockSessions)
     }
     
     @BackgroundActor
-    func getStockSessions(stockId: String, dateScope: Date, invoke: @escaping (ResultRealm<StockSession?>) -> Unit) async {
-        await repository.getStockSessions(stockId: stockId, dateScope: dateScope, invoke: invoke)
+    func getStockSessions(stockInfo: StockInfo, dateScope: Date, invoke: @escaping (ResultRealm<StockSession?>) -> Unit) async {
+        await repository.getStockSessions(stockInfo: stockInfo, dateScope: dateScope, invoke: invoke)
     }
     
     @BackgroundActor
     func getAllStockSessions(
-        stockId: String,
+        stockInfo: StockInfo,
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async {
-        await repository.getAllStockSessions(stockId: stockId, stockSessions: stockSessions)
+        await repository.getAllStockSessions(stockInfo: stockInfo, stockSessions: stockSessions)
     }
     
     @BackgroundActor
     func getStocksSessions(
-        stockId: [String],
+        stockInfo: [StockInfo],
         stringData: [String],
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async {
-        await repository.getStocksSessions(stockId: stockId, stringData: stringData, stockSessions: stockSessions)
+        await repository.getStocksSessions(stockInfo: stockInfo, stringData: stringData, stockSessions: stockSessions)
     }
     
     @BackgroundActor
     func getAllStocksSessions(
-        stockId: [String],
+        stockInfo: [StockInfo],
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async {
-        await repository.getAllStocksSessions(stockId: stockId, stockSessions: stockSessions)
+        await repository.getAllStocksSessions(stockInfo: stockInfo, stockSessions: stockSessions)
     }
 }

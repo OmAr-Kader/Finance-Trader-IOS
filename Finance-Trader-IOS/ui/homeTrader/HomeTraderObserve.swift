@@ -22,15 +22,15 @@ class HomeTraderObserve : ObservableObject {
     @MainActor
     func loadData(_ it: Int, traderId: String) {
         if it == 0 {
-            if state.stocksInfo.isEmpty {
+            state.stocksInfo.ifEmpty {
                 loadStocksInfoSearch()
             }
         } else if it == 1 {
-            if state.stocks.isEmpty {
+            state.stocks.ifEmpty {
                 loadStocks()
             }
         } else if it == 2 {
-            if state.myStocks.isEmpty {
+            state.myStocks.ifEmpty {
                 loadMyStocks(traderId: traderId)
             }
         } else if it == 3 {
@@ -40,17 +40,19 @@ class HomeTraderObserve : ObservableObject {
     
     @MainActor
     func loadStocks() {
-        self.state = self.state.copy(isLoading: true)
+        loadingStatus(true)
         self.scope.launchRealm {
             self.cancelAllLive?.cancel()
             self.cancelAllLive = await self.project.stockInfo.getAllStockInfoLive { it in
-                let nativeStocks: [StockData] = it.toHomeStockData()
-                let stocks = nativeStocks.map { it in
-                    it.splitStock(timeScope: it.timeScope)
-                }
-                self.scope.launchMain {
-                    withAnimation {
-                        self.state = self.state.copy(stocks: stocks, nativeStocks: nativeStocks, isLoading: false, dummy: self.state.dummy + 1)
+                it.toHomeStockData().supplyBack { nativeStocks in
+                    nativeStocks.map { it in
+                        it.splitStock(timeScope: it.timeScope).loadWave()
+                    }.supplyBack { stocks in
+                        self.scope.launchMain {
+                            withAnimation {
+                                self.state = self.state.copy(stocks: stocks, nativeStocks: nativeStocks, isLoading: false, dummy: self.state.dummy + 1)
+                            }
+                        }
                     }
                 }
             }
@@ -59,17 +61,19 @@ class HomeTraderObserve : ObservableObject {
     
     @MainActor
     func loadMyStocks(traderId: String) {
-        self.state = self.state.copy(isLoading: true)
+        loadingStatus(true)
         self.scope.launchRealm {
             self.cancelAllLive?.cancel()
             self.cancelAllLive = await self.project.stockInfo.getTraderStocksInfoLive(traderId: traderId) { it in
-                let nativeMyStocks: [StockData] = it.toHomeStockData()
-                let myStocks = nativeMyStocks.map { it in
-                    it.splitStock(timeScope: it.timeScope)
-                }
-                self.scope.launchMain {
-                    withAnimation {
-                        self.state = self.state.copy(myStocks: myStocks, nativeMyStocks: nativeMyStocks, isLoading: false, dummy: self.state.dummy + 1)
+                it.toHomeStockData().supplyBack { nativeMyStocks in
+                    nativeMyStocks.map { it in
+                        it.splitStock(timeScope: it.timeScope)
+                    }.supplyBack { myStocks in
+                        self.scope.launchMain {
+                            withAnimation {
+                                self.state = self.state.copy(myStocks: myStocks, nativeMyStocks: nativeMyStocks, isLoading: false, dummy: self.state.dummy + 1)
+                            }
+                        }
                     }
                 }
             }
@@ -83,10 +87,11 @@ class HomeTraderObserve : ObservableObject {
         self.scope.launchRealm {
             self.cancelAllLive?.cancel()
             self.cancelAllLive = await self.project.stockInfo.getAllStockInfoLive { it in
-                let stockInfos = it.toStockInfoData()
-                self.scope.launchMain {
-                    withAnimation {
-                        self.state = self.state.copy(stocksInfo: stockInfos, stocksSearch: stockInfos, isLoading: false)
+                it.toStockInfoData().supplyBack { stockInfos in
+                    self.scope.launchMain {
+                        withAnimation {
+                            self.state = self.state.copy(stocksInfo: stockInfos, stocksSearch: stockInfos, isLoading: false)
+                        }
                     }
                 }
             }
@@ -95,15 +100,15 @@ class HomeTraderObserve : ObservableObject {
   
     @MainActor
     func loadStockMode(index: Int, mode: ChartMode) {
-        let state = state
-        guard let stock: StockData = state.stocks[safe: index] else {
-            return
-        }
-        self.state = self.state.copy(stocks: state.stocks.updateStocks(index, stock.copy(isLoading: true)), dummy: self.state.dummy + 1)
-        self.scope.launchRealm {
-            let new = state.stocks.changeStockMode(nativeStocks: state.nativeStocks, index: index, mode: mode)
-            self.scope.launchMain {
-                self.state = self.state.copy(stocks: new.newStocks, nativeStocks: new.newNativeStocks, dummy: self.state.dummy + 1)
+        state.supply { state in
+            state.stocks[safe: index]?.supply { stock in
+                self.state = self.state.copy(stocks: state.stocks.updateStocks(index, stock.copy(isLoading: true)), dummy: self.state.dummy + 1)
+                self.scope.launchRealm {
+                    let newStocks = state.stocks.changeStockMode(index: index, mode: mode)
+                    self.scope.launchMain {
+                        self.state = self.state.copy(stocks: newStocks, dummy: self.state.dummy + 1)
+                    }
+                }
             }
         }
     }
@@ -111,40 +116,44 @@ class HomeTraderObserve : ObservableObject {
     
     @MainActor
     func loadTimeScope(index: Int, timeScope: Int64) {
-        let state = state
-        self.scope.launchRealm {
-            let newStocks = state.stocks.changeTimeScope(nativeStocks: state.nativeStocks, index: index, timeScope: timeScope)
-            self.scope.launchMain {
-                self.state = self.state.copy(stocks: newStocks, dummy: self.state.dummy + 1)
+        state.supply { state in
+            self.scope.launchRealm {
+                state.stocks.changeTimeScope(nativeStocks: state.nativeStocks, index: index, timeScope: timeScope).supplyBack { newStocks in
+                    self.scope.launchMain {
+                        self.state = self.state.copy(stocks: newStocks, dummy: self.state.dummy + 1)
+                    }
+                }
             }
         }
     }
     
     @MainActor
     func loadMyStockMode(index: Int, mode: ChartMode) {
-        let state = state
-        guard let myStock: StockData = state.myStocks[safe: index] else {
-            return
-        }
-        self.state = self.state.copy(myStocks: state.myStocks.updateStocks(index, myStock.copy(isLoading: true)), dummy: self.state.dummy + 1)
-        
-        self.scope.launchRealm {
-            let new = state.myStocks.changeStockMode(nativeStocks: state.nativeMyStocks, index: index, mode: mode)
-            self.scope.launchMain {
-                self.state = self.state.copy(myStocks: new.newStocks, nativeMyStocks: new.newNativeStocks, dummy: self.state.dummy + 1)
+        state.supply { state in
+            state.myStocks[safe: index]?.supply { myStock in
+                self.state = self.state.copy(myStocks: state.myStocks.updateStocks(index, myStock.copy(isLoading: true)), dummy: self.state.dummy + 1)
+                self.scope.launchRealm {
+                    let newMyStocks = state.myStocks.changeStockMode(index: index, mode: mode)
+                    self.scope.launchMain {
+                        self.state = self.state.copy(myStocks: newMyStocks, dummy: self.state.dummy + 1)
+                    }
+                }
             }
         }
     }
     
     @MainActor
     func loadMyTimeScope(index: Int, timeScope: Int64) {
-        let state = state
-        self.scope.launchRealm {
-            let newMyStocks = state.myStocks.changeTimeScope(nativeStocks: state.nativeMyStocks, index: index, timeScope: timeScope)
-            self.scope.launchMain {
-                self.state = self.state.copy(stocks: newMyStocks, dummy: self.state.dummy + 1)
+        state.supply { state in
+            self.scope.launchRealm {
+                state.myStocks.changeTimeScope(nativeStocks: state.nativeMyStocks, index: index, timeScope: timeScope).supply { newMyStocks in
+                    self.scope.launchMain {
+                        self.state = self.state.copy(myStocks: newMyStocks, dummy: self.state.dummy + 1)
+                    }
+                }
             }
         }
+        
     }
     
     @MainActor
@@ -152,25 +161,27 @@ class HomeTraderObserve : ObservableObject {
         loadingStatus(true)
         self.scope.launchRealm {
             await self.project.stockInfo.getStockInfo(id: stockId) { it in
-                guard let stockInfo = it.value else {
-                    self.loadingStatus(false)
-                    return
-                }
-                self.scope.launchRealm {
-                    await self.project.supplyDemand.insertSupplyDemand(
-                        SupplyDemand(supplyDemandData: SupplyDemandData(id: "", isSupply: isSupply, traderId: traderId, stockId: stockId, shares: shares, price: price), stockInfo: stockInfo)
-                    ) { it in
-                        self.scope.launchMain {
-                            guard it != nil else {
-                                self.loadingStatus(false)
-                                failed()
-                                return
-                            }
-                            self.loadingStatus(false)
-                            invoke()
+                it.value.letBack { stockInfo in
+                    self.scope.launchRealm {
+                        await self.project.supplyDemand.insertSupplyDemand(
+                            SupplyDemand(
+                                supplyDemandData: SupplyDemandData(id: "", isSupply: isSupply, traderId: traderId, stockId: stockId, shares: shares, price: price), stockInfo: stockInfo
+                            )
+                        ) { it in
+                            it?.supplyBack { _ in
+                                self.scope.launchMain {
+                                    self.loadingStatus(false)
+                                    invoke()
+                                }
+                            } ?? {
+                                self.scope.launchMain {
+                                    self.loadingStatus(false)
+                                    failed()
+                                }
+                            }()
                         }
                     }
-                }
+                } ?? self.loadingStatus(false)
             }
         }
     }
@@ -179,13 +190,15 @@ class HomeTraderObserve : ObservableObject {
     func loadAllArticles() {
         loadingStatus(true)
         self.scope.launchRealm {
-            await self.project.article.getAllArticles { it in
-                let articles = it.value.toArticleData().sorted { it, it1 in
+            self.cancelAllLive?.cancel()
+            self.cancelAllLive = await self.project.article.getAllArticlesLive { it in
+                it?.toArticleData().sorted { it, it1 in
                     it.releasedDate < it1.releasedDate
-                }
-                self.scope.launchMain {
-                    self.state = self.state.copy(articles: articles, isLoading: false)
-                }
+                }.supply { articles in
+                    self.scope.launchMain {
+                        self.state = self.state.copy(articles: articles, isLoading: false)
+                    }
+                } ?? self.loadingStatus(false)
             }
         }
     }
@@ -202,17 +215,18 @@ class HomeTraderObserve : ObservableObject {
     
     @MainActor
     func onSearch(str: String) {
-        let state = self.state
-        self.scope.launchMed {
-            let stocksSearch = if str.isEmpty {
-                state.stocksInfo
-            } else {
-                state.stocksInfo.filter { it in
-                    it.name.range(of: str, options: .caseInsensitive) != nil || it.symbol.range(of: str, options: .caseInsensitive) != nil
+        self.state.supply { state in
+            self.scope.launchMed {
+                let stocksSearch = if str.isEmpty {
+                    state.stocksInfo
+                } else {
+                    state.stocksInfo.filter { it in
+                        it.name.range(of: str, options: .caseInsensitive) != nil || it.symbol.range(of: str, options: .caseInsensitive) != nil
+                    }
                 }
-            }
-            self.scope.launchMain {
-                self.state = self.state.copy(stocksSearch: stocksSearch)
+                self.scope.launchMain {
+                    self.state = self.state.copy(stocksSearch: stocksSearch)
+                }
             }
         }
     }
@@ -231,7 +245,7 @@ class HomeTraderObserve : ObservableObject {
         }
     }
     
-    struct State {
+    struct State : ScopeFunc {
         var stocks: [StockData] = []
         var nativeStocks: [StockData] = []
         var myStocks: [StockData] = []
@@ -243,7 +257,7 @@ class HomeTraderObserve : ObservableObject {
 
         var isSearch: Bool = false
         var isLoading: Bool = false
-        var selectedIndex: Int = 3
+        var selectedIndex: Int = 1
 
         var supplyStockId: String = ""
         var isAddSheet: Bool = false

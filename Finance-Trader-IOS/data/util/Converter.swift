@@ -149,7 +149,7 @@ extension [StockSession] {
     @BackgroundActor
     func toStockData() -> [StockData] {
         return self.map { it in
-            StockData(it, stockId: it.stockInfo?._id.stringValue)
+            StockData(it, stockId: it.stockInfo!._id.stringValue)
         }
     }
 }

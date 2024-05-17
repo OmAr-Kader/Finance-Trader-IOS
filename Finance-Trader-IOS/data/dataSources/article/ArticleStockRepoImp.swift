@@ -47,4 +47,10 @@ class ArticleStockRepoImp : BaseRepoImp, ArticleStockRepo {
     ) async {
         await queryAll(invoke)
     }
+    
+    @BackgroundActor
+    func getAllArticlesLive(invoke: @escaping @BackgroundActor ([Article]?) -> Unit) async -> AnyCancellable?  {
+        return await queryAllFlow(invoke, "getAllArticlesLive")
+    }
+    
 }

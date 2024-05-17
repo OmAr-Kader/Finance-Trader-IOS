@@ -40,4 +40,9 @@ class ArticleStockData {
     ) async {
         await repository.getAllArticles(invoke: invoke)
     }
+    
+    @BackgroundActor
+    func getAllArticlesLive(invoke: @escaping @BackgroundActor ([Article]?) -> Unit) async -> AnyCancellable? {
+        return await repository.getAllArticlesLive(invoke: invoke)
+    }
 }

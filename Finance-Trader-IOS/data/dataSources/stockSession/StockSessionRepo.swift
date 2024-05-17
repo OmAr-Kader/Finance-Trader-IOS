@@ -14,41 +14,41 @@ protocol StockSessionRepo {
     
     
     @BackgroundActor
-    func getSessionLive(stockId: String, invoke: @escaping (StockSession?) -> Unit) async -> AnyCancellable?
+    func getSessionLive(stockInfo: StockInfo, invoke: @escaping (StockSession?) -> Unit) async -> AnyCancellable?
     
     @BackgroundActor
     func getAStockSession(
-        stockId: String,
+        stockInfo: StockInfo,
         stringData: String,
         invoke: (ResultRealm<StockSession?>) -> Unit
     ) async
     
     @BackgroundActor
     func getStockSessions(
-        stockId: String,
+        stockInfo: StockInfo,
         stringData: [String],
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async
     
     @BackgroundActor
-    func getStockSessions(stockId: String, dateScope: Date, invoke: @escaping (ResultRealm<StockSession?>) -> Unit) async
+    func getStockSessions(stockInfo: StockInfo, dateScope: Date, invoke: @escaping (ResultRealm<StockSession?>) -> Unit) async
     
     @BackgroundActor
     func getAllStockSessions(
-        stockId: String,
+        stockInfo: StockInfo,
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async
     
     @BackgroundActor
     func getStocksSessions(
-        stockId: [String],
+        stockInfo:[ StockInfo],
         stringData: [String],
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async
     
     @BackgroundActor
     func getAllStocksSessions(
-        stockId: [String],
+        stockInfo: [StockInfo],
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async
     

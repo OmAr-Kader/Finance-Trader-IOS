@@ -1,6 +1,7 @@
 import Foundation
 
-typealias Unit = ()
+typealias Unit = Void
+
 
 var currentTime: Int64 {
     return Int64(NSDate.now.timeIntervalSince1970 * 1000.0)
@@ -24,8 +25,14 @@ var currentTime: Int64 {
 }
 
 extension Array {
-        
-    @inlinable func ifNotEmpty<R>(defaultValue: ([Element]) -> R) -> R? {
+    
+    @inlinable func ifEmpty(_ defaultValue: () -> ()) {
+        if self.isEmpty {
+            defaultValue()
+        }
+    }
+    
+    @inlinable func ifNotEmpty<R>(_ defaultValue: ([Element]) -> R) -> R? {
         if (!self.isEmpty) {
             return defaultValue(self)
         } else {
@@ -187,7 +194,16 @@ extension Int64 {
             from: Date(timeIntervalSince1970: Double(integerLiteral: self) / 1000.0)
         )
     }
-
+    
+    var toMillionOrBillon: String {
+        if self > 1000000000 {
+            String(Float64(self) / 1000000000) + "B"
+        } else if self > 1000000 {
+            String(Float64(self) / 1000000) + "M"
+        } else {
+            String(self)
+        }
+    }
 }
 
 extension Float64 {

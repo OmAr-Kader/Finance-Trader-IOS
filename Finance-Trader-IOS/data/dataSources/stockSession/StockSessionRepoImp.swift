@@ -14,87 +14,88 @@ class StockSessionRepoImp : BaseRepoImp, StockSessionRepo {
         }
     }
     
-    func getSessionLive(stockId: String, invoke: @escaping (StockSession?) -> Unit) async -> AnyCancellable? {
+    func getSessionLive(stockInfo: StockInfo, invoke: @escaping (StockSession?) -> Unit) async -> AnyCancellable? {
         return await querySingleFlow(
             invoke,
-            "getSessionLive\(stockId)",
+            "getSessionLive\(stockInfo._id.stringValue)",
             "%K == %@",
-            "stockId", NSString(string: stockId)
+            "stockInfo", stockInfo
         )
     }
     
     @BackgroundActor
     func getAStockSession(
-        stockId: String,
+        stockInfo: StockInfo,
         stringData: String,
         invoke: (ResultRealm<StockSession?>) -> Unit
     ) async {
         await querySingle(
             invoke,
-            "getAStockSession\(stockId + stringData)",
+            "getAStockSession\(stockInfo._id.stringValue + stringData)",
             "%K == %@ AND %K == %@",
-            "stockId", NSString(string: stockId),
+            "stockInfo", stockInfo,
             "stringData", NSString(string: stringData)
         )
     }
     
-    func getStockSessions(stockId: String, stringData: [String], stockSessions: (ResultRealm<[StockSession]>) -> Unit) async {
+    func getStockSessions(stockInfo: StockInfo, stringData: [String], stockSessions: (ResultRealm<[StockSession]>) -> Unit) async {
         let filterArguments = NSMutableArray()
         filterArguments.add(stringData)
         filterArguments.addObjects(from: stringData)
         await queryLess(stockSessions,
             "%K == %@ AND %K IN %@",
-            "stockId", NSString(string: stockId),
+            "stockInfo", stockInfo,
             "stringData", filterArguments
         )
     }
     
     @BackgroundActor
-    func getStockSessions(stockId: String, dateScope: Date, invoke: @escaping (ResultRealm<StockSession?>) -> Unit) async {
+    func getStockSessions(stockInfo: StockInfo, dateScope: Date, invoke: @escaping (ResultRealm<StockSession?>) -> Unit) async {
         await querySingle(
             invoke,
-            "getStockSessions\(stockId)\(dateScope.timeIntervalSince1970)",
-            "%K == %@ AND %K > %@", "stockId",
-            NSString(string: stockId), "dateSession", NSDate(timeIntervalSince1970: dateScope.timeIntervalSince1970)
+            "getStockSessions\(stockInfo._id.stringValue)\(dateScope.timeIntervalSince1970)",
+            "%K == %@ AND %K > %@",
+            "stockInfo", stockInfo,
+            "dateSession", NSDate(timeIntervalSince1970: dateScope.timeIntervalSince1970)
         )
     }
     
     @BackgroundActor
     func getAllStockSessions(
-        stockId: String,
+        stockInfo: StockInfo,
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async {
         await queryLess(
             stockSessions,
             "%K == %@",
             //"%K == %@ AND %K > %@",
-            "stockId", NSString(string: stockId)//,
+            "stockInfo", stockInfo//,
             //"dateSession", NSDate(timeIntervalSince1970: (currentTime - (84 * 86400000)).toStrDMY.toTimeDate().timeIntervalSince1970)
         )
     }
 
-    func getStocksSessions(stockId: [String], stringData: [String], stockSessions: (ResultRealm<[StockSession]>) -> Unit) async {
+    func getStocksSessions(stockInfo: [StockInfo], stringData: [String], stockSessions: (ResultRealm<[StockSession]>) -> Unit) async {
         let stringDataArguments = NSMutableArray()
         stringDataArguments.addObjects(from: stringData)
-        let stockIdArguments = NSMutableArray()
-        stockIdArguments.addObjects(from: stockId)
+        let stockInfoArguments = NSMutableArray()
+        stockInfoArguments.addObjects(from: stockInfo)
         await queryLess(stockSessions,
             "%K IN %@ AND %K IN %@",
-            "stockId", stockIdArguments,
+            "stockInfo", stockInfoArguments,
             "stringData", stringDataArguments
         )
     }
     
     @BackgroundActor
     func getAllStocksSessions(
-        stockId: [String],
+        stockInfo: [StockInfo],
         stockSessions: (ResultRealm<[StockSession]>) -> Unit
     ) async {
-        let stockIdArguments = NSMutableArray()
-        stockIdArguments.addObjects(from: stockId)
+        let stockInfoArguments = NSMutableArray()
+        stockInfoArguments.addObjects(from: stockInfo)
         await queryLess(stockSessions,
             "%K IN %@",
-            "stockId", stockIdArguments
+            "stockInfo", stockInfoArguments
         )
     }
     

@@ -77,8 +77,6 @@
 		07EC2A8B2BD870BF002375F2 /* HomeTrader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A622BD870BF002375F2 /* HomeTrader.swift */; };
 		07EC2A8C2BD870BF002375F2 /* HomeTraderObserve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EC2A632BD870BF002375F2 /* HomeTraderObserve.swift */; };
 		07EC2A902BD870F9002375F2 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 07EC2A8F2BD870F9002375F2 /* Swinject */; };
-		07EC2A922BD870F9002375F2 /* Swinject-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 07EC2A912BD870F9002375F2 /* Swinject-Dynamic */; };
-		07EC2A952BD8711E002375F2 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 07EC2A942BD8711E002375F2 /* Realm */; };
 		07EC2A972BD8711E002375F2 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 07EC2A962BD8711E002375F2 /* RealmSwift */; };
 		07F3EBE52BE80939005017F2 /* TraderUserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F3EBE42BE80939005017F2 /* TraderUserData.swift */; };
 		07F3EBE72BE80949005017F2 /* TraderRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F3EBE62BE80949005017F2 /* TraderRepo.swift */; };
@@ -182,10 +180,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				07EC2A972BD8711E002375F2 /* RealmSwift in Frameworks */,
-				07EC2A952BD8711E002375F2 /* Realm in Frameworks */,
 				07DD0E1F2BE3CF450006E25E /* RandomColor in Frameworks */,
 				07EC2A902BD870F9002375F2 /* Swinject in Frameworks */,
-				07EC2A922BD870F9002375F2 /* Swinject-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,8 +319,8 @@
 		07EC2A3F2BD870BE002375F2 /* model */ = {
 			isa = PBXGroup;
 			children = (
-				07EC2A3C2BD870BE002375F2 /* Preference.swift */,
 				07EC2A3D2BD870BE002375F2 /* ResultRealm.swift */,
+				07EC2A3C2BD870BE002375F2 /* Preference.swift */,
 				070FD1452BED92B10072F986 /* Stock.swift */,
 				070FD1442BED92B10072F986 /* StockExchange.swift */,
 				070FD1432BED92B00072F986 /* SupplyAndDemand.swift */,
@@ -512,8 +508,6 @@
 			name = "Finance-Trader-IOS";
 			packageProductDependencies = (
 				07EC2A8F2BD870F9002375F2 /* Swinject */,
-				07EC2A912BD870F9002375F2 /* Swinject-Dynamic */,
-				07EC2A942BD8711E002375F2 /* Realm */,
 				07EC2A962BD8711E002375F2 /* RealmSwift */,
 				07DD0E1E2BE3CF450006E25E /* RandomColor */,
 			);
@@ -896,16 +890,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */;
 			productName = Swinject;
-		};
-		07EC2A912BD870F9002375F2 /* Swinject-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 07EC2A8E2BD870F9002375F2 /* XCRemoteSwiftPackageReference "Swinject" */;
-			productName = "Swinject-Dynamic";
-		};
-		07EC2A942BD8711E002375F2 /* Realm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 07EC2A932BD8711E002375F2 /* XCRemoteSwiftPackageReference "realm-swift" */;
-			productName = Realm;
 		};
 		07EC2A962BD8711E002375F2 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;

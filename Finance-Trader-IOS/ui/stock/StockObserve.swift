@@ -19,56 +19,53 @@ class StockObserve : ObservableObject {
     func loadData(stockId: String, trader: TraderData, isDarkMode: Bool) {
         loadingStatus(true)
         self.scope.launchRealm {
+            self.cancelInfo?.cancel()
             self.cancelInfo = await self.project.stockInfo.getStockInfoLive(id: stockId) { it in
-                guard let _stockInfo = it else {
-                    self.loadingStatus(false)
-                    return
-                }
-                let stockInfo = StockInfoData(stockInfo: _stockInfo).injectColor(isDarkMode: isDarkMode)
-                let _supplyDemands = Array(_stockInfo.supplysAndDemands)
-                let haveShares = stockInfo.stockholders.first { it in
-                    it.holderId == trader.id
-                }
-                let stock = stockInfo.toHomeStockData(_stockInfo.stockSessions.toStockData(stockId: stockInfo.id))
-                let splitStock = stock.splitStock(timeScope: stock.timeScope)
-                let supplyDemands = _supplyDemands.toSupplyDemandData().injectStatus(traderId: trader.id, haveShares: haveShares).injectColors(stackHolders: stockInfo.stockholders)
-                self.scope.launchMain {
-                    withAnimation {
-                        self.state = self.state.copy(stockInfo: stockInfo, supplyDemands: supplyDemands, isHaveShares: haveShares != nil, stock: splitStock, nativeStock: stock, isLoading: false)
+                it?.supplyBack { _stockInfo in
+                    StockInfoData(stockInfo: _stockInfo).injectColor(isDarkMode: isDarkMode).supplyBack { stockInfo in
+                        let haveShares = stockInfo.stockholders.first { it in
+                            it.holderId == trader.id
+                        }
+                        let stock = stockInfo.toHomeStockData(_stockInfo.stockSessions.toStockData(stockId: stockInfo.id))
+                        let splitStock = stock.splitStock(timeScope: stock.timeScope).loadWave()
+                        self.scope.launchRealm {
+                            self.cancelSupplysAndDemands?.cancel()
+                            self.cancelSupplysAndDemands = await self.project.supplyDemand.repository.getSupplysAndDemandsLive(stockInfo: _stockInfo) { it in
+                                it.toSupplyDemandData()
+                                    .injectStatus(traderId: trader.id, haveShares: haveShares)
+                                    .injectColors(stackHolders: stockInfo.stockholders).supplyBack { supplyDemands in
+                                        self.scope.launchMain {
+                                            withAnimation {
+                                                self.state = self.state.copy(stockInfo: stockInfo, supplyDemands: supplyDemands, isHaveShares: haveShares != nil, stock: splitStock, nativeStock: stock, isLoading: false)
+                                            }
+                                        }
+                                    }
+                            }
+                        }
                     }
-                }
+                } ?? self.loadingStatus(false)
             }
         }
     }
     
     @MainActor
     func loadTimeScope(timeScope: Int64) {
-        let nativeStock = state.nativeStock
+        let state = state
         self.scope.launchRealm {
-            let stock = nativeStock.splitStock(timeScope: timeScope).copy(timeScope: timeScope)
+            let newStock = state.stock.changeTimeScope(nativeStock: state.nativeStock, timeScope: timeScope)
             self.scope.launchMain {
-                self.state = self.state.copy(stock: stock)
+                self.state = self.state.copy(stock: newStock)
             }
         }
     }
     
     @MainActor
-    func loadStocks(mode: ChartMode) {
+    func loadStockMode(mode: ChartMode) {
         let state = self.state
         scope.launchRealm {
-            let stock = state.stock
-            let nativeStock = state.nativeStock
-            let newNativeStock = switch mode {
-            case .StockWave: nativeStock.loadWave()
-            case .StockSMA: nativeStock.loadSMA()
-            case .StockEMA: nativeStock.loadEMA()
-            case .StockRSI: nativeStock.loadRSI()
-            case .StockTrad: nativeStock.loadTrad()
-            case .StockPrediction: self.loadPrediction(nativeStock, mode: mode)
-            }
-            let newStock = newNativeStock.splitStock(timeScope: stock.timeScope)
+            let newStock = state.stock.changeStockMode(mode: mode)
             self.scope.launchMain {
-                self.state = self.state.copy(stock: newStock, nativeStock: newNativeStock)
+                self.state = self.state.copy(stock: newStock, dummy: self.state.dummy + 1)
             }
         }
     }
@@ -122,20 +119,20 @@ class StockObserve : ObservableObject {
     }
     
     @MainActor
-    func buyShare(supplyData: SupplyDemandData, toTrader: String, stockId: String, invoke: @escaping () -> (), failed: @escaping @MainActor () -> ()) {
+    func buyShare(supplyData: SupplyDemandData, toTrader: String, stockInfo: StockInfoData, invoke: @escaping () -> (), failed: @escaping @MainActor () -> ()) {
         loadingStatus(true)
         let state = state
-        self.adjustStockInfo(supplyData: supplyData, fromTrader: supplyData.traderId, toTrader: toTrader, stockId: stockId) { newStockInfoData in
+        self.adjustStockInfo(supplyData: supplyData, fromTrader: supplyData.traderId, toTrader: toTrader, stockId: stockInfo.id) { newStockInfoData in
             self.scope.launchRealm {
-                await self.project.stockSession.getAStockSession(stockId: stockId, stringData: currentTime.toStrDMY) { _stockSession in
+                await self.project.stockSession.getAStockSession(stockInfo: StockInfo(stockInfoData: stockInfo), stringData: currentTime.toStrDMY) { _stockSession in
                     self.scope.launchRealm {
                         guard let stockSession = _stockSession.value else {
-                            self.createNewSessionAndUpdateInfo(newStockInfoData: newStockInfoData, symbol: newStockInfoData.symbol, stockId: stockId, invoke: {
+                            self.createNewSessionAndUpdateInfo(newStockInfoData: newStockInfoData, symbol: newStockInfoData.symbol, stockId: stockInfo.id, invoke: {
                                 await self.doDeleteSuppltDemand(supplyDemandData: supplyData, stockInfo: state.stockInfo, invoke: invoke, failed: failed)
                             }, failed: failed)
                             return
                         }
-                        self.adjustStockSessionAndUpdateInfo(stockSession: stockSession, newStockInfoData: newStockInfoData, symbol: newStockInfoData.symbol, stockId: stockId, invoke: {
+                        self.adjustStockSessionAndUpdateInfo(stockSession: stockSession, newStockInfoData: newStockInfoData, symbol: newStockInfoData.symbol, stockId: stockInfo.id, invoke: {
                             await self.doDeleteSuppltDemand(supplyDemandData: supplyData, stockInfo: state.stockInfo, invoke: invoke, failed: failed)
                         }, failed: failed)
                     }
@@ -201,7 +198,7 @@ class StockObserve : ObservableObject {
         self.scope.launchRealm {
             let stockSession = StockSession(
                 stockData: StockData(
-                    id: "",
+                    _id: "",
                     stockId: stockId,
                     symbol: symbol,
                     values: [StockPointData(time: currentTime, newPrice: newStockInfoData.stockPrice)],
@@ -245,7 +242,7 @@ class StockObserve : ObservableObject {
             _stockData.appendPoint(StockPointData(time: currentTime, newPrice: newStockInfoData.stockPrice))
             let stockData = _stockData
             self.scope.launchRealm {
-                let newStockSession = await self.project.stockSession.updateSession(id: stockData.id, stockData: stockData)
+                let newStockSession = await self.project.stockSession.updateSession(id: stockData.stockId, stockData: stockData)
                 guard newStockSession.value != nil else {
                     self.scope.launchMain {
                         self.loadingStatus(false)
@@ -303,20 +300,20 @@ class StockObserve : ObservableObject {
     }
     
     @MainActor
-    func sellShare(demmandData: SupplyDemandData, fromTrader: String, stockId: String, invoke: @escaping () -> (), failed: @escaping @MainActor () -> ()) {
+    func sellShare(demmandData: SupplyDemandData, fromTrader: String, stockInfo: StockInfoData, invoke: @escaping () -> (), failed: @escaping @MainActor () -> ()) {
         loadingStatus(true)
         let state = state
-        self.adjustStockInfo(supplyData: demmandData, fromTrader: fromTrader, toTrader: demmandData.traderId, stockId: stockId) { newStockInfoData in
+        self.adjustStockInfo(supplyData: demmandData, fromTrader: fromTrader, toTrader: demmandData.traderId, stockId: stockInfo.id) { newStockInfoData in
             self.scope.launchRealm {
-                await self.project.stockSession.getAStockSession(stockId: stockId, stringData: currentTime.toStrDMY) { _stockSession in
+                await self.project.stockSession.getAStockSession(stockInfo: StockInfo(stockInfoData: stockInfo), stringData: currentTime.toStrDMY) { _stockSession in
                     self.scope.launchRealm {
                         guard let stockSession = _stockSession.value else {
-                            self.createNewSessionAndUpdateInfo(newStockInfoData: newStockInfoData, symbol: newStockInfoData.symbol, stockId: stockId, invoke: {
+                            self.createNewSessionAndUpdateInfo(newStockInfoData: newStockInfoData, symbol: newStockInfoData.symbol, stockId: stockInfo.id, invoke: {
                                 await self.doDeleteSuppltDemand(supplyDemandData: demmandData, stockInfo: state.stockInfo, invoke: invoke, failed: failed)
                             }, failed: failed)
                             return
                         }
-                        self.adjustStockSessionAndUpdateInfo(stockSession: stockSession, newStockInfoData: newStockInfoData, symbol: newStockInfoData.symbol, stockId: stockId, invoke: {
+                        self.adjustStockSessionAndUpdateInfo(stockSession: stockSession, newStockInfoData: newStockInfoData, symbol: newStockInfoData.symbol, stockId: stockInfo.id, invoke: {
                             await self.doDeleteSuppltDemand(supplyDemandData: demmandData, stockInfo: state.stockInfo, invoke: invoke, failed: failed)
                         }, failed: failed)
                     }
@@ -386,6 +383,7 @@ class StockObserve : ObservableObject {
 
         var stock: StockData = StockData()
         var nativeStock: StockData = StockData()
+        var dummy: Int = 0
         var isLoading: Bool = false
         
         var isAddSheet: Bool = false
@@ -399,6 +397,7 @@ class StockObserve : ObservableObject {
             isHaveShares: Bool? = nil,
             stock: StockData? = nil,
             nativeStock: StockData? = nil,
+            dummy: Int? = nil,
             isLoading: Bool? = nil,
             isAddSheet: Bool? = nil,
             supplyDemandData: SupplyDemandData? = nil,
@@ -411,6 +410,7 @@ class StockObserve : ObservableObject {
             self.isHaveShares = isHaveShares ?? self.isHaveShares
             self.stock = stock ?? self.stock
             self.nativeStock = nativeStock ?? self.nativeStock
+            self.dummy = dummy ?? self.dummy
             self.isLoading = isLoading ?? self.isLoading
             self.isAddSheet = isAddSheet ?? self.isAddSheet
             self.supplyDemandData = supplyDemandData ?? self.supplyDemandData
@@ -420,8 +420,8 @@ class StockObserve : ObservableObject {
     }
     
     deinit {
-        cancelInfo?.cancel()
         cancelSupplysAndDemands?.cancel()
+        cancelInfo?.cancel()
         cancelInfo = nil
         cancelSupplysAndDemands = nil
     }

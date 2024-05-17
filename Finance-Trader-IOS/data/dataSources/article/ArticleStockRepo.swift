@@ -25,4 +25,7 @@ protocol ArticleStockRepo {
         invoke: @BackgroundActor (ResultRealm<[Article]>) -> Unit
     ) async
     
+    @BackgroundActor
+    func getAllArticlesLive(invoke: @escaping @BackgroundActor ([Article]?) -> Unit) async -> AnyCancellable?
+    
 }
