@@ -1,9 +1,13 @@
 # 📉📈 Trader(Demo): <br> Finance IOS App For Traders And Stock Market
 
-Overview
---------
+Mobile application for iOS devices built with Swift and SwiftUI that allows users to track the stock market, manage their personalized portfolios, and access financial tools and news analysis. Trader is a cutting-edge iOS app designed for traders and stock market enthusiasts. Developed using SwiftUI, MongoDB Realm, Swinject for dependency injection, and Charts API, it offers a suite of powerful features including Real-Time Data, Personalized Portfolio, Stocks News & Analysis, and Financial Tools.
 
-This project is a mobile application for iOS devices built with Swift and SwiftUI that allows users to track the stock market, manage their personalized portfolios, and access financial tools and news analysis. Trader is a cutting-edge iOS app designed for traders and stock market enthusiasts. Developed using SwiftUI, MongoDB Realm, Swinject for dependency injection, and Charts API, it offers a suite of powerful features including Real-Time Data, Personalized Portfolio, Stocks News & Analysis, and Financial Tools.
+
+## 🤩 Support Me
+
+<a href="https://www.buymeacoffee.com/omar_kader">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png" width="200" height="70" alt="Buy Me a Coffee">
+</a>
 
 Features
 --------
@@ -78,10 +82,6 @@ Usage
 3.  Explore various features, interact with charts and data visualizations, and leverage tools for investment research and decision-making.
     
 4.  Customize settings, preferences, and notifications to tailor the app experience to individual needs and preferences.
-
-<!---Video
--------------
--->
 
 Screenshot
 -------------
